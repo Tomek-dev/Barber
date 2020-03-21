@@ -16,7 +16,7 @@ import org.springframework.util.AntPathMatcher;
 @Configuration
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Order(1)
+    @Order(2)
     @Configuration
     class BasicAuth extends WebSecurityConfigurerAdapter{
 
@@ -36,7 +36,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         protected void configure(HttpSecurity http) throws Exception {
             http.antMatcher("/")
                     .authorizeRequests()
-                    .antMatchers("/api/reviews/**").permitAll()
+                    .antMatchers("/api/barber/**").permitAll()
                     .and()
                     .formLogin()
                     .loginPage("/login")

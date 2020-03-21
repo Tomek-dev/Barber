@@ -24,6 +24,26 @@ public class BarberBuidler {
         return this;
     }
 
+    public BarberBuidler city(String city){
+        barber.setCity(city);
+        return this;
+    }
+
+    public BarberBuidler local(String local){
+        barber.setLocal(local);
+        return this;
+    }
+
+    public BarberBuidler name(String name){
+        barber.setName(name);
+        return this;
+    }
+
+    public BarberBuidler address(String address){
+        barber.setAddress(address);
+        return this;
+    }
+
     public Barber build(){
         return barber;
     }

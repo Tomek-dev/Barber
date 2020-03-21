@@ -20,7 +20,7 @@ public class ReviewController {
         this.reviewService = reviewService;
     }
 
-    @PostMapping("/reviews/{id}")
+    @PostMapping("/reviews/add/{id}")
     public void add(@RequestBody ReviewInputDto review, @PathVariable  long id){
         reviewService.add(review, id);
     }
