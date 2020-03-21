@@ -19,7 +19,6 @@ public class Review {
     @ManyToOne(cascade = CascadeType.REMOVE)
     private Barber barber;
 
-    @ElementCollection
     private Star star;
 
     public Review() {

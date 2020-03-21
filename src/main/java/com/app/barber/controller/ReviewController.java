@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@RequestMapping("/api")
 public class ReviewController {
 
     private ReviewService reviewService;
@@ -18,17 +19,17 @@ public class ReviewController {
         this.reviewService = reviewService;
     }
 
-    @PostMapping("/{id}/reviews")
+    @PostMapping("/reviews/{id}")
     public Review add(@RequestBody String review, @RequestBody int star,@PathVariable  long id){
         return reviewService.add(review, star, id);
     }
 
-    @GetMapping("/{id}/reviews")
+    @GetMapping("/reviews/{id}")
     public List<Review> findAll(@PathVariable long id){
         return reviewService.findById(id);
     }
 
-    @DeleteMapping("/{id}/reviews")
+    @DeleteMapping("/reviews/{id}")
     public void delete(@PathVariable long id){
         reviewService.delete(id);
     }

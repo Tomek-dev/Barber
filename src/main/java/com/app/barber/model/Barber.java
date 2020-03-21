@@ -11,7 +11,10 @@ public class Barber {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany(mappedBy = "user")
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    private User user;
+
+    @OneToMany(mappedBy = "barber")
     private Set<Review> reviews = new HashSet<>();
 
     public Barber() {
@@ -31,5 +34,13 @@ public class Barber {
 
     public void setReviews(Set<Review> reviews) {
         this.reviews = reviews;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }
