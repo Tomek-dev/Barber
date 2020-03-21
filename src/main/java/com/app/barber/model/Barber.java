@@ -25,6 +25,9 @@ public class Barber {
     @OneToMany(mappedBy = "barber", orphanRemoval = true)
     private Set<Review> reviews = new HashSet<>();
 
+    @OneToMany(mappedBy = "barber", orphanRemoval = true)
+    private Set<Worker> workers = new HashSet<>();
+
     public Barber() {
     }
 
