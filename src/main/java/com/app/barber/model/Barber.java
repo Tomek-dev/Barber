@@ -11,10 +11,10 @@ public class Barber {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @OneToOne(fetch = FetchType.LAZY, orphanRemoval = true)
     private User user;
 
-    @OneToMany(mappedBy = "barber")
+    @OneToMany(mappedBy = "barber", orphanRemoval = true)
     private Set<Review> reviews = new HashSet<>();
 
     public Barber() {

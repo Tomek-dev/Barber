@@ -5,18 +5,23 @@ import com.app.barber.dao.ReviewDao;
 import com.app.barber.model.Barber;
 import com.app.barber.model.Review;
 import com.app.barber.other.builder.ReviewBuilder;
+import com.app.barber.other.dto.ReviewInputDto;
+import com.app.barber.other.dto.ReviewOutputDto;
 import com.app.barber.other.enums.Star;
 import com.app.barber.other.exception.BarberNotFoundException;
 import com.app.barber.other.exception.StarNotFoundException;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ReviewService {
+
+    private final ModelMapper mapper = new ModelMapper();
 
     private ReviewDao reviewDao;
     private BarberDao barberDao;
@@ -27,24 +32,27 @@ public class ReviewService {
         this.barberDao = barberDao;
     }
 
-    public Review add(String review, int star, long id){
+    public void add(ReviewInputDto review, long id){
         Optional<Barber> barberOptional = barberDao.findById(id);
         Barber foundBarber = barberOptional.orElseThrow(BarberNotFoundException::new);
-        Optional<Star> starOptional = Star.fromNumber(star);
+        Optional<Star> starOptional = Star.fromNumber(review.getStar());
         Star foundStar = starOptional.orElseThrow(StarNotFoundException::new);
         Review newReview = ReviewBuilder.builder()
-                .review(review)
+                .review(review.getReview())
                 .star(foundStar)
                 .barber(foundBarber)
                 .build();
-        return reviewDao.save(newReview);
+        reviewDao.save(newReview);
     }
 
     public void delete(Long id){
         reviewDao.deleteById(id);
     }
 
-    public List<Review> findById(long id){
-        return reviewDao.findByIdOrderByDateDesc(id);
+    public List<ReviewOutputDto> findById(long id){
+        List<Review> reviews = reviewDao.findByBarberId(id);
+        return reviews.stream()
+                .map(review -> mapper.map(review, ReviewOutputDto.class))
+                .collect(Collectors.toList());
     }
 }

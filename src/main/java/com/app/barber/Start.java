@@ -31,6 +31,7 @@ public class Start {
         this.barberDao = barberDao;
         this.userDao = userDao;
         this.passwordEncoder = passwordEncoder;
+        init();
     }
 
     private void init(){
@@ -47,8 +48,8 @@ public class Start {
                 .roles(Collections.singleton(Role.USER))
                 .build();
         barber.setUser(user);
-        reviewDao.save(review);
-        barberDao.save(barber);
         userDao.save(user);
+        barberDao.save(barber);
+        reviewDao.save(review);
     }
 }

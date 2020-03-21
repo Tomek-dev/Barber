@@ -1,36 +1,16 @@
-package com.app.barber.model;
+package com.app.barber.other.dto;
 
 import com.app.barber.other.enums.Star;
 
-import javax.persistence.*;
 import java.time.LocalDateTime;
 
-@Entity
-public class Review {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class ReviewOutputDto {
 
     private String review;
-
     private LocalDateTime date;
-
-    @ManyToOne
-    private Barber barber;
-
     private Star star;
 
-    public Review() {
-        date = LocalDateTime.now();
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
+    public ReviewOutputDto() {
     }
 
     public String getReview() {
@@ -47,14 +27,6 @@ public class Review {
 
     public void setDate(LocalDateTime date) {
         this.date = date;
-    }
-
-    public Barber getBarber() {
-        return barber;
-    }
-
-    public void setBarber(Barber barber) {
-        this.barber = barber;
     }
 
     public Star getStar() {

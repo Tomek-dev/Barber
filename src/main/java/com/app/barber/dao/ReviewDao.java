@@ -8,5 +8,5 @@ import java.util.List;
 
 @Repository
 public interface ReviewDao extends JpaRepository<Review, Long> {
-    List<Review> findByIdOrderByDateDesc(Long id);
+    List<Review> findByBarberId(Long id);
 }
