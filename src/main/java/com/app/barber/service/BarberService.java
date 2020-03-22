@@ -22,21 +22,26 @@ public class BarberService {
 
     private BarberDao barberDao;
     private UserDao userDao;
+    private CoordinateService coordinateService;
 
     @Autowired
-    public BarberService(BarberDao barberDao, UserDao userDao) {
+    public BarberService(BarberDao barberDao, UserDao userDao, CoordinateService coordinateService) {
         this.barberDao = barberDao;
         this.userDao = userDao;
+        this.coordinateService = coordinateService;
     }
 
     public void add(BarberInputDto barberDto, Long id){
         Optional<User> userOptional =  userDao.findById(id);
         User foundUser = userOptional.orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        Double[] coordinates = coordinateService.geocoder(barberDto.getAddress(), barberDto.getCity(), barberDto.getLocal()) ;
         Barber barber = BarberBuidler.buidler()
                 .name(barberDto.getName())
                 .city(barberDto.getCity())
                 .local(barberDto.getLocal())
                 .address(barberDto.getAddress())
+                .latitude(coordinates[0])
+                .longitude(coordinates[1])
                 .user(foundUser)
                 .build();
         barberDao.save(barber);

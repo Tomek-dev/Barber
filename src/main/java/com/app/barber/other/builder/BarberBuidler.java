@@ -3,6 +3,7 @@ package com.app.barber.other.builder;
 import com.app.barber.model.Barber;
 import com.app.barber.model.Review;
 import com.app.barber.model.User;
+import com.app.barber.model.Worker;
 
 import java.util.Set;
 
@@ -41,6 +42,21 @@ public class BarberBuidler {
 
     public BarberBuidler address(String address){
         barber.setAddress(address);
+        return this;
+    }
+
+    public BarberBuidler longitude(Double longitude){
+        barber.setLongitude(longitude);
+        return this;
+    }
+
+    public BarberBuidler latitude(Double latitude){
+        barber.setLatitude(latitude);
+        return this;
+    }
+
+    public BarberBuidler workers(Set<Worker> workers){
+        barber.setWorkers(workers);
         return this;
     }
 

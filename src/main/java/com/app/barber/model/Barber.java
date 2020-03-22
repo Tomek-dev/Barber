@@ -19,6 +19,10 @@ public class Barber {
 
     private String local;
 
+    private Double longitude;
+
+    private Double latitude;
+
     @OneToOne(fetch = FetchType.LAZY, orphanRemoval = true)
     private User user;
 
@@ -85,5 +89,29 @@ public class Barber {
 
     public void setLocal(String local) {
         this.local = local;
+    }
+
+    public Double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(Double longitude) {
+        this.longitude = longitude;
+    }
+
+    public Double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(Double latitude) {
+        this.latitude = latitude;
+    }
+
+    public Set<Worker> getWorkers() {
+        return workers;
+    }
+
+    public void setWorkers(Set<Worker> workers) {
+        this.workers = workers;
     }
 }
