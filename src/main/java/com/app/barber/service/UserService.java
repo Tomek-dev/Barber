@@ -3,7 +3,7 @@ package com.app.barber.service;
 import com.app.barber.dao.UserDao;
 import com.app.barber.model.User;
 import com.app.barber.other.builder.UserBuilder;
-import com.app.barber.other.dto.UserInputDto;
+import com.app.barber.other.dto.SignUpDto;
 import com.app.barber.other.enums.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -23,11 +23,11 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public void add(UserInputDto userDto){
+    public void add(SignUpDto signUp){
         User user = UserBuilder.builder()
-                .username(userDto.getUsername())
-                .email(userDto.getEmail())
-                .password(passwordEncoder.encode(userDto.getPassword()))
+                .username(signUp.getUsername())
+                .email(signUp.getEmail())
+                .password(passwordEncoder.encode(signUp.getPassword()))
                 .roles(Collections.singleton(Role.USER))
                 .build();
         userDao.save(user);
