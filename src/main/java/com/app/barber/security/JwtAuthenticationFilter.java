@@ -4,6 +4,7 @@ import com.app.barber.other.enums.Role;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -22,11 +23,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private static final String TOKEN_HEADER = "Authorization";
     private static final String TOKEN_PREFIX = "Bearer ";
-    private static final String SECRET = "";
+
+    @Value("${jwt.secret.key}")
+    private String secret;
 
     @Override
     protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain filterChain) throws ServletException, IOException {
-        String header = httpServletRequest.getHeader("Authorization");
+        String header = httpServletRequest.getHeader(TOKEN_HEADER);
         if(header == null || !header.startsWith(TOKEN_PREFIX)){
             httpServletResponse.setStatus(HttpServletResponse.SC_FORBIDDEN);
             filterChain.doFilter(httpServletRequest, httpServletResponse);
@@ -39,7 +42,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private UsernamePasswordAuthenticationToken getAuthentication(String header) {
         DecodedJWT verified = JWT
-                .require(Algorithm.HMAC512(SECRET.getBytes()))
+                .require(Algorithm.HMAC512(secret.getBytes()))
                 .build()
                 .verify(header.replace(TOKEN_PREFIX, ""));
         String username = verified.getSubject();
