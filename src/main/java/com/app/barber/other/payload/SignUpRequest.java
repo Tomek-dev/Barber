@@ -1,18 +1,11 @@
 package com.app.barber.other.payload;
 
-import com.app.barber.other.validation.Password;
-import com.app.barber.other.validation.PasswordDetails;
-import com.app.barber.other.validation.UniqueEmail;
-import com.app.barber.other.validation.Username;
-
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
-@Password
 public class SignUpRequest implements PasswordDetails {
 
-    @Username
     @NotBlank
     @Size(min = 4, max = 24)
     private String username;
@@ -23,7 +16,6 @@ public class SignUpRequest implements PasswordDetails {
 
     private String confirmPassword;
 
-    @UniqueEmail
     @NotBlank
     @Email
     private String email;

@@ -36,4 +36,12 @@ public class UserService {
     public void delete(Long id){
         userDao.deleteById(id);
     }
+
+    public boolean existsByEmail(String email){
+        return userDao.existsByEmail(email);
+    }
+
+    public boolean existsByUsername(String username){
+        return userDao.existsByUsername(username);
+    }
 }

@@ -1,11 +1,13 @@
 package com.app.barber.controller;
 
 import com.app.barber.other.payload.LoginRequest;
+import com.app.barber.other.payload.ApiResponse;
 import com.app.barber.other.payload.SignUpRequest;
 import com.app.barber.other.payload.TokenResponse;
 import com.app.barber.security.JwtTokenProvider;
 import com.app.barber.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -48,8 +50,19 @@ public class AuthenticationController {
 
     @PostMapping("/sign-up")
     public ResponseEntity<?> signUp(@Valid @RequestBody SignUpRequest signUp){
-        //TODO validation
+        if(userService.existsByUsername(signUp.getUsername())){
+            return new ResponseEntity(new ApiResponse(false, "Username is already taken."),
+                    HttpStatus.BAD_REQUEST);
+        }
+        if(userService.existsByEmail(signUp.getEmail())){
+            return new ResponseEntity(new ApiResponse(false, "Email is already in use."),
+                    HttpStatus.BAD_REQUEST);
+        }
+        if(!signUp.getPassword().equals(signUp.getConfirmPassword())){
+            return new ResponseEntity(new ApiResponse(false, "Password not matches."),
+                    HttpStatus.BAD_REQUEST);
+        }
         userService.add(signUp);
-        return ResponseEntity.ok("");
+        return ResponseEntity.ok(new ApiResponse(true, "User registered successfully."));
     }
 }
