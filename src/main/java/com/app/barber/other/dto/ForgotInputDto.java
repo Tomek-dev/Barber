@@ -1,6 +1,9 @@
 package com.app.barber.other.dto;
 
+import javax.validation.constraints.NotBlank;
+
 public class ForgotInputDto {
+    @NotBlank
     private String username;
 
     public ForgotInputDto() {

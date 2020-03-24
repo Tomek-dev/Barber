@@ -39,7 +39,7 @@ public class Token {
     public static final class Builder{
 
         private UUID token;
-        private LocalDateTime date;
+        private LocalDateTime date = LocalDateTime.now().plusDays(1);
         private User user;
 
         public Builder token(UUID token){

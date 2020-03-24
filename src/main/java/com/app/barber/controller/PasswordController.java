@@ -41,7 +41,7 @@ public class PasswordController {
     @PostMapping("/forgot")
     public ResponseEntity<?> forgot(@RequestBody ForgotInputDto forgot){
         passwordService.reset(forgot);
-        return ResponseEntity.ok("Send email");
+        return ResponseEntity.ok("Successfully create reset token");
     }
 }
 

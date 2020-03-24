@@ -14,7 +14,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -54,7 +53,6 @@ public class PasswordService {
         Token token = new Token.Builder()
                 .user(user)
                 .token(UUID.randomUUID())
-                .date(LocalDateTime.now())
                 .build();
         tokenDao.save(token);
     }
