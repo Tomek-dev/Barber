@@ -58,10 +58,6 @@ public class AuthenticationController {
             return new ResponseEntity(new ApiResponse(false, "Email is already in use."),
                     HttpStatus.BAD_REQUEST);
         }
-        if(!signUp.getPassword().equals(signUp.getConfirmPassword())){
-            return new ResponseEntity(new ApiResponse(false, "Password not matches."),
-                    HttpStatus.BAD_REQUEST);
-        }
         userService.add(signUp);
         return ResponseEntity.ok(new ApiResponse(true, "User registered successfully."));
     }

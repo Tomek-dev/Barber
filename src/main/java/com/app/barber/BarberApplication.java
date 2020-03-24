@@ -10,5 +10,5 @@ public class BarberApplication {
 		SpringApplication.run(BarberApplication.class, args);
 	}
 
-	//TODO password annotation(other),logout and ResponseEntity
+	//TODO email and user annotation,logout and ResponseEntity, schedule
 }
