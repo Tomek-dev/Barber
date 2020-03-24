@@ -43,7 +43,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/api/barber/**", "/api/auth/**").permitAll()
+                .antMatchers("/api/barber/**", "/api/auth/**", "/api/password/**").permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()

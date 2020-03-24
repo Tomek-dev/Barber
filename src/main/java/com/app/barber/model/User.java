@@ -29,6 +29,9 @@ public class User implements UserDetails {
     @OneToOne(mappedBy = "user", fetch = FetchType.LAZY, orphanRemoval = true)
     private Barber barber;
 
+    @OneToOne(mappedBy = "user", orphanRemoval = true, fetch = FetchType.LAZY)
+    private Token token;
+
     public User() {
     }
 
