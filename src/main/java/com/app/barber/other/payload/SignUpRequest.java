@@ -1,4 +1,4 @@
-package com.app.barber.other.dto;
+package com.app.barber.other.payload;
 
 import com.app.barber.other.validation.Password;
 import com.app.barber.other.validation.PasswordDetails;
@@ -10,7 +10,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 @Password
-public class SignUpDto implements PasswordDetails {
+public class SignUpRequest implements PasswordDetails {
 
     @Username
     @NotBlank
@@ -28,7 +28,7 @@ public class SignUpDto implements PasswordDetails {
     @Email
     private String email;
 
-    public SignUpDto() {
+    public SignUpRequest() {
     }
 
     public String getUsername() {

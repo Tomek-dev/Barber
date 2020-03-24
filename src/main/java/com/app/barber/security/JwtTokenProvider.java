@@ -22,15 +22,17 @@ public class JwtTokenProvider {
     private String secret;
 
     @Value("${jwt.expiration}")
-    private String expiration;
+    private Long expiration;
 
     public String generateToken(Authentication authentication){
         User user = (User) authentication.getPrincipal();
+        String[] roles = user.getRoles().stream()
+                .map(Role::getAuthority)
+                .toArray(String[]::new);
         String token = JWT.create()
                 .withSubject(user.getUsername())
                 .withExpiresAt(new Date(System.currentTimeMillis() + expiration))
-                .withArrayClaim("roles", (String[]) user.getRoles().stream()
-                        .map(Role::getAuthority).distinct().toArray())
+                .withArrayClaim("roles", roles)
                 .sign(Algorithm.HMAC512(secret.getBytes()));
         return TOKEN_PREFIX + token;
     }

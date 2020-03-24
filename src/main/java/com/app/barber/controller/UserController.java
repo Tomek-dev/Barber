@@ -1,6 +1,5 @@
 package com.app.barber.controller;
 
-import com.app.barber.other.dto.SignUpDto;
 import com.app.barber.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

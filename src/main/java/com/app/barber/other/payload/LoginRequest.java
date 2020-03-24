@@ -1,9 +1,9 @@
-package com.app.barber.other.dto;
+package com.app.barber.other.payload;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
-public class LoginDto {
+public class LoginRequest {
 
     @NotBlank
     @Size(min = 4, max = 24)
@@ -13,7 +13,7 @@ public class LoginDto {
     @Size(min = 8, max = 36)
     private String password;
 
-    public LoginDto() {
+    public LoginRequest() {
     }
 
     public String getUsername() {

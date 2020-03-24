@@ -24,56 +24,41 @@ import org.springframework.util.AntPathMatcher;
 @Configuration
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Order(2)
-    @Configuration
-    class JwtAuth extends WebSecurityConfigurerAdapter{
+    private UserDetailsServiceImpl userDetailsService;
+    private JwtAuthenticationEntryPoint authenticationEntryPoint;
+    private JwtAuthenticationFilter authenticationFilter;
 
-        private UserDetailsServiceImpl userDetailsService;
-        private JwtAuthenticationEntryPoint entryPoint;
-
-        @Autowired
-        public JwtAuth(UserDetailsServiceImpl userDetailsService) {
-            this.userDetailsService = userDetailsService;
-        }
-
-        @Override
-        protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-            auth.userDetailsService(userDetailsService);
-        }
-
-        @Override
-        protected void configure(HttpSecurity http) throws Exception {
-            http.antMatcher("/")
-                    .authorizeRequests()
-                        .antMatchers("/api/barber/**").permitAll()
-                        .and()
-                    .sessionManagement()
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                        .and()
-                    .addFilter(new JwtAuthenticationFilter())
-                        .exceptionHandling()
-                        .authenticationEntryPoint(entryPoint)
-                        .and()
-                    .csrf().disable();
-
-            http.addFilterBefore(authenticationFilter(), UsernamePasswordAuthenticationFilter.class);
-        }
+    @Autowired
+    public WebSecurityConfig(UserDetailsServiceImpl userDetailsService, JwtAuthenticationEntryPoint authenticationEntryPoint, JwtAuthenticationFilter authenticationFilter) {
+        this.userDetailsService = userDetailsService;
+        this.authenticationEntryPoint = authenticationEntryPoint;
+        this.authenticationFilter = authenticationFilter;
     }
 
-    @Order(1)
-    @Configuration
-    class OpenIdAuth extends WebSecurityConfigurerAdapter{
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(userDetailsService);
+    }
 
-        @Override
-        protected void configure(HttpSecurity http) throws Exception {
-            http.antMatcher("/reviews")
-                    .authorizeRequests()
-                    .antMatchers("/reviews").authenticated();
-        }
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http.authorizeRequests()
+                .antMatchers("/api/barber/**", "/api/auth/**").permitAll()
+                .anyRequest()
+                .authenticated()
+                .and()
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .exceptionHandling()
+                .authenticationEntryPoint(authenticationEntryPoint)
+                .and()
+                .csrf().disable()
+                .addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class);
     }
 
     @Bean
-    public PasswordEncoder passwordEncoder(){
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
@@ -83,8 +68,4 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return super.authenticationManagerBean();
     }
 
-    @Bean
-    public JwtAuthenticationFilter authenticationFilter(){
-        return new JwtAuthenticationFilter();
-    }
 }

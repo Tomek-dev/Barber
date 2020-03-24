@@ -1,7 +1,8 @@
 package com.app.barber.controller;
 
-import com.app.barber.other.dto.LoginDto;
-import com.app.barber.other.dto.SignUpDto;
+import com.app.barber.other.payload.LoginRequest;
+import com.app.barber.other.payload.SignUpRequest;
+import com.app.barber.other.payload.TokenResponse;
 import com.app.barber.security.JwtTokenProvider;
 import com.app.barber.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,12 +11,15 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 
 @RestController
+@RequestMapping("/api/auth")
 public class AuthenticationController {
 
     private UserService userService;
@@ -29,7 +33,8 @@ public class AuthenticationController {
         this.provider = provider;
     }
 
-    public ResponseEntity login(@Valid @RequestBody LoginDto login){
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@Valid @RequestBody LoginRequest login){
 
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(login.getUsername(), login.getPassword())
@@ -38,14 +43,13 @@ public class AuthenticationController {
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         String token = provider.generateToken(authentication);
-        //TODO return
-        return null;
+        return ResponseEntity.ok(new TokenResponse(token));
     }
 
-    public ResponseEntity signUp(@Valid @RequestBody SignUpDto signUp){
-
-        //TODO validate and return
+    @PostMapping("/sign-up")
+    public ResponseEntity<?> signUp(@Valid @RequestBody SignUpRequest signUp){
+        //TODO validation
         userService.add(signUp);
-        return null;
+        return ResponseEntity.ok("");
     }
 }
