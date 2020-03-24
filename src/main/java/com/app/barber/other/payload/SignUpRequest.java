@@ -4,7 +4,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
-public class SignUpRequest implements PasswordDetails {
+public class SignUpRequest{
 
     @NotBlank
     @Size(min = 4, max = 24)
@@ -31,7 +31,6 @@ public class SignUpRequest implements PasswordDetails {
         this.username = username;
     }
 
-    @Override
     public String getPassword() {
         return password;
     }
@@ -40,7 +39,6 @@ public class SignUpRequest implements PasswordDetails {
         this.password = password;
     }
 
-    @Override
     public String getConfirmPassword() {
         return confirmPassword;
     }
