@@ -1,6 +1,8 @@
 package com.app.barber.model;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 public class Service {
@@ -14,6 +16,9 @@ public class Service {
     private String description;
 
     private Double price;
+
+    @OneToMany(mappedBy = "service", orphanRemoval = true)
+    private Set<Visit> visits = new HashSet<>();
 
     @ManyToOne
     private Worker worker;
@@ -59,5 +64,13 @@ public class Service {
 
     public void setWorker(Worker worker) {
         this.worker = worker;
+    }
+
+    public Set<Visit> getVisits() {
+        return visits;
+    }
+
+    public void setVisits(Set<Visit> visits) {
+        this.visits = visits;
     }
 }
