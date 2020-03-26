@@ -6,7 +6,6 @@ import com.app.barber.dao.VisitDao;
 import com.app.barber.dao.WorkerDao;
 import com.app.barber.model.Barber;
 import com.app.barber.model.Visit;
-import com.app.barber.model.Worker;
 import com.app.barber.other.dto.VisitOutputDto;
 import com.app.barber.other.exception.BarberNotFoundException;
 import org.modelmapper.ModelMapper;
@@ -44,7 +43,7 @@ public class VisitService {
                 .collect(Collectors.toList());
     }
 
-    public void add(){
+    public void add(Long id){
         //TODO
     }
 

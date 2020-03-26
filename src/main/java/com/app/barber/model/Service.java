@@ -17,6 +17,8 @@ public class Service {
 
     private Double price;
 
+    private Long time;
+
     @OneToMany(mappedBy = "service", orphanRemoval = true)
     private Set<Visit> visits = new HashSet<>();
 
@@ -72,5 +74,13 @@ public class Service {
 
     public void setVisits(Set<Visit> visits) {
         this.visits = visits;
+    }
+
+    public Long getTime() {
+        return time;
+    }
+
+    public void setTime(Long time) {
+        this.time = time;
     }
 }

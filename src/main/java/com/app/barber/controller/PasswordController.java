@@ -28,7 +28,7 @@ public class PasswordController {
 
     @PostMapping("/change")
     public ResponseEntity<?> change(@Valid @RequestBody PasswordDto password, Authentication authentication){
-        passwordService.reset(password, authentication);
+        passwordService.change(password, authentication);
         return ResponseEntity.ok("Password change successfully");
     }
 
@@ -40,7 +40,7 @@ public class PasswordController {
 
     @PostMapping("/forgot")
     public ResponseEntity<?> forgot(@RequestBody ForgotInputDto forgot){
-        passwordService.reset(forgot);
+        passwordService.createReset(forgot);
         return ResponseEntity.ok("Successfully create reset token");
     }
 }

@@ -39,6 +39,11 @@ public class ServiceBuilder {
         return this;
     }
 
+    public ServiceBuilder time(Long time){
+        service.setTime(time);
+        return this;
+    }
+
     public Service build(){
         return service;
     }

@@ -31,7 +31,7 @@ public class PasswordService {
         this.tokenDao = tokenDao;
     }
 
-    public void reset(PasswordDto password, Authentication authentication){
+    public void change(PasswordDto password, Authentication authentication){
         Optional<User> userOptional = userDao.findByUsername(authentication.getName());
         User user = userOptional.orElseThrow(() -> new UsernameNotFoundException("User not found"));
         user.setPassword(passwordEncoder.encode(password.getPassword()));
@@ -47,7 +47,7 @@ public class PasswordService {
         tokenDao.delete(foundToken);
     }
 
-    public void reset(ForgotInputDto forgot){
+    public void createReset(ForgotInputDto forgot){
         Optional<User> userOptional = userDao.findByUsername(forgot.getUsername());
         User user = userOptional.orElseThrow(() -> new UsernameNotFoundException("User not found"));
         Token token = new Token.Builder()
