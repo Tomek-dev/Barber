@@ -2,13 +2,14 @@ package com.app.barber.other.dto;
 
 public class ServiceOutputDto {
 
+    private String workerName;
+
     private String name;
 
     private String description;
 
     private Double price;
 
-    private String nameWorker;
 
     public ServiceOutputDto() {
     }
@@ -37,11 +38,11 @@ public class ServiceOutputDto {
         this.price = price;
     }
 
-    public String getNameWorker() {
-        return nameWorker;
+    public String getWorkerName() {
+        return workerName;
     }
 
-    public void setNameWorker(String nameWorker) {
-        this.nameWorker = nameWorker;
+    public void setWorkerName(String workerName) {
+        this.workerName = workerName;
     }
 }
