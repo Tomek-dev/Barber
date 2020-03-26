@@ -11,4 +11,5 @@ public class BarberApplication {
 	}
 
 	//TODO email and user annotation, logout and ResponseEntity
+	//TODO preAuthorize get() ... error, acl
 }

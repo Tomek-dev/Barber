@@ -35,7 +35,12 @@ public class Start {
     }
 
     private void init(){
-        Barber barber = new Barber();
+        Barber barber = BarberBuidler.buidler()
+                .name("name")
+                .local("1")
+                .city("city")
+                .address("address")
+                .build();
         Review review = ReviewBuilder.builder()
                 .review("review")
                 .star(Star.FOUR)

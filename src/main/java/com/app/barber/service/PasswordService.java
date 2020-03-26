@@ -31,8 +31,8 @@ public class PasswordService {
         this.tokenDao = tokenDao;
     }
 
-    public void change(PasswordDto password, Authentication authentication){
-        Optional<User> userOptional = userDao.findByUsername(authentication.getName());
+    public void change(PasswordDto password, String username){
+        Optional<User> userOptional = userDao.findByUsername(username);
         User user = userOptional.orElseThrow(() -> new UsernameNotFoundException("User not found"));
         user.setPassword(passwordEncoder.encode(password.getPassword()));
         userDao.save(user);

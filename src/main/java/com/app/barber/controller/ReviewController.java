@@ -5,6 +5,7 @@ import com.app.barber.other.dto.ReviewInputDto;
 import com.app.barber.other.dto.ReviewOutputDto;
 import com.app.barber.service.ReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,6 +21,7 @@ public class ReviewController {
         this.reviewService = reviewService;
     }
 
+    //only openId user
     @PostMapping("/reviews/add/{id}")
     public void add(@RequestBody ReviewInputDto review, @PathVariable  long id){
         reviewService.add(review, id);
@@ -30,6 +32,7 @@ public class ReviewController {
         return reviewService.findById(id);
     }
 
+    //only owner of this (openID)
     @DeleteMapping("/reviews/{id}")
     public void delete(@PathVariable long id){
         reviewService.delete(id);

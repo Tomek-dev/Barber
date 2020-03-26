@@ -23,7 +23,7 @@ public class Barber {
 
     private Double latitude;
 
-    @OneToOne(fetch = FetchType.LAZY, orphanRemoval = true)
+    @OneToOne(fetch = FetchType.LAZY)
     private User user;
 
     @OneToMany(mappedBy = "barber", orphanRemoval = true)

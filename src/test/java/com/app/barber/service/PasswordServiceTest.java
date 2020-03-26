@@ -50,7 +50,7 @@ public class PasswordServiceTest {
         given(userDao.findByUsername(Mockito.any(String.class))).willReturn(Optional.empty());
 
         //then
-        assertThrows(UsernameNotFoundException.class, () -> passwordService.change(new PasswordDto(), authentication));
+        assertThrows(UsernameNotFoundException.class, () -> passwordService.change(new PasswordDto(), ""));
         assertThrows(UsernameNotFoundException.class, () -> passwordService.createReset(new ForgotInputDto()));
     }
 
@@ -84,11 +84,10 @@ public class PasswordServiceTest {
                 .build();
         PasswordDto password = new PasswordDto();
         password.setPassword("change");
-        Authentication authentication = new UsernamePasswordAuthenticationToken("user", null, null);
         given(userDao.findByUsername(Mockito.any())).willReturn(Optional.of(user));
 
         //when
-        passwordService.change(password, authentication);
+        passwordService.change(password, "");
 
         //then
         verify(userDao).save(user);

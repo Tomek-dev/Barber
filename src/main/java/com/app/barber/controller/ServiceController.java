@@ -1,9 +1,11 @@
 package com.app.barber.controller;
 
+import com.app.barber.model.User;
 import com.app.barber.other.dto.ServiceInputDto;
 import com.app.barber.other.dto.ServiceOutputDto;
 import com.app.barber.service.ServiceService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,8 +21,9 @@ public class ServiceController {
         this.serviceService = serviceService;
     }
 
+    //only barber/user
     @PostMapping("/service/add/{id}")
-    public void add(@RequestBody ServiceInputDto serviceDto,@PathVariable Long id){
+    public void add(@RequestBody ServiceInputDto serviceDto, @PathVariable Long id){
         serviceService.add(serviceDto, id);
     }
 
@@ -29,6 +32,7 @@ public class ServiceController {
         return serviceService.getAllByWorkerId(id);
     }
 
+    //only owner of this
     @DeleteMapping("/service/{id}")
     public void delete(@PathVariable Long id){
         serviceService.delete(id);

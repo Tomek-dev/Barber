@@ -18,11 +18,13 @@ public class VisitController {
         this.visitService = visitService;
     }
 
+    //only barber which is owner (openId)
     @GetMapping("/visit/{id}")
     public List<VisitOutputDto> findAllByBarber(@PathVariable Long id){
         return visitService.findAllByBarber(id);
     }
 
+    //only owner of this (openId)
     @DeleteMapping("/visit/{id}")
     public void delete(@PathVariable Long id){
         visitService.delete(id);
