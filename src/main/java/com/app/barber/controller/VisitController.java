@@ -1,5 +1,6 @@
 package com.app.barber.controller;
 
+import com.app.barber.other.dto.VisitInputDto;
 import com.app.barber.other.dto.VisitOutputDto;
 import com.app.barber.service.VisitService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,12 @@ public class VisitController {
     @GetMapping("/visit/{id}")
     public List<VisitOutputDto> findAllByBarber(@PathVariable Long id){
         return visitService.findAllByBarber(id);
+    }
+
+    //authenticated (openId)
+    @PostMapping("/visit/add")
+    public void add(@RequestBody VisitInputDto visit){
+        visitService.add(visit);
     }
 
     //only owner of this (openId)

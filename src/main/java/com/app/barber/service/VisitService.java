@@ -6,12 +6,19 @@ import com.app.barber.dao.VisitDao;
 import com.app.barber.dao.WorkerDao;
 import com.app.barber.model.Barber;
 import com.app.barber.model.Visit;
+import com.app.barber.model.Worker;
+import com.app.barber.other.builder.VisitBuilder;
+import com.app.barber.other.dto.VisitInputDto;
 import com.app.barber.other.dto.VisitOutputDto;
 import com.app.barber.other.exception.BarberNotFoundException;
+import com.app.barber.other.exception.ServiceNotFoundException;
+import com.app.barber.other.exception.VisitDateNotAvailableException;
+import com.app.barber.other.exception.WorkerNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -43,8 +50,30 @@ public class VisitService {
                 .collect(Collectors.toList());
     }
 
-    public void add(Long id){
-        //TODO
+    public void add(VisitInputDto visitDto){
+        Optional<com.app.barber.model.Service> serviceOptional = serviceDao.findById(visitDto.getService());
+        com.app.barber.model.Service service = serviceOptional.orElseThrow(ServiceNotFoundException::new);
+        Optional<Worker> workerOptional = workerDao.findById(visitDto.getWorker());
+        Worker worker = workerOptional.orElseThrow(WorkerNotFoundException::new);
+        //TODO check if worker has this service
+        LocalDateTime beginning = LocalDateTime.now()
+                .withMinute(visitDto.getMinutes())
+                .withDayOfMonth(visitDto.getDay())
+                .withHour(visitDto.getHour())
+                .withMonth(visitDto.getMonth());
+        LocalDateTime finish = beginning.plusMinutes(service.getTime());
+        if(visitDao.existsByWorkerAndFinishLessThanEqualOrBeginningGreaterThanEqual(
+                worker, finish, beginning)){
+            throw new VisitDateNotAvailableException();
+        }
+        Visit visit = VisitBuilder.builder()
+                .name(visitDto.getName())
+                .worker(worker)
+                .service(service)
+                .beginning(beginning)
+                .finish(finish)
+                .build();
+        visitDao.save(visit);
     }
 
     public void delete(Long id){

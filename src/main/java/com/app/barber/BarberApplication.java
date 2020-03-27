@@ -17,7 +17,7 @@ public class BarberApplication {
 		SpringApplication.run(BarberApplication.class, args);
 	}
 
-	@Bean
+	/*@Bean
 	CorsConfigurationSource corsConfigurationSource() {
 		CorsConfiguration configuration = new CorsConfiguration();
 		configuration.setAllowedOrigins(Collections.singletonList("http://localhost:3000"));
@@ -25,8 +25,8 @@ public class BarberApplication {
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 		source.registerCorsConfiguration("/**", configuration);
 		return source;
-	}
+	}*/
 
-	//TODO email and user annotation, logout and ResponseEntity
+	//TODO email and user annotation(validation), logout and ResponseEntity, visit validation
 	//TODO preAuthorize get() ... error, acl
 }

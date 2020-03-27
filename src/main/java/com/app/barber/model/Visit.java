@@ -1,6 +1,7 @@
 package com.app.barber.model;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 public class Visit {
@@ -11,7 +12,9 @@ public class Visit {
 
     private String name;
 
-    //time
+    private LocalDateTime beginning;
+
+    private LocalDateTime finish;
 
     @ManyToOne
     private Service service;
@@ -52,5 +55,21 @@ public class Visit {
 
     public void setWorker(Worker worker) {
         this.worker = worker;
+    }
+
+    public LocalDateTime getBeginning() {
+        return beginning;
+    }
+
+    public void setBeginning(LocalDateTime beginning) {
+        this.beginning = beginning;
+    }
+
+    public LocalDateTime getFinish() {
+        return finish;
+    }
+
+    public void setFinish(LocalDateTime finish) {
+        this.finish = finish;
     }
 }
