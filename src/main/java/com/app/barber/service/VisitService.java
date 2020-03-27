@@ -60,7 +60,9 @@ public class VisitService {
                 .withMinute(visitDto.getMinutes())
                 .withDayOfMonth(visitDto.getDay())
                 .withHour(visitDto.getHour())
-                .withMonth(visitDto.getMonth());
+                .withMonth(visitDto.getMonth())
+                .withSecond(0)
+                .withNano(0);
         LocalDateTime finish = beginning.plusMinutes(service.getTime());
         if(visitDao.existsByWorkerAndFinishLessThanEqualOrBeginningGreaterThanEqual(
                 worker, finish, beginning)){
