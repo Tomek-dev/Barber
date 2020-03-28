@@ -24,8 +24,7 @@ public class DataParser {
             double longitude = Double.parseDouble(array.get(0).toString());
             return new Double[]{latitude, longitude};
         } catch (ParseException e) {
-            e.printStackTrace();
+            throw new GeocodeException();
         }
-        throw new GeocodeException();
     }
 }
