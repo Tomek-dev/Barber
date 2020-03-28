@@ -63,14 +63,17 @@ public class VisitService {
         LocalTime time = open.getOpen();
         LocalDate day = LocalDate.parse(date);
         List<Visit> visits = visitDao.findByServiceAndBeginningBetweenOrderByBeginningAsc(service, day.atStartOfDay(), day.plusDays(1).atStartOfDay());
-        while (time.compareTo(open.getClose())  < 0){
+        while (time.compareTo(open.getClose()) < 0){
             times.add(time);
             time = time.plusMinutes(15);
         }
         for (Visit visit : visits) {
             times = times.stream()
                     .filter(value -> !(value.compareTo(visit.getBeginning().toLocalTime().minusSeconds(1)) >= 0
-                            && value.compareTo(visit.getFinish().toLocalTime()) < 0))
+                            && value.compareTo(visit.getFinish().toLocalTime()) < 0)
+                            && !(value.plusMinutes(service.getTime()).compareTo(visit.getBeginning().toLocalTime()) >= 0
+                            && value.plusMinutes(service.getTime()).compareTo(visit.getFinish().toLocalTime()) < 0)
+                            && value.plusMinutes(service.getTime()).compareTo(open.getClose()) <= 0)
                     .collect(Collectors.toList());
         }
         return times.stream()

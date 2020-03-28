@@ -1,9 +1,6 @@
 package com.app.barber.other.builder;
 
-import com.app.barber.model.Barber;
-import com.app.barber.model.Review;
-import com.app.barber.model.User;
-import com.app.barber.model.Worker;
+import com.app.barber.model.*;
 
 import java.util.Set;
 
@@ -57,6 +54,11 @@ public class BarberBuidler {
 
     public BarberBuidler workers(Set<Worker> workers){
         barber.setWorkers(workers);
+        return this;
+    }
+
+    public BarberBuidler open(Open open){
+        barber.setOpen(open);
         return this;
     }
 
