@@ -5,9 +5,11 @@ import com.app.barber.dao.ServiceDao;
 import com.app.barber.dao.VisitDao;
 import com.app.barber.dao.WorkerDao;
 import com.app.barber.model.Barber;
+import com.app.barber.model.Open;
 import com.app.barber.model.Visit;
 import com.app.barber.model.Worker;
 import com.app.barber.other.builder.VisitBuilder;
+import com.app.barber.other.dto.AvailableVisitOutputDto;
 import com.app.barber.other.dto.VisitInputDto;
 import com.app.barber.other.dto.VisitOutputDto;
 import com.app.barber.other.exception.BarberNotFoundException;
@@ -18,7 +20,10 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -50,22 +55,40 @@ public class VisitService {
                 .collect(Collectors.toList());
     }
 
+    public List<AvailableVisitOutputDto> findAllAvailable(Long id, String date){
+        Optional<com.app.barber.model.Service> serviceOptional = serviceDao.findById(id);
+        com.app.barber.model.Service service = serviceOptional.orElseThrow(ServiceNotFoundException::new);
+        Open open = service.getWorker().getBarber().getOpen();
+        List<LocalTime> times = new LinkedList<>();
+        LocalTime time = open.getOpen();
+        LocalDate day = LocalDate.parse(date);
+        List<Visit> visits = visitDao.findByServiceAndBeginningBetweenOrderByBeginningAsc(service, day.atStartOfDay(), day.plusDays(1).atStartOfDay());
+        while (time.compareTo(open.getClose())  < 0){
+            times.add(time);
+            time = time.plusMinutes(15);
+        }
+        for (Visit visit : visits) {
+            times = times.stream()
+                    .filter(value -> !(value.compareTo(visit.getBeginning().toLocalTime().minusSeconds(1)) >= 0
+                            && value.compareTo(visit.getFinish().toLocalTime()) < 0))
+                    .collect(Collectors.toList());
+        }
+        return times.stream()
+                .map(AvailableVisitOutputDto::new)
+                .collect(Collectors.toList());
+    }
+
     public void add(VisitInputDto visitDto){
         Optional<com.app.barber.model.Service> serviceOptional = serviceDao.findById(visitDto.getService());
         com.app.barber.model.Service service = serviceOptional.orElseThrow(ServiceNotFoundException::new);
         Optional<Worker> workerOptional = workerDao.findById(visitDto.getWorker());
         Worker worker = workerOptional.orElseThrow(WorkerNotFoundException::new);
         //TODO check if worker has this service
-        LocalDateTime beginning = LocalDateTime.now()
-                .withMinute(visitDto.getMinutes())
-                .withDayOfMonth(visitDto.getDay())
-                .withHour(visitDto.getHour())
-                .withMonth(visitDto.getMonth())
-                .withSecond(0)
-                .withNano(0);
+        LocalDateTime beginning = LocalDateTime.parse(visitDto.getDate());
         LocalDateTime finish = beginning.plusMinutes(service.getTime());
-        if(visitDao.existsByWorkerAndFinishLessThanEqualOrBeginningGreaterThanEqual(
-                worker, finish, beginning)){
+        beginning = beginning.plusSeconds(1);
+        if(visitDao.existsByWorkerAndFinishBetweenOrBeginningBetween(
+                worker, beginning, finish, beginning, finish)){
             throw new VisitDateNotAvailableException();
         }
         Visit visit = VisitBuilder.builder()

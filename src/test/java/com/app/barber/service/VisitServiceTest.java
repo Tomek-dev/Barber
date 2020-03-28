@@ -106,14 +106,11 @@ public class VisitServiceTest {
         Service service = new Service();
         service.setTime(0L);
         VisitInputDto visit = new VisitInputDto();
-        visit.setMonth(1);
-        visit.setDay(1);
-        visit.setHour(1);
-        visit.setMinutes(1);
+        visit.setDate("2020-03-29T08:30:00.0");
         given(serviceDao.findById(Mockito.any())).willReturn(Optional.of(service));
         given(workerDao.findById(Mockito.any())).willReturn(Optional.of(new Worker()));
-        given(visitDao.existsByWorkerAndFinishLessThanEqualOrBeginningGreaterThanEqual(
-                Mockito.any(), Mockito.any(), Mockito.any())).willReturn(true);
+        given(visitDao.existsByWorkerAndFinishBetweenOrBeginningBetween(
+                Mockito.any(), Mockito.any(), Mockito.any(), Mockito.any(), Mockito.any())).willReturn(true);
 
 
         //then

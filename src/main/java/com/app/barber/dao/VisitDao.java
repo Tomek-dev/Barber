@@ -1,5 +1,6 @@
 package com.app.barber.dao;
 
+import com.app.barber.model.Service;
 import com.app.barber.model.Visit;
 import com.app.barber.model.Worker;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -12,5 +13,6 @@ import java.util.List;
 @Repository
 public interface VisitDao extends JpaRepository<Visit, Long> {
     List<Visit> findByWorkerIn(Collection<Worker> workers);
-    boolean existsByWorkerAndFinishLessThanEqualOrBeginningGreaterThanEqual(Worker worker, LocalDateTime finish, LocalDateTime beginning);
+    boolean existsByWorkerAndFinishBetweenOrBeginningBetween(Worker worker, LocalDateTime finishDate1, LocalDateTime beginningDate1, LocalDateTime finishDate2, LocalDateTime beginningDate2);
+    List<Visit> findByServiceAndBeginningBetweenOrderByBeginningAsc(Service service, LocalDateTime day, LocalDateTime next);
 }

@@ -1,5 +1,6 @@
 package com.app.barber.controller;
 
+import com.app.barber.other.dto.AvailableVisitOutputDto;
 import com.app.barber.other.dto.VisitInputDto;
 import com.app.barber.other.dto.VisitOutputDto;
 import com.app.barber.service.VisitService;
@@ -29,6 +30,11 @@ public class VisitController {
     @PostMapping("/visit/add")
     public void add(@RequestBody VisitInputDto visit){
         visitService.add(visit);
+    }
+
+    @GetMapping("/visit/")
+    public List<AvailableVisitOutputDto> findAllAvailable(@RequestParam Long id, @RequestParam String date){
+        return visitService.findAllAvailable(id, date);
     }
 
     //only owner of this (openId)

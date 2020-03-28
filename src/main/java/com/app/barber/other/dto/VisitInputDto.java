@@ -3,10 +3,7 @@ package com.app.barber.other.dto;
 public class VisitInputDto {
 
     private String name;
-    private Integer month;
-    private Integer day;
-    private Integer hour;
-    private Integer minutes;
+    private String date;
     private Long service;
     private Long worker;
 
@@ -21,36 +18,12 @@ public class VisitInputDto {
         this.name = name;
     }
 
-    public Integer getMonth() {
-        return month;
+    public String getDate() {
+        return date;
     }
 
-    public void setMonth(Integer month) {
-        this.month = month;
-    }
-
-    public Integer getDay() {
-        return day;
-    }
-
-    public void setDay(Integer day) {
-        this.day = day;
-    }
-
-    public Integer getHour() {
-        return hour;
-    }
-
-    public void setHour(Integer hour) {
-        this.hour = hour;
-    }
-
-    public Integer getMinutes() {
-        return minutes;
-    }
-
-    public void setMinutes(Integer minutes) {
-        this.minutes = minutes;
+    public void setDate(String date) {
+        this.date = date;
     }
 
     public Long getService() {

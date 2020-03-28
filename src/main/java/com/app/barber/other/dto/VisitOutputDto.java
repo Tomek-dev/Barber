@@ -1,12 +1,17 @@
 package com.app.barber.other.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+import java.time.LocalDateTime;
+
 public class VisitOutputDto {
 
     private String name;
 
     private String workerName;
 
-    //time
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd MMMM yyyy hh:mm")
+    private LocalDateTime beginning;
 
     private String serviceName;
 
@@ -45,5 +50,13 @@ public class VisitOutputDto {
 
     public void setServicePrice(Double servicePrice) {
         this.servicePrice = servicePrice;
+    }
+
+    public LocalDateTime getBeginning() {
+        return beginning;
+    }
+
+    public void setBeginning(LocalDateTime beginning) {
+        this.beginning = beginning;
     }
 }

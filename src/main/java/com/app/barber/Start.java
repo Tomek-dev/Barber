@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalTime;
 import java.util.Collections;
 
 @Component
@@ -20,15 +21,17 @@ public class Start {
     private PasswordEncoder passwordEncoder;
     private WorkerDao workerDao;
     private ServiceDao serviceDao;
+    private OpenDao openDao;
 
     @Autowired
-    public Start(ReviewDao reviewDao, BarberDao barberDao, UserDao userDao, PasswordEncoder passwordEncoder, WorkerDao workerDao, ServiceDao serviceDao) {
+    public Start(ReviewDao reviewDao, BarberDao barberDao, UserDao userDao, PasswordEncoder passwordEncoder, WorkerDao workerDao, ServiceDao serviceDao, OpenDao openDao) {
         this.reviewDao = reviewDao;
         this.barberDao = barberDao;
         this.userDao = userDao;
         this.passwordEncoder = passwordEncoder;
         this.workerDao = workerDao;
         this.serviceDao = serviceDao;
+        this.openDao = openDao;
         init();
     }
 
@@ -60,12 +63,18 @@ public class Start {
                 .price(1.0)
                 .description("description")
                 .worker(worker)
-                .time(10L)
+                .time(30L)
+                .build();
+        Open open = OpenBuilder.builder()
+                .open(LocalTime.of(8, 0))
+                .close(LocalTime.of(16, 0))
+                .barber(barber)
                 .build();
         userDao.save(user);
         barberDao.save(barber);
         reviewDao.save(review);
         workerDao.save(worker);
         serviceDao.save(service);
+        openDao.save(open);
     }
 }
