@@ -3,6 +3,7 @@ package com.app.barber.service;
 import com.app.barber.dao.UserDao;
 import com.app.barber.model.User;
 import com.app.barber.other.builder.UserBuilder;
+import com.app.barber.other.dto.AvailabilityDto;
 import com.app.barber.other.payload.SignUpRequest;
 import com.app.barber.other.enums.Role;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,11 +38,21 @@ public class UserService {
         userDao.deleteById(id);
     }
 
-    public boolean existsByEmail(String email){
-        return userDao.existsByEmail(email);
+    public boolean existsByEmailIgnoreCase(String email){
+        return userDao.existsByEmailIgnoreCase(email);
     }
 
-    public boolean existsByUsername(String username){
-        return userDao.existsByUsername(username);
+    public boolean existsByUsernameIgnoreCase(String username){
+        return userDao.existsByUsernameIgnoreCase(username);
+    }
+
+    public AvailabilityDto usernameAvailability(String username){
+        Boolean available = userDao.existsByUsernameIgnoreCase(username);
+        return new AvailabilityDto(!available);
+    }
+
+    public AvailabilityDto emailAvailability(String email){
+        Boolean available = userDao.existsByEmailIgnoreCase(email);
+        return new AvailabilityDto(!available);
     }
 }

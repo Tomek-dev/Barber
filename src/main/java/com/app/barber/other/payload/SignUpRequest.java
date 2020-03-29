@@ -5,6 +5,7 @@ import com.app.barber.other.validation.PasswordDetails;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 @Password
@@ -16,6 +17,7 @@ public class SignUpRequest implements PasswordDetails {
 
     @NotBlank
     @Size(min = 8, max = 36)
+    @Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$)$")
     private String password;
 
     private String confirmPassword;

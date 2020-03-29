@@ -74,4 +74,12 @@ public class ExceptionAdvice {
         response.setDate(LocalDateTime.now());
         return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler(IncorrectParamException.class)
+    public ResponseEntity<ApiResponse> handleIncorrectParamException(IncorrectParamException e){
+        ApiResponse response = new ApiResponse(false, e.getMessage());
+        response.setStatus(HttpStatus.UNPROCESSABLE_ENTITY.value());
+        response.setDate(LocalDateTime.now());
+        return new ResponseEntity<>(response, HttpStatus.UNPROCESSABLE_ENTITY);
+    }
 }

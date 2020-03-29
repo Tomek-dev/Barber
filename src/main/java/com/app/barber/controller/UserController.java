@@ -1,5 +1,7 @@
 package com.app.barber.controller;
 
+import com.app.barber.other.dto.AvailabilityDto;
+import com.app.barber.other.exception.IncorrectParamException;
 import com.app.barber.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -20,5 +22,14 @@ public class UserController {
     @DeleteMapping("/user/{id}")
     public void delete(@PathVariable Long id){
         userService.delete(id);
+    }
+
+    @GetMapping("/user/available")
+    public AvailabilityDto existsByUsername(@RequestParam(required = false) String username, @RequestParam(required = false) String email){
+        if ((username == null && email == null)
+                || (username != null && email != null)){
+            throw new IncorrectParamException();
+        }
+        return (username != null? userService.usernameAvailability(username): userService.emailAvailability(email));
     }
 }
