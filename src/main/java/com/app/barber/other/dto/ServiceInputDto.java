@@ -1,11 +1,17 @@
 package com.app.barber.other.dto;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
 public class ServiceInputDto {
 
+    @NotBlank
     private String name;
 
+    @NotBlank
     private String description;
 
+    @NotNull
     private Double price;
 
     public ServiceInputDto() {

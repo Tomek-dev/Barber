@@ -1,8 +1,13 @@
 package com.app.barber.other.dto;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
 public class ReviewInputDto {
 
+    @NotBlank
     private String review;
+    @NotNull
     private Integer star;
 
     public ReviewInputDto() {

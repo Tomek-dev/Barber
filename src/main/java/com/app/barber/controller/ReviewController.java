@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -23,7 +24,7 @@ public class ReviewController {
 
     //only openId user
     @PostMapping("/reviews/add/{id}")
-    public void add(@RequestBody ReviewInputDto review, @PathVariable  long id){
+    public void add(@Valid @RequestBody ReviewInputDto review, @PathVariable  long id){
         reviewService.add(review, id);
     }
 

@@ -9,6 +9,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -25,7 +26,7 @@ public class WorkerController {
 
     @PreAuthorize("hasRole('ROLE_USER')")
     @PostMapping("/worker/add")
-    public void add(@RequestBody WorkerInputDto workerDto, @AuthenticationPrincipal User user){
+    public void add(@Valid @RequestBody WorkerInputDto workerDto, @AuthenticationPrincipal User user){
         workerService.add(workerDto, user.getBarber().getId());
     }
 

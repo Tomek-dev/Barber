@@ -1,10 +1,21 @@
 package com.app.barber.other.dto;
 
+import com.app.barber.other.validation.Today;
+
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 public class VisitInputDto {
 
+    @NotBlank
+    @Size(min = 4, max = 36)
     private String name;
+    @Today
     private String date;
+    @NotNull
     private Long service;
+    @NotNull
     private Long worker;
 
     public VisitInputDto() {

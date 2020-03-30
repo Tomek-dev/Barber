@@ -10,6 +10,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.security.Principal;
 
 @RestController
@@ -25,7 +26,7 @@ public class BarberController {
 
     @PreAuthorize("hasRole('ROLE_USER')")
     @PostMapping("/barber/add")
-    public void add(@RequestBody BarberInputDto barberDto, @AuthenticationPrincipal User user){
+    public void add(@Valid @RequestBody BarberInputDto barberDto, @AuthenticationPrincipal User user){
         barberService.add(barberDto, user.getId());
     }
 

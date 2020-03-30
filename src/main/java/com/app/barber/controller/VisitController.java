@@ -7,6 +7,7 @@ import com.app.barber.service.VisitService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -28,7 +29,7 @@ public class VisitController {
 
     //authenticated (openId)
     @PostMapping("/visit/add")
-    public void add(@RequestBody VisitInputDto visit){
+    public void add(@Valid @RequestBody VisitInputDto visit){
         visitService.add(visit);
     }
 

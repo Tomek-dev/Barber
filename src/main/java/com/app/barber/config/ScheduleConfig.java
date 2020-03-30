@@ -1,6 +1,7 @@
 package com.app.barber.config;
 
 import com.app.barber.dao.TokenDao;
+import com.app.barber.dao.VisitDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -14,14 +15,22 @@ import java.time.LocalDateTime;
 public class ScheduleConfig {
 
     private TokenDao tokenDao;
+    private VisitDao visitDao;
 
     @Autowired
-    public ScheduleConfig(TokenDao tokenDao) {
+    public ScheduleConfig(TokenDao tokenDao, VisitDao visitDao) {
         this.tokenDao = tokenDao;
+        this.visitDao = visitDao;
     }
 
     @Scheduled(fixedRate = 60000)
-    private void delete(){
+    private void deleteToken(){
         tokenDao.deleteByDateLessThanEqual(LocalDateTime.now());
+    }
+
+    @Scheduled(cron = "0 0 0 * * *")
+    public void deleteVisit(){
+        LocalDateTime now = LocalDateTime.now();
+        visitDao.deleteByFinishLessThan(now);
     }
 }
