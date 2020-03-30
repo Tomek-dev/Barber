@@ -48,12 +48,14 @@ public class PasswordService {
     }
 
     public void createReset(ForgotInputDto forgot){
-        Optional<User> userOptional = userDao.findByUsername(forgot.getUsername());
-        User user = userOptional.orElseThrow(() -> new UsernameNotFoundException("User not found"));
-        Token token = new Token.Builder()
-                .user(user)
-                .token(UUID.randomUUID())
-                .build();
-        tokenDao.save(token);
+        if (!tokenDao.existsByUserUsername(forgot.getUsername())) {
+            Optional<User> userOptional = userDao.findByUsername(forgot.getUsername());
+            User user = userOptional.orElseThrow(() -> new UsernameNotFoundException("User not found"));
+            Token token = new Token.Builder()
+                    .user(user)
+                    .token(UUID.randomUUID())
+                    .build();
+            tokenDao.save(token);
+        }
     }
 }

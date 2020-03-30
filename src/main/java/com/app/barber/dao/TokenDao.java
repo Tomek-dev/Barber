@@ -14,4 +14,5 @@ public interface TokenDao extends JpaRepository<Token, Long> {
     Optional<Token> findByToken(UUID token);
     @Transactional
     void deleteByDateLessThanEqual(LocalDateTime date);
+    Boolean existsByUserUsername(String username);
 }
