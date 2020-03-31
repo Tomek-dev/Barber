@@ -50,14 +50,6 @@ public class AuthenticationController {
 
     @PostMapping("/sign-up")
     public ResponseEntity<?> signUp(@Valid @RequestBody SignUpRequest signUp){
-        if(userService.existsByUsernameIgnoreCase(signUp.getUsername())){
-            return new ResponseEntity(new ApiResponse(false, "Username is already taken."),
-                    HttpStatus.BAD_REQUEST);
-        }
-        if(userService.existsByEmailIgnoreCase(signUp.getEmail())){
-            return new ResponseEntity(new ApiResponse(false, "Email is already in use."),
-                    HttpStatus.BAD_REQUEST);
-        }
         userService.add(signUp);
         return ResponseEntity.ok(new ApiResponse(true, "User registered successfully."));
     }

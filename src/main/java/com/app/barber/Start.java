@@ -49,7 +49,7 @@ public class Start {
                 .build();
         User user = UserBuilder.builder()
                 .username("user")
-                .email("email")
+                .email("email@email.email")
                 .password(passwordEncoder.encode("password"))
                 .roles(Collections.singleton(Role.USER))
                 .build();
