@@ -37,7 +37,7 @@ public class ServiceController {
         || (barber != null && worker != null)) {
             throw new IncorrectParamException();
         }
-        return (barber == null ? serviceService.getAllByWorkerId(barber): serviceService.getAllByBarberId(barber));
+        return (barber == null ? serviceService.getAllByWorkerId(worker): serviceService.getAllByBarberId(barber));
     }
 
     @PreAuthorize("hasRole('ROLE_USER') && @webSecurity.serviceOwner(#id, authentication)")

@@ -70,7 +70,6 @@ public class VisitServiceTest {
                 .price(1.0)
                 .name("name")
                 .time(30L)
-                .workers(Collections.singleton(worker))
                 .barber(barber)
                 .build();
         visit = VisitBuilder.builder()
@@ -79,6 +78,7 @@ public class VisitServiceTest {
                 .service(service)
                 .name("name")
                 .build();
+        worker.addService(service);
     }
 
     @Test
@@ -119,10 +119,8 @@ public class VisitServiceTest {
     }
 
     @Test
-    public void shouldThrowVisitDateNotAvailable(){
+    public void shouldThrowVisitDateNotAvailable1(){
         //given
-        Service service = new Service();
-        service.setTime(0L);
         VisitInputDto visit = new VisitInputDto();
         visit.setDate("2020-03-29T08:30:00.0");
         given(serviceDao.findById(Mockito.any())).willReturn(Optional.of(service));
@@ -132,6 +130,23 @@ public class VisitServiceTest {
 
 
         //then
+        assertThrows(VisitDateNotAvailableException.class, () -> visitService.add(visit));
+    }
+
+    @Test
+    public void shouldThrowVisitDateNotAvailable2(){
+        //given
+        VisitInputDto visit = new VisitInputDto();
+        visit.setDate("2020-03-29T07:30:00.0");
+        given(serviceDao.findById(Mockito.any())).willReturn(Optional.of(service));
+        given(workerDao.findById(Mockito.any())).willReturn(Optional.of(new Worker()));
+        given(visitDao.existsByWorkerAndFinishBetweenOrBeginningBetween(
+                Mockito.any(), Mockito.any(), Mockito.any(), Mockito.any(), Mockito.any())).willReturn(false);
+
+
+        //then
+        assertThrows(VisitDateNotAvailableException.class, () -> visitService.add(visit));
+        visit.setDate("2020-03-29T11:45:00.0");
         assertThrows(VisitDateNotAvailableException.class, () -> visitService.add(visit));
     }
 

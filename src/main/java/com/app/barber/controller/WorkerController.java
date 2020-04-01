@@ -36,6 +36,11 @@ public class WorkerController {
         workerService.addTo(serviceId, workerId);
     }
 
+    @PreAuthorize("hasRole('ROLE_USER') && @webSecurity.workerOwner(#workerId, authentication)")
+    @PostMapping("/worker/{workerId}/remove/{serviceId}")
+    public void removeFrom(@PathVariable Long serviceId, @PathVariable Long workerId){
+        workerService.removeFrom(serviceId, workerId);
+    }
     @PreAuthorize("hasRole('ROLE_USER') && @webSecurity.workerOwner(#id, authentication)")
     @DeleteMapping("/worker/{id}")
     public void delete(@PathVariable Long id){

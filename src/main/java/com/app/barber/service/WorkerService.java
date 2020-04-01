@@ -53,7 +53,20 @@ public class WorkerService {
             throw new BelongException();
         }
         worker.addService(service);
-        serviceDao.save(service);
+        workerDao.save(worker);
+    }
+
+    public void removeFrom(Long serviceId, Long workerId){
+        Optional<Worker> workerOptional = workerDao.findById(workerId);
+        Worker worker = workerOptional.orElseThrow(WorkerNotFoundException::new);
+        Optional<com.app.barber.model.Service> serviceOptional = serviceDao.findById(serviceId);
+        com.app.barber.model.Service service = serviceOptional.orElseThrow(ServiceNotFoundException::new);
+        if(!(worker.getBarber().getId().equals(service.getBarber().getId()))
+                || !(worker.getServices().contains(service))){
+            throw new BelongException();
+        }
+        worker.removeService(service);
+        workerDao.save(worker);
     }
 
     public WorkerOutputDto getById(Long id){
@@ -63,6 +76,9 @@ public class WorkerService {
     }
 
     public void delete(Long id){
-        workerDao.deleteById(id);
+        Optional<Worker> workerOptional = workerDao.findById(id);
+        Worker worker = workerOptional.orElseThrow(WorkerNotFoundException::new);
+        worker.getServices().removeIf(service -> service.getWorkers().contains(worker));
+        workerDao.delete(worker);
     }
 }

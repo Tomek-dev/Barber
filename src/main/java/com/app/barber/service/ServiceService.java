@@ -69,6 +69,9 @@ public class ServiceService {
     }
 
     public void delete(Long id){
-        serviceDao.deleteById(id);
+        Optional<com.app.barber.model.Service> serviceOptional = serviceDao.findById(id);
+        com.app.barber.model.Service service = serviceOptional.orElseThrow(ServiceNotFoundException::new);
+        service.getWorkers().forEach(worker -> worker.removeService(service));
+        serviceDao.delete(service);
     }
 }
