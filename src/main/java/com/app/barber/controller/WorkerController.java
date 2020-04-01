@@ -30,6 +30,12 @@ public class WorkerController {
         workerService.add(workerDto, user.getBarber().getId());
     }
 
+    @PreAuthorize("hasRole('ROLE_USER') && @webSecurity.workerOwner(#workerId, authentication)")
+    @PostMapping("/worker/{workerId}/add/{serviceId}")
+    public void addTo(@PathVariable Long serviceId, @PathVariable Long workerId){
+        workerService.addTo(serviceId, workerId);
+    }
+
     @PreAuthorize("hasRole('ROLE_USER') && @webSecurity.workerOwner(#id, authentication)")
     @DeleteMapping("/worker/{id}")
     public void delete(@PathVariable Long id){

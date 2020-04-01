@@ -4,14 +4,14 @@ import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import java.time.LocalDateTime;
 
-public class TodayValidator implements ConstraintValidator<Today, LocalDateTime> {
+public class TodayValidator implements ConstraintValidator<Today, String> {
     @Override
-    public void initialize(Today constraintAnnotation) {
-
+    public boolean isValid(String s, ConstraintValidatorContext constraintValidatorContext) {
+        return LocalDateTime.parse(s).compareTo(LocalDateTime.now()) > 0;
     }
 
     @Override
-    public boolean isValid(LocalDateTime localDateTime, ConstraintValidatorContext constraintValidatorContext) {
-        return localDateTime.compareTo(LocalDateTime.now()) > 0;
+    public void initialize(Today constraintAnnotation) {
+
     }
 }

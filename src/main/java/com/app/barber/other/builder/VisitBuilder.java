@@ -1,5 +1,6 @@
 package com.app.barber.other.builder;
 
+import com.app.barber.model.Barber;
 import com.app.barber.model.Service;
 import com.app.barber.model.Visit;
 import com.app.barber.model.Worker;
@@ -36,6 +37,11 @@ public class VisitBuilder {
 
     public VisitBuilder finish(LocalDateTime finish){
         visit.setFinish(finish);
+        return this;
+    }
+
+    public VisitBuilder barber(Barber barber){
+        visit.setBarber(barber);
         return this;
     }
 

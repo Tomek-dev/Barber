@@ -30,5 +30,5 @@ public class BarberApplication {
 	}
 
 	//TODO logout and ResponseEntity
-	//TODO preAuthorize get() ... error, acl, regexp, remove worker/service
+	//TODO acl, regexp, remove worker/service servicedto
 }

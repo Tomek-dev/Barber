@@ -1,8 +1,13 @@
 package com.app.barber.other.dto;
 
+import com.app.barber.model.Worker;
+
+import java.util.Set;
+import java.util.stream.Collectors;
+
 public class ServiceOutputDto {
 
-    private String workerName;
+    private Set<String> workers;
 
     private String name;
 
@@ -38,11 +43,13 @@ public class ServiceOutputDto {
         this.price = price;
     }
 
-    public String getWorkerName() {
-        return workerName;
+    public Set<String> getWorkers() {
+        return workers;
     }
 
-    public void setWorkerName(String workerName) {
-        this.workerName = workerName;
+    public void setWorkers(Set<Worker> workers) {
+        this.workers = workers.stream()
+                .map(Worker::getName)
+                .collect(Collectors.toSet());
     }
 }

@@ -14,6 +14,9 @@ public class ServiceInputDto {
     @NotNull
     private Double price;
 
+    @NotNull
+    private Long time;
+
     public ServiceInputDto() {
     }
 
@@ -39,5 +42,13 @@ public class ServiceInputDto {
 
     public void setPrice(Double price) {
         this.price = price;
+    }
+
+    public Long getTime() {
+        return time;
+    }
+
+    public void setTime(Long time) {
+        this.time = time;
     }
 }

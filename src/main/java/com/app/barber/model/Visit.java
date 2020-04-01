@@ -75,4 +75,12 @@ public class Visit {
     public void setFinish(LocalDateTime finish) {
         this.finish = finish;
     }
+
+    public Barber getBarber() {
+        return barber;
+    }
+
+    public void setBarber(Barber barber) {
+        this.barber = barber;
+    }
 }

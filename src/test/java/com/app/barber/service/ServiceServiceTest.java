@@ -1,5 +1,6 @@
 package com.app.barber.service;
 
+import com.app.barber.dao.BarberDao;
 import com.app.barber.dao.ServiceDao;
 import com.app.barber.dao.WorkerDao;
 import com.app.barber.model.Service;
@@ -8,6 +9,7 @@ import com.app.barber.other.builder.ServiceBuilder;
 import com.app.barber.other.builder.WorkerBuilder;
 import com.app.barber.other.dto.ServiceInputDto;
 import com.app.barber.other.dto.ServiceOutputDto;
+import com.app.barber.other.exception.BarberNotFoundException;
 import com.app.barber.other.exception.WorkerNotFoundException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -32,6 +34,9 @@ public class ServiceServiceTest {
     @Mock
     private WorkerDao workerDao;
 
+    @Mock
+    private BarberDao barberDao;
+
     @InjectMocks
     private ServiceService service;
 
@@ -39,9 +44,10 @@ public class ServiceServiceTest {
     public void shouldThrowWorkerNotFoundException(){
         //given
         given(workerDao.findById(Mockito.any())).willReturn(Optional.empty());
+        given(barberDao.findById(Mockito.any())).willReturn(Optional.empty());
 
         //then
-        assertThrows(WorkerNotFoundException.class, () -> service.add(new ServiceInputDto(), 4L));
+        assertThrows(BarberNotFoundException.class, () -> service.add(new ServiceInputDto(), 4L));
         assertThrows(WorkerNotFoundException.class, () -> service.getAllByWorkerId(4L));
     }
 
@@ -57,7 +63,7 @@ public class ServiceServiceTest {
                 .name("name")
                 .services(Collections.singleton(service))
                 .build();
-        service.setWorker(worker);
+        service.setWorkers(Collections.singleton(worker));
         given(workerDao.findById(Mockito.any())).willReturn(Optional.ofNullable(worker));
 
         //when
@@ -65,7 +71,7 @@ public class ServiceServiceTest {
 
         //then
         assertEquals("name", services.get(0).getName());
-        assertEquals("name", services.get(0).getWorkerName());
+        assertTrue(services.get(0).getWorkers().contains("name"));
         assertEquals(1.0, services.get(0).getPrice());
         assertEquals("description", services.get(0).getDescription());
     }

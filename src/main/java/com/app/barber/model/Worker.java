@@ -13,7 +13,10 @@ public class Worker {
 
     private String name;
 
-    @OneToMany(mappedBy = "worker", orphanRemoval = true)
+    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @JoinTable(name = "worker_services",
+        joinColumns = @JoinColumn(name = "worker_id"),
+        inverseJoinColumns = @JoinColumn(name = "service_id"))
     private Set<Service> services = new HashSet<>();
 
     @ManyToOne
@@ -63,5 +66,15 @@ public class Worker {
 
     public void setVisits(Set<Visit> visits) {
         this.visits = visits;
+    }
+
+    public void addService(Service service){
+        this.services.add(service);
+        service.getWorkers().add(this);
+    }
+
+    public void removeService(Service service){
+        this.services.remove(service);
+        service.getWorkers().remove(this);
     }
 }

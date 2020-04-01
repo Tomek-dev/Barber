@@ -25,8 +25,8 @@ public class Service {
     @ManyToOne
     private Barber barber;
 
-    @ManyToOne
-    private Worker worker;
+    @ManyToMany(mappedBy = "services")
+    private Set<Worker> workers = new HashSet<>();
 
     public Service() {
     }
@@ -63,12 +63,12 @@ public class Service {
         this.price = price;
     }
 
-    public Worker getWorker() {
-        return worker;
+    public Set<Worker> getWorkers() {
+        return workers;
     }
 
-    public void setWorker(Worker worker) {
-        this.worker = worker;
+    public void setWorkers(Set<Worker> worker) {
+        this.workers = worker;
     }
 
     public Set<Visit> getVisits() {

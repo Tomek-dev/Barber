@@ -1,5 +1,6 @@
 package com.app.barber.other.builder;
 
+import com.app.barber.model.Barber;
 import com.app.barber.model.Service;
 import com.app.barber.model.Visit;
 import com.app.barber.model.Worker;
@@ -29,8 +30,8 @@ public class ServiceBuilder {
         return this;
     }
 
-    public ServiceBuilder worker(Worker worker){
-        service.setWorker(worker);
+    public ServiceBuilder workers(Set<Worker> workers){
+        service.setWorkers(workers);
         return this;
     }
 
@@ -41,6 +42,11 @@ public class ServiceBuilder {
 
     public ServiceBuilder time(Long time){
         service.setTime(time);
+        return this;
+    }
+
+    public ServiceBuilder barber(Barber barber){
+        service.setBarber(barber);
         return this;
     }
 

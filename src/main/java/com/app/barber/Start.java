@@ -62,12 +62,14 @@ public class Start {
                 .name("name")
                 .price(1.0)
                 .description("description")
-                .worker(worker)
+                .workers(Collections.singleton(worker))
                 .time(30L)
+                .barber(barber)
                 .build();
+        worker.setServices(Collections.singleton(service));
         Open open = OpenBuilder.builder()
                 .open(LocalTime.of(8, 0))
-                .close(LocalTime.of(16, 0))
+                .close(LocalTime.of(18, 0))
                 .barber(barber)
                 .build();
         userDao.save(user);

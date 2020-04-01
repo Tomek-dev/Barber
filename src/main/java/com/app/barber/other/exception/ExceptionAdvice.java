@@ -82,4 +82,14 @@ public class ExceptionAdvice {
         response.setDate(LocalDateTime.now());
         return new ResponseEntity<>(response, HttpStatus.UNPROCESSABLE_ENTITY);
     }
+
+    @ExceptionHandler(BelongException.class)
+    public ResponseEntity<ApiResponse> handleBelongException(BelongException e){
+        ApiResponse response = new ApiResponse(false, e.getMessage());
+        response.setStatus(HttpStatus.UNPROCESSABLE_ENTITY.value());
+        response.setDate(LocalDateTime.now());
+        return new ResponseEntity<>(response, HttpStatus.UNPROCESSABLE_ENTITY);
+    }
+
+
 }

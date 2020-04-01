@@ -70,7 +70,8 @@ public class VisitServiceTest {
                 .price(1.0)
                 .name("name")
                 .time(30L)
-                .worker(worker)
+                .workers(Collections.singleton(worker))
+                .barber(barber)
                 .build();
         visit = VisitBuilder.builder()
                 .beginning(LocalDateTime.parse("2020-03-29T10:30:01.0"))
@@ -85,7 +86,7 @@ public class VisitServiceTest {
         //given
         visit.setWorker(worker);
         given(barberDao.findById(Mockito.any())).willReturn(java.util.Optional.ofNullable(barber));
-        given(visitDao.findByWorkerIn(Mockito.any())).willReturn(Collections.singletonList(visit));
+        given(visitDao.findByBarber(Mockito.any())).willReturn(Collections.singletonList(visit));
 
         //when
         List<VisitOutputDto> visits = visitService.findAllByBarber(4L);

@@ -62,6 +62,16 @@ public class BarberBuidler {
         return this;
     }
 
+    public BarberBuidler visits(Set<Visit> visits){
+        barber.setVisits(visits);
+        return this;
+    }
+
+    public BarberBuidler services(Set<Service> services){
+        barber.setServices(services);
+        return this;
+    }
+
     public Barber build(){
         return barber;
     }

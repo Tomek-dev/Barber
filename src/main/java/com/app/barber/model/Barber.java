@@ -136,6 +136,14 @@ public class Barber {
         return services;
     }
 
+    public Set<Visit> getVisits() {
+        return visits;
+    }
+
+    public void setVisits(Set<Visit> visits) {
+        this.visits = visits;
+    }
+
     public void setServices(Set<Service> services) {
         this.services = services;
     }

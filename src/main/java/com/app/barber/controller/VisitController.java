@@ -22,7 +22,6 @@ public class VisitController {
         this.visitService = visitService;
     }
 
-    //only barber which is owner
     @PreAuthorize("hasRole('ROLE_USER') && @webSecurity.visitOwner(#id, authentication)")
     @GetMapping("/visit/{id}")
     public List<VisitOutputDto> findAllByBarber(@PathVariable Long id){

@@ -49,7 +49,7 @@ public class VisitService {
     public List<VisitOutputDto> findAllByBarber(Long id){
         Optional<Barber> barberOptional = barberDao.findById(id);
         Barber barber = barberOptional.orElseThrow(BarberNotFoundException::new);
-        List<Visit> visits = visitDao.findByWorkerIn(barber.getWorkers());
+        List<Visit> visits = visitDao.findByBarber(barber);
         return visits.stream()
                 .map(visit -> mapper.map(visit, VisitOutputDto.class))
                 .collect(Collectors.toList());
@@ -58,7 +58,7 @@ public class VisitService {
     public List<AvailableVisitOutputDto> findAllAvailable(Long id, String date){
         Optional<com.app.barber.model.Service> serviceOptional = serviceDao.findById(id);
         com.app.barber.model.Service service = serviceOptional.orElseThrow(ServiceNotFoundException::new);
-        Open open = service.getWorker().getBarber().getOpen();
+        Open open = service.getBarber().getOpen();
         List<LocalTime> times = new LinkedList<>();
         LocalTime time = open.getOpen();
         LocalDate day = LocalDate.parse(date);
@@ -87,17 +87,21 @@ public class VisitService {
         Optional<Worker> workerOptional = workerDao.findById(visitDto.getWorker());
         Worker worker = workerOptional.orElseThrow(WorkerNotFoundException::new);
         //TODO check if worker has this service
+        Barber barber = service.getBarber();
         LocalDateTime beginning = LocalDateTime.parse(visitDto.getDate());
         LocalDateTime finish = beginning.plusMinutes(service.getTime());
         beginning = beginning.plusSeconds(1);
         if(visitDao.existsByWorkerAndFinishBetweenOrBeginningBetween(
-                worker, beginning, finish, beginning, finish)){
+                worker, beginning, finish, beginning, finish)
+                || finish.toLocalTime().compareTo(barber.getOpen().getClose().plusSeconds(1)) > 0
+                || beginning.toLocalTime().compareTo(barber.getOpen().getOpen()) < 0){
             throw new VisitDateNotAvailableException();
         }
         Visit visit = VisitBuilder.builder()
                 .name(visitDto.getName())
                 .worker(worker)
                 .service(service)
+                .barber(barber)
                 .beginning(beginning)
                 .finish(finish)
                 .build();
