@@ -15,9 +15,6 @@ public class ResetInputDto implements PasswordDetails {
     private String password;
     private String confirmPassword;
 
-    @NotBlank
-    private UUID token;
-
     public ResetInputDto() {
     }
 
@@ -37,13 +34,5 @@ public class ResetInputDto implements PasswordDetails {
 
     public void setConfirmPassword(String confirmPassword) {
         this.confirmPassword = confirmPassword;
-    }
-
-    public UUID getToken() {
-        return token;
-    }
-
-    public void setToken(UUID token) {
-        this.token = token;
     }
 }

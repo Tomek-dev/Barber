@@ -1,5 +1,6 @@
 package com.app.barber.dao;
 
+import com.app.barber.model.Barber;
 import com.app.barber.model.Service;
 import com.app.barber.model.Visit;
 import com.app.barber.model.Worker;
@@ -18,4 +19,6 @@ public interface VisitDao extends JpaRepository<Visit, Long> {
     List<Visit> findByServiceAndBeginningBetweenOrderByBeginningAsc(Service service, LocalDateTime day, LocalDateTime next);
     @Transactional
     void deleteByFinishLessThan(LocalDateTime time);
+
+    Boolean existsByIdAndBarber(Long id, Barber barber);
 }

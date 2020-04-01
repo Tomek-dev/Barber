@@ -10,10 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.UUID;
@@ -37,9 +34,9 @@ public class PasswordController {
         return ResponseEntity.ok("Password change successfully");
     }
 
-    @PostMapping("/reset")
-    public ResponseEntity<?> reset(@Valid @RequestBody ResetInputDto reset){
-        passwordService.reset(reset);
+    @PostMapping("/reset/value")
+    public ResponseEntity<?> reset(@Valid @RequestBody ResetInputDto reset, @RequestParam String token){
+        passwordService.reset(reset, token);
         return ResponseEntity.ok("Reset password successfully");
     }
 

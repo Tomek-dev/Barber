@@ -22,7 +22,7 @@ public class ServiceController {
         this.serviceService = serviceService;
     }
 
-    //only barber/user
+    @PreAuthorize("hasRole('ROLE_USER') && @webSecurity.serviceOwner(#id, authentication)")
     @PostMapping("/service/add/{id}")
     public void add(@Valid @RequestBody ServiceInputDto serviceDto, @PathVariable Long id){
         serviceService.add(serviceDto, id);
@@ -33,7 +33,7 @@ public class ServiceController {
         return serviceService.getAllByWorkerId(id);
     }
 
-    //only owner of this
+    @PreAuthorize("hasRole('ROLE_USER') && @webSecurity.serviceOwner(#id, authentication)")
     @DeleteMapping("/service/{id}")
     public void delete(@PathVariable Long id){
         serviceService.delete(id);

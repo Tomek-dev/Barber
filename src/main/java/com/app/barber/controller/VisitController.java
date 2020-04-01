@@ -5,6 +5,7 @@ import com.app.barber.other.dto.VisitInputDto;
 import com.app.barber.other.dto.VisitOutputDto;
 import com.app.barber.service.VisitService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -21,7 +22,8 @@ public class VisitController {
         this.visitService = visitService;
     }
 
-    //only barber which is owner (openId)
+    //only barber which is owner
+    @PreAuthorize("hasRole('ROLE_USER') && @webSecurity.visitOwner(#id, authentication)")
     @GetMapping("/visit/{id}")
     public List<VisitOutputDto> findAllByBarber(@PathVariable Long id){
         return visitService.findAllByBarber(id);

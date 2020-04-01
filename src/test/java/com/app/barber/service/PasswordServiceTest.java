@@ -60,7 +60,7 @@ public class PasswordServiceTest {
         given(tokenDao.findByToken(Mockito.any())).willReturn(Optional.empty());
 
         //then
-        assertThrows(TokenNotFoundException.class, () -> passwordService.reset(new ResetInputDto()));
+        assertThrows(TokenNotFoundException.class, () -> passwordService.reset(new ResetInputDto(), ""));
     }
 
     @Test
@@ -104,7 +104,7 @@ public class PasswordServiceTest {
         given(tokenDao.findByToken(Mockito.any())).willReturn(Optional.of(token));
 
         //when
-        passwordService.reset(reset);
+        passwordService.reset(reset, "");
 
         //then
         verify(tokenDao).delete(token);

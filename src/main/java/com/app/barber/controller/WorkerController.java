@@ -30,7 +30,7 @@ public class WorkerController {
         workerService.add(workerDto, user.getBarber().getId());
     }
 
-    //only owner of this
+    @PreAuthorize("hasRole('ROLE_USER') && @webSecurity.workerOwner(#id, authentication)")
     @DeleteMapping("/worker/{id}")
     public void delete(@PathVariable Long id){
         workerService.delete(id);

@@ -38,8 +38,8 @@ public class PasswordService {
         userDao.save(user);
     }
 
-    public void reset(ResetInputDto reset){
-        Optional<Token> tokenOptional = tokenDao.findByToken(reset.getToken());
+    public void reset(ResetInputDto reset, String token){
+        Optional<Token> tokenOptional = tokenDao.findByToken(UUID.fromString(token));
         Token foundToken = tokenOptional.orElseThrow(TokenNotFoundException::new);
         User user = foundToken.getUser();
         user.setPassword(passwordEncoder.encode(reset.getPassword()));

@@ -22,6 +22,9 @@ public class Visit {
     @ManyToOne
     private Worker worker;
 
+    @ManyToOne
+    private Barber barber;
+
     public Visit() {
     }
 

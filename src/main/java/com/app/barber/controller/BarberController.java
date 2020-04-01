@@ -35,7 +35,7 @@ public class BarberController {
         return barberService.getById(id);
     }
 
-    @PreAuthorize("isAuthenticated() && #id == authentication.getPrincipal().getBarber().getId()")
+    @PreAuthorize("hasRole('ROLE_USER') && @webSecurity.barberOwner(#id, authentication)")
     @DeleteMapping("/barber/{id}")
     public void delete(@PathVariable Long id){
         barberService.delete(id);

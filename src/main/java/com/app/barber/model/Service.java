@@ -23,6 +23,9 @@ public class Service {
     private Set<Visit> visits = new HashSet<>();
 
     @ManyToOne
+    private Barber barber;
+
+    @ManyToOne
     private Worker worker;
 
     public Service() {
@@ -82,5 +85,13 @@ public class Service {
 
     public void setTime(Long time) {
         this.time = time;
+    }
+
+    public Barber getBarber() {
+        return barber;
+    }
+
+    public void setBarber(Barber barber) {
+        this.barber = barber;
     }
 }

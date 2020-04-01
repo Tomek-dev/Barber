@@ -29,6 +29,6 @@ public class BarberApplication {
 		return source;
 	}
 
-	//TODO email and user annotation(validation), logout and ResponseEntity, visit validation
-	//TODO preAuthorize get() ... error, acl, regexp
+	//TODO logout and ResponseEntity
+	//TODO preAuthorize get() ... error, acl, regexp, remove worker/service
 }
