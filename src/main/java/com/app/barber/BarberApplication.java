@@ -30,5 +30,5 @@ public class BarberApplication {
 	}
 
 	//TODO logout and ResponseEntity, images, admin
-	//TODO acl, regexp, servicedto, visits
+	//TODO acl, regexp, servicedto, visits, integration tests
 }

@@ -51,4 +51,9 @@ public class WorkerController {
     public WorkerOutputDto get(@PathVariable Long id){
         return workerService.getById(id);
     }
+
+    @GetMapping("/workers/{id}")
+    public List<WorkerOutputDto> getAll(@PathVariable Long id){
+        return workerService.getByBarberId(id);
+    }
 }

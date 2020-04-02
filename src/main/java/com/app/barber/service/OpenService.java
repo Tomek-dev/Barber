@@ -12,7 +12,9 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.DayOfWeek;
 import java.time.LocalTime;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -29,18 +31,27 @@ public class OpenService {
         this.barberDao = barberDao;
     }
 
-    public void add(Long id, OpenDto openDto){
-        Optional<Barber> barberOptional = barberDao.findById(id);
-        Barber barber = barberOptional.orElseThrow(BarberNotFoundException::new);
-        Open open = OpenBuilder.builder()
-                .open(LocalTime.parse(openDto.getOpen()))
-                .close(LocalTime.parse(openDto.getClose()))
-                .barber(barber)
-                .build();
+    public void changeDay(Long id, OpenDto openDto){
+        Optional<Open> openOptional = openDao.findByBarberIdAndDay(id, DayOfWeek.valueOf(openDto.getDay().toUpperCase()));
+        Open open = openOptional.orElseThrow(OpenNotFoundException::new);
+        open.setOpen(LocalTime.parse(openDto.getOpen()));
+        open.setClose(LocalTime.parse(openDto.getClose()));
         openDao.save(open);
     }
 
-    //update
+    public void setWeek(Long id, List<OpenDto> openDto){
+        Optional<Barber> barberOptional = barberDao.findById(id);
+        Barber barber = barberOptional.orElseThrow(BarberNotFoundException::new);
+        openDto.forEach(day -> {
+            Open open = OpenBuilder.builder()
+                    .open(LocalTime.parse(day.getOpen()))
+                    .close(LocalTime.parse(day.getClose()))
+                    .barber(barber)
+                    .day(DayOfWeek.valueOf(day.getDay().toUpperCase()))
+                    .build();
+            openDao.save(open);
+        });
+    }
 
     public OpenDto get(Long id){
         Optional<Open> openOptional = openDao.findById(id);

@@ -57,7 +57,7 @@ public class BarberBuidler {
         return this;
     }
 
-    public BarberBuidler open(Open open){
+    public BarberBuidler open(Set<Open> open){
         barber.setOpen(open);
         return this;
     }

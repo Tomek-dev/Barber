@@ -3,6 +3,7 @@ package com.app.barber.other.builder;
 import com.app.barber.model.Barber;
 import com.app.barber.model.Open;
 
+import java.time.DayOfWeek;
 import java.time.LocalTime;
 
 public class OpenBuilder {
@@ -25,6 +26,11 @@ public class OpenBuilder {
 
     public OpenBuilder barber(Barber barber){
         open.setBarber(barber);
+        return this;
+    }
+
+    public OpenBuilder day(DayOfWeek day){
+        open.setDay(day);
         return this;
     }
 

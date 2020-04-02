@@ -1,6 +1,7 @@
 package com.app.barber.model;
 
 import javax.persistence.*;
+import java.time.DayOfWeek;
 import java.time.LocalTime;
 
 @Entity
@@ -10,10 +11,11 @@ public class Open {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private DayOfWeek day;
     private LocalTime open;
     private LocalTime close;
 
-    @OneToOne
+    @ManyToOne
     private Barber barber;
 
     public Open() {
@@ -49,5 +51,13 @@ public class Open {
 
     public void setBarber(Barber barber) {
         this.barber = barber;
+    }
+
+    public DayOfWeek getDay() {
+        return day;
+    }
+
+    public void setDay(DayOfWeek day) {
+        this.day = day;
     }
 }

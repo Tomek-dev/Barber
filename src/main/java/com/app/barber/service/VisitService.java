@@ -1,9 +1,6 @@
 package com.app.barber.service;
 
-import com.app.barber.dao.BarberDao;
-import com.app.barber.dao.ServiceDao;
-import com.app.barber.dao.VisitDao;
-import com.app.barber.dao.WorkerDao;
+import com.app.barber.dao.*;
 import com.app.barber.model.Barber;
 import com.app.barber.model.Open;
 import com.app.barber.model.Visit;
@@ -12,14 +9,12 @@ import com.app.barber.other.builder.VisitBuilder;
 import com.app.barber.other.dto.AvailableVisitOutputDto;
 import com.app.barber.other.dto.VisitInputDto;
 import com.app.barber.other.dto.VisitOutputDto;
-import com.app.barber.other.exception.BarberNotFoundException;
-import com.app.barber.other.exception.ServiceNotFoundException;
-import com.app.barber.other.exception.VisitDateNotAvailableException;
-import com.app.barber.other.exception.WorkerNotFoundException;
+import com.app.barber.other.exception.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -37,13 +32,15 @@ public class VisitService {
     private VisitDao visitDao;
     private WorkerDao workerDao;
     private BarberDao barberDao;
+    private OpenDao openDao;
 
     @Autowired
-    public VisitService(ServiceDao serviceDao, VisitDao visitDao, WorkerDao workerDao, BarberDao barberDao) {
+    public VisitService(ServiceDao serviceDao, VisitDao visitDao, WorkerDao workerDao, BarberDao barberDao, OpenDao openDao) {
         this.serviceDao = serviceDao;
         this.visitDao = visitDao;
         this.workerDao = workerDao;
         this.barberDao = barberDao;
+        this.openDao = openDao;
     }
 
     public List<VisitOutputDto> findAllByBarber(Long id){
@@ -58,7 +55,8 @@ public class VisitService {
     public List<AvailableVisitOutputDto> findAllAvailable(Long id, String date){
         Optional<com.app.barber.model.Service> serviceOptional = serviceDao.findById(id);
         com.app.barber.model.Service service = serviceOptional.orElseThrow(ServiceNotFoundException::new);
-        Open open = service.getBarber().getOpen();
+        Optional<Open> openOptional = openDao.findByBarberAndDay(service.getBarber(), DayOfWeek.from(LocalDate.parse(date)));
+        Open open = openOptional.orElseThrow(OpenNotFoundException::new);
         List<LocalTime> times = new LinkedList<>();
         LocalTime time = open.getOpen();
         LocalDate day = LocalDate.parse(date);
@@ -88,13 +86,15 @@ public class VisitService {
         Worker worker = workerOptional.orElseThrow(WorkerNotFoundException::new);
         //TODO check if worker has this service
         Barber barber = service.getBarber();
+        Optional<Open> openOptional = openDao.findByBarberAndDay(barber, DayOfWeek.from(LocalDateTime.parse(visitDto.getDate())));
+        Open open = openOptional.orElseThrow(OpenNotFoundException::new);
         LocalDateTime beginning = LocalDateTime.parse(visitDto.getDate());
         LocalDateTime finish = beginning.plusMinutes(service.getTime());
         beginning = beginning.plusSeconds(1);
         if(visitDao.existsByWorkerAndFinishBetweenOrBeginningBetween(
                 worker, beginning, finish, beginning, finish)
-                || finish.toLocalTime().compareTo(barber.getOpen().getClose().plusSeconds(1)) > 0
-                || beginning.toLocalTime().compareTo(barber.getOpen().getOpen()) < 0){
+                || finish.toLocalTime().compareTo(open.getClose().plusSeconds(1)) > 0
+                || beginning.toLocalTime().compareTo(open.getOpen()) < 0){
             throw new VisitDateNotAvailableException();
         }
         Visit visit = VisitBuilder.builder()

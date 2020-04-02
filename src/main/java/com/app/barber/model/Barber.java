@@ -35,8 +35,8 @@ public class Barber {
     @OneToMany(mappedBy = "barber", orphanRemoval = true)
     private Set<Service> services = new HashSet<>();
 
-    @OneToOne(fetch = FetchType.LAZY, orphanRemoval = true, mappedBy = "barber")
-    private Open open;
+    @OneToMany(orphanRemoval = true, mappedBy = "barber")
+    private Set<Open> open = new HashSet<>();
 
     @OneToMany(mappedBy = "barber", orphanRemoval = true)
     private Set<Visit> visits = new HashSet<>();
@@ -124,11 +124,11 @@ public class Barber {
         this.workers = workers;
     }
 
-    public Open getOpen() {
+    public Set<Open> getOpen() {
         return open;
     }
 
-    public void setOpen(Open open) {
+    public void setOpen(Set<Open> open) {
         this.open = open;
     }
 

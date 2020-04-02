@@ -16,7 +16,9 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class WorkerService {
@@ -67,6 +69,14 @@ public class WorkerService {
         }
         worker.removeService(service);
         workerDao.save(worker);
+    }
+
+    public List<WorkerOutputDto> getByBarberId(Long id){
+        Optional<Barber> barberOptional = barberDao.findById(id);
+        Barber barber = barberOptional.orElseThrow(BarberNotFoundException::new);
+        return barber.getWorkers().stream()
+                .map(worker -> mapper.map(worker, WorkerOutputDto.class))
+                .collect(Collectors.toList());
     }
 
     public WorkerOutputDto getById(Long id){

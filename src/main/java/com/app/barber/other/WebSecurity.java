@@ -12,12 +12,14 @@ public class WebSecurity {
     private VisitDao visitDao;
     private ServiceDao serviceDao;
     private WorkerDao workerDao;
+    private OpenDao openDao;
 
     @Autowired
-    public WebSecurity(VisitDao visitDao, ServiceDao serviceDao, WorkerDao workerDao) {
+    public WebSecurity(VisitDao visitDao, ServiceDao serviceDao, WorkerDao workerDao, OpenDao openDao) {
         this.visitDao = visitDao;
         this.serviceDao = serviceDao;
         this.workerDao = workerDao;
+        this.openDao = openDao;
     }
 
     public Boolean barberOwner(Long id, Authentication authentication){
@@ -30,10 +32,7 @@ public class WebSecurity {
 
     public Boolean openOwner(Long id, Authentication authentication){
         User user = (User) authentication.getPrincipal();
-        if(user.getBarber().getOpen() != null){
-            return user.getBarber().getOpen().getId().equals(id);
-        }
-        return false;
+        return openDao.existsByIdAndBarber(id, user.getBarber());
     }
 
     public Boolean workerOwner(Long id, Authentication authentication){

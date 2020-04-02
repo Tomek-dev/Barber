@@ -1,9 +1,6 @@
 package com.app.barber.service;
 
-import com.app.barber.dao.BarberDao;
-import com.app.barber.dao.ServiceDao;
-import com.app.barber.dao.VisitDao;
-import com.app.barber.dao.WorkerDao;
+import com.app.barber.dao.*;
 import com.app.barber.model.*;
 import com.app.barber.other.builder.*;
 import com.app.barber.other.dto.AvailableVisitOutputDto;
@@ -20,6 +17,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.*;
@@ -42,6 +40,9 @@ public class VisitServiceTest {
     @Mock
     private BarberDao barberDao;
 
+    @Mock
+    private OpenDao openDao;
+
     @InjectMocks
     private VisitService visitService;
 
@@ -59,7 +60,7 @@ public class VisitServiceTest {
                 .build();
         barber = BarberBuidler.buidler()
                 .workers(Collections.singleton(worker))
-                .open(open)
+                .open(Collections.singleton(open))
                 .build();
         worker = WorkerBuilder.builder()
                 .visits(Collections.singleton(visit))
@@ -127,7 +128,7 @@ public class VisitServiceTest {
         given(workerDao.findById(Mockito.any())).willReturn(Optional.of(new Worker()));
         given(visitDao.existsByWorkerAndFinishBetweenOrBeginningBetween(
                 Mockito.any(), Mockito.any(), Mockito.any(), Mockito.any(), Mockito.any())).willReturn(true);
-
+        given(openDao.findByBarberAndDay(Mockito.any(), Mockito.any())).willReturn(Optional.of(open));
 
         //then
         assertThrows(VisitDateNotAvailableException.class, () -> visitService.add(visit));
@@ -142,7 +143,29 @@ public class VisitServiceTest {
         given(workerDao.findById(Mockito.any())).willReturn(Optional.of(new Worker()));
         given(visitDao.existsByWorkerAndFinishBetweenOrBeginningBetween(
                 Mockito.any(), Mockito.any(), Mockito.any(), Mockito.any(), Mockito.any())).willReturn(false);
+        given(openDao.findByBarberAndDay(Mockito.any(), Mockito.any())).willReturn(Optional.of(open));
 
+        //then
+        assertThrows(VisitDateNotAvailableException.class, () -> visitService.add(visit));
+        visit.setDate("2020-03-29T11:45:00.0");
+        assertThrows(VisitDateNotAvailableException.class, () -> visitService.add(visit));
+    }
+
+    @Test
+    public void shouldThrowVisitDateNotAvailable3(){
+        //given
+        Open open = OpenBuilder.builder()
+                .open(LocalTime.MIDNIGHT)
+                .close(LocalTime.MIDNIGHT)
+                .day(DayOfWeek.FRIDAY)
+                .build();
+        VisitInputDto visit = new VisitInputDto();
+        visit.setDate("2020-03-29T07:30:00.0");
+        given(serviceDao.findById(Mockito.any())).willReturn(Optional.of(service));
+        given(workerDao.findById(Mockito.any())).willReturn(Optional.of(new Worker()));
+        given(visitDao.existsByWorkerAndFinishBetweenOrBeginningBetween(
+                Mockito.any(), Mockito.any(), Mockito.any(), Mockito.any(), Mockito.any())).willReturn(false);
+        given(openDao.findByBarberAndDay(Mockito.any(), Mockito.any())).willReturn(Optional.of(open));
 
         //then
         assertThrows(VisitDateNotAvailableException.class, () -> visitService.add(visit));
@@ -156,6 +179,7 @@ public class VisitServiceTest {
         given(visitDao.findByServiceAndBeginningBetweenOrderByBeginningAsc(
                 Mockito.any(), Mockito.any(), Mockito.any())).willReturn(Collections.singletonList(visit));
         given(serviceDao.findById(Mockito.any())).willReturn(Optional.of(service));
+        given(openDao.findByBarberAndDay(Mockito.any(), Mockito.any())).willReturn(Optional.of(open));
 
         //when
         List<AvailableVisitOutputDto> visits = visitService.findAllAvailable(4L, "2020-03-29");
@@ -177,14 +201,15 @@ public class VisitServiceTest {
         Open open = OpenBuilder.builder()
                 .open(LocalTime.parse("10:00:00.0"))
                 .close(LocalTime.parse("14:00:00.0"))
+                .day(DayOfWeek.FRIDAY)
                 .build();
-        barber.setOpen(open);
         List<Visit> found = new LinkedList<>();
         found.add(visit);
         found.add(this.visit);
         given(visitDao.findByServiceAndBeginningBetweenOrderByBeginningAsc(
                 Mockito.any(), Mockito.any(), Mockito.any())).willReturn(found);
         given(serviceDao.findById(Mockito.any())).willReturn(Optional.of(service));
+        given(openDao.findByBarberAndDay(Mockito.any(), Mockito.any())).willReturn(Optional.of(open));
 
         //when
         List<AvailableVisitOutputDto> visits = visitService.findAllAvailable(4L, "2020-03-29");

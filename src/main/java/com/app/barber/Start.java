@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import java.time.DayOfWeek;
 import java.time.LocalTime;
 import java.util.Collections;
 
@@ -70,6 +71,7 @@ public class Start {
         Open open = OpenBuilder.builder()
                 .open(LocalTime.of(8, 0))
                 .close(LocalTime.of(18, 0))
+                .day(DayOfWeek.FRIDAY)
                 .barber(barber)
                 .build();
         userDao.save(user);

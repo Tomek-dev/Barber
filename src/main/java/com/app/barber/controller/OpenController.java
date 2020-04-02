@@ -6,7 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.nio.file.Path;
+import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api")
@@ -20,9 +21,15 @@ public class OpenController {
     }
 
     @PreAuthorize("hasRole('ROLE_USER') && @webSecurity.openOwner(#id, authentication)")
+    @PutMapping("/open/{id}")
+    public void changeDay(@PathVariable Long id, @Valid @RequestBody OpenDto open){
+        openService.changeDay(id, open);
+    }
+
+    @PreAuthorize("hasRole('ROLE_USER') && @webSecurity.barberOwner(#id, authentication)")
     @PostMapping("/open/add/{id}")
-    public void add(@PathVariable Long id, @RequestBody OpenDto open){
-        openService.add(id, open);
+    public void setWeek(@PathVariable Long id, @Valid @RequestBody List<OpenDto> open){
+        openService.setWeek(id, open);
     }
 
     @GetMapping("/open/{id}")

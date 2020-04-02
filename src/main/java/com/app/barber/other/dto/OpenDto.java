@@ -1,8 +1,14 @@
 package com.app.barber.other.dto;
 
+import javax.validation.constraints.NotEmpty;
+
 public class OpenDto {
 
+    @NotEmpty
+    private String day;
+    @NotEmpty
     private String open;
+    @NotEmpty
     private String close;
 
     public OpenDto(String open, String close) {
@@ -24,5 +30,13 @@ public class OpenDto {
 
     public void setClose(String close) {
         this.close = close;
+    }
+
+    public String getDay() {
+        return day;
+    }
+
+    public void setDay(String day) {
+        this.day = day;
     }
 }

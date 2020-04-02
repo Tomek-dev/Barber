@@ -1,6 +1,5 @@
 package com.app.barber.controller;
 
-import com.app.barber.dao.BarberDao;
 import com.app.barber.model.User;
 import com.app.barber.other.dto.BarberInputDto;
 import com.app.barber.other.dto.BarberOutputDto;
@@ -11,7 +10,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.security.Principal;
 
 @RestController
 @RequestMapping("/api")
