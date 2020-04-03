@@ -1,19 +1,23 @@
 package com.app.barber.other.dto;
 
+import com.app.barber.other.validation.Time;
+
 import javax.validation.constraints.NotEmpty;
 
 public class OpenDto {
 
     @NotEmpty
     private String day;
+
+    @Time
     @NotEmpty
     private String open;
+
+    @Time
     @NotEmpty
     private String close;
 
-    public OpenDto(String open, String close) {
-        this.open = open;
-        this.close = close;
+    public OpenDto() {
     }
 
     public String getOpen() {

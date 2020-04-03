@@ -1,5 +1,6 @@
 package com.app.barber.other.dto;
 
+import com.app.barber.other.validation.Time;
 import com.app.barber.other.validation.Today;
 
 import javax.validation.constraints.NotBlank;
@@ -11,6 +12,8 @@ public class VisitInputDto {
     @NotBlank
     @Size(min = 4, max = 36)
     private String name;
+
+    @Time
     @Today
     private String date;
     @NotNull

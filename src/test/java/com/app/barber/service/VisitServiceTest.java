@@ -57,6 +57,7 @@ public class VisitServiceTest {
         open = OpenBuilder.builder()
                 .open(LocalTime.parse("10:00:00.0"))
                 .close(LocalTime.parse("12:00:00.0"))
+                .day(DayOfWeek.FRIDAY)
                 .build();
         barber = BarberBuidler.buidler()
                 .workers(Collections.singleton(worker))
@@ -185,6 +186,7 @@ public class VisitServiceTest {
         List<AvailableVisitOutputDto> visits = visitService.findAllAvailable(4L, "2020-03-29");
 
         //then
+        assertEquals(4, visits.size());
         assertEquals("10:00", visits.get(0).getTime().toString());
         assertEquals("11:00", visits.get(1).getTime().toString());
         assertEquals("11:15", visits.get(2).getTime().toString());
@@ -215,6 +217,7 @@ public class VisitServiceTest {
         List<AvailableVisitOutputDto> visits = visitService.findAllAvailable(4L, "2020-03-29");
 
         //then
+        assertEquals(7, visits.size());
         assertEquals("10:00", visits.get(0).getTime().toString());
         assertEquals("11:00", visits.get(1).getTime().toString());
         assertEquals("11:15", visits.get(2).getTime().toString());

@@ -29,6 +29,6 @@ public class BarberApplication {
 		return source;
 	}
 
-	//TODO logout and ResponseEntity, images, admin
+	//TODO logout and ResponseEntity, images, admin, valid list opendto
 	//TODO acl, regexp, servicedto, visits, integration tests
 }
