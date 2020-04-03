@@ -1,6 +1,7 @@
 package com.app.barber.controller;
 
 import com.app.barber.other.dto.OpenDto;
+import com.app.barber.other.validation.ValidList;
 import com.app.barber.service.OpenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -28,8 +29,8 @@ public class OpenController {
 
     @PreAuthorize("hasRole('ROLE_USER') && @webSecurity.barberOwner(#id, authentication)")
     @PostMapping("/open/add/{id}")
-    public void setWeek(@PathVariable Long id, @Valid @RequestBody List<OpenDto> open){
-        openService.setWeek(id, open);
+    public void setWeek(@PathVariable Long id, @RequestBody @Valid ValidList<OpenDto> open){
+        openService.setWeek(id, (List<OpenDto>) open);
     }
 
     @GetMapping("/open/{id}")
