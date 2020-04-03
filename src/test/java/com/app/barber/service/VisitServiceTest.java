@@ -226,4 +226,40 @@ public class VisitServiceTest {
         assertEquals("13:15", visits.get(5).getTime().toString());
         assertEquals("13:30", visits.get(6).getTime().toString());
     }
+
+    @Test
+    public void shouldReturnListOfAvailableVisitOutputDto3(){
+        //given
+        List<Visit> found = new LinkedList<>();
+        found.add(this.visit);
+        visit = VisitBuilder.builder()
+                .beginning(LocalDateTime.parse("2020-03-29T12:00:01.0"))
+                .finish(LocalDateTime.parse("2020-03-29T13:00:00.0"))
+                .build();
+        found.add(visit);
+        visit = VisitBuilder.builder()
+                .beginning(LocalDateTime.parse("2020-03-29T11:15:01.0"))
+                .finish(LocalDateTime.parse("2020-03-29T11:45:00.0"))
+                .build();
+        found.add(visit);
+        Open open = OpenBuilder.builder()
+                .open(LocalTime.parse("10:00:00.0"))
+                .close(LocalTime.parse("14:00:00.0"))
+                .day(DayOfWeek.FRIDAY)
+                .build();
+        given(visitDao.findByServiceAndBeginningBetweenOrderByBeginningAsc(
+                Mockito.any(), Mockito.any(), Mockito.any())).willReturn(found);
+        given(serviceDao.findById(Mockito.any())).willReturn(Optional.of(service));
+        given(openDao.findByBarberAndDay(Mockito.any(), Mockito.any())).willReturn(Optional.of(open));
+
+        //when
+        List<AvailableVisitOutputDto> visits = visitService.findAllAvailable(4L, "2020-03-29");
+
+        //then
+        assertEquals(4, visits.size());
+        assertEquals("10:00", visits.get(0).getTime().toString());
+        assertEquals("13:00", visits.get(1).getTime().toString());
+        assertEquals("13:15", visits.get(2).getTime().toString());
+        assertEquals("13:30", visits.get(3).getTime().toString());
+    }
 }

@@ -57,26 +57,23 @@ public class VisitService {
         com.app.barber.model.Service service = serviceOptional.orElseThrow(ServiceNotFoundException::new);
         Optional<Open> openOptional = openDao.findByBarberAndDay(service.getBarber(), DayOfWeek.from(LocalDate.parse(date)));
         Open open = openOptional.orElseThrow(OpenNotFoundException::new);
-        List<LocalTime> times = new LinkedList<>();
+        List<AvailableVisitOutputDto> times = new LinkedList<>();
         LocalTime time = open.getOpen();
         LocalDate day = LocalDate.parse(date);
         List<Visit> visits = visitDao.findByServiceAndBeginningBetweenOrderByBeginningAsc(service, day.atStartOfDay(), day.plusDays(1).atStartOfDay());
         while (time.compareTo(open.getClose()) < 0){
-            times.add(time);
+            LocalTime finalTime = time;
+            boolean available = visits.stream().anyMatch(visit -> (finalTime.compareTo(visit.getBeginning().toLocalTime().minusSeconds(1)) >= 0
+                    && finalTime.compareTo(visit.getFinish().toLocalTime()) < 0)
+                    || (finalTime.plusMinutes(service.getTime()).compareTo(visit.getBeginning().toLocalTime()) >= 0
+                    && finalTime.plusMinutes(service.getTime()).compareTo(visit.getFinish().toLocalTime()) < 0)
+                    || !(finalTime.plusMinutes(service.getTime()).compareTo(open.getClose()) <= 0));
+            if(!available){
+                times.add(new AvailableVisitOutputDto(time));
+            }
             time = time.plusMinutes(15);
         }
-        for (Visit visit : visits) {
-            times = times.stream()
-                    .filter(value -> !(value.compareTo(visit.getBeginning().toLocalTime().minusSeconds(1)) >= 0
-                            && value.compareTo(visit.getFinish().toLocalTime()) < 0)
-                            && !(value.plusMinutes(service.getTime()).compareTo(visit.getBeginning().toLocalTime()) >= 0
-                            && value.plusMinutes(service.getTime()).compareTo(visit.getFinish().toLocalTime()) < 0)
-                            && value.plusMinutes(service.getTime()).compareTo(open.getClose()) <= 0)
-                    .collect(Collectors.toList());
-        }
-        return times.stream()
-                .map(AvailableVisitOutputDto::new)
-                .collect(Collectors.toList());
+        return times;
     }
 
     public void add(VisitInputDto visitDto){
