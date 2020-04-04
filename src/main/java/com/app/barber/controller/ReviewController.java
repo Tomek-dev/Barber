@@ -23,7 +23,7 @@ public class ReviewController {
     }
 
     //only openId user
-    @PostMapping("/reviews/add/{id}")
+    @PostMapping("/oauth/reviews/add/{id}")
     public void add(@Valid @RequestBody ReviewInputDto review, @PathVariable  long id){
         reviewService.add(review, id);
     }
@@ -33,8 +33,13 @@ public class ReviewController {
         return reviewService.findById(id);
     }
 
+    @GetMapping("/review/average/{id}")
+    public Double getAverage(@PathVariable Long id){
+        return reviewService.averageByBarber(id);
+    }
+
     //only owner of this (openID)
-    @DeleteMapping("/reviews/{id}")
+    @DeleteMapping("/oauth/reviews/{id}")
     public void delete(@PathVariable long id){
         reviewService.delete(id);
     }

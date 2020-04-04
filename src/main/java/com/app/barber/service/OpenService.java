@@ -14,8 +14,11 @@ import org.springframework.stereotype.Service;
 
 import java.time.DayOfWeek;
 import java.time.LocalTime;
+import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class OpenService {
@@ -57,6 +60,13 @@ public class OpenService {
         Optional<Open> openOptional = openDao.findById(id);
         Open open = openOptional.orElseThrow(OpenNotFoundException::new);
         return mapper.map(open, OpenDto.class);
+    }
+
+    public List<OpenDto> getWeek(Long id){
+        List<Open> opens = openDao.findByBarberId(id);
+        return opens.stream()
+                .map(open -> mapper.map(open, OpenDto.class))
+                .collect(Collectors.toList());
     }
 
     public void delete(Long id){

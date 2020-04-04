@@ -29,7 +29,7 @@ public class VisitController {
     }
 
     //authenticated (openId)
-    @PostMapping("/visit/add")
+    @PostMapping("/oauth/visit/add")
     public void add(@Valid @RequestBody VisitInputDto visit){
         visitService.add(visit);
     }
@@ -40,7 +40,7 @@ public class VisitController {
     }
 
     //only owner of this (openId)
-    @DeleteMapping("/visit/{id}")
+    @DeleteMapping("/oauth/visit/{id}")
     public void delete(@PathVariable Long id){
         visitService.delete(id);
     }

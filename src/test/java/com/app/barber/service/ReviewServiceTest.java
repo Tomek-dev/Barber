@@ -20,6 +20,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 import java.awt.*;
 import java.time.LocalDateTime;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
@@ -105,5 +106,23 @@ public class ReviewServiceTest {
 
         //then
         verify(reviewDao).deleteById(4L);
+    }
+
+    @Test
+    public void shouldReturnAverage(){
+        //given
+        List<Review> reviews = new LinkedList<>();
+        Review review1 = ReviewBuilder.builder()
+                .star(Star.FOUR)
+                .build();
+        reviews.add(review1);
+        Review review2 = ReviewBuilder.builder()
+                .star(Star.FIVE)
+                .build();
+        reviews.add(review2);
+        given(reviewDao.findByBarberId(Mockito.any())).willReturn(reviews);
+
+        //then
+        assertEquals(4.5, reviewService.averageByBarber(4L));
     }
 }

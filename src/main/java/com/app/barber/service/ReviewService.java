@@ -55,4 +55,13 @@ public class ReviewService {
                 .map(review -> mapper.map(review, ReviewOutputDto.class))
                 .collect(Collectors.toList());
     }
+
+    public Double averageByBarber(Long id){
+        List<Review> reviews = reviewDao.findByBarberId(id);
+        long sum = 0L;
+        for (Review review : reviews) {
+            sum += review.getStar().getNumber();
+        }
+        return  (double) sum / reviews.size();
+    }
 }

@@ -33,6 +33,11 @@ public class OpenController {
         openService.setWeek(id, (List<OpenDto>) open);
     }
 
+    @GetMapping("/open/week/{id}")
+    public List<OpenDto> getWeek(@PathVariable Long id){
+        return openService.getWeek(id);
+    }
+
     @GetMapping("/open/{id}")
     public OpenDto get(@PathVariable Long id){
         return openService.get(id);
