@@ -1,4 +1,4 @@
-package com.app.barber.security;
+package com.app.barber.security.jwt;
 
 import com.app.barber.model.User;
 import com.app.barber.other.enums.Role;

@@ -3,7 +3,8 @@ package com.app.barber.other.enums;
 import org.springframework.security.core.GrantedAuthority;
 
 public enum Role implements GrantedAuthority {
-    USER("ROLE_USER");
+    USER("ROLE_USER"),
+    OAUTH("ROLE_OAUTH");
 
     private final String value;
 

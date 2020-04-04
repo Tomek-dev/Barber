@@ -1,4 +1,4 @@
-package com.app.barber.security;
+package com.app.barber.security.jwt;
 
 import com.app.barber.dao.UserDao;
 import com.app.barber.model.User;

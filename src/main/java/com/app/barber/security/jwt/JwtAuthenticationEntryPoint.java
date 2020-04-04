@@ -1,4 +1,4 @@
-package com.app.barber.security;
+package com.app.barber.security.jwt;
 
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
