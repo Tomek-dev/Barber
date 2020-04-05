@@ -2,6 +2,7 @@ package com.app.barber.model;
 
 import javax.persistence.*;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -22,6 +23,9 @@ public class Barber {
     private Double longitude;
 
     private Double latitude;
+
+    @OneToMany(mappedBy = "barber", orphanRemoval = true)
+    private Set<Image> images = new HashSet<>();
 
     @OneToOne(fetch = FetchType.LAZY)
     private User user;

@@ -4,8 +4,10 @@ import com.app.barber.other.enums.AuthProvider;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 
 @Entity
@@ -24,10 +26,10 @@ public class OAuthUser {
     private String providerId;
 
     @OneToMany(mappedBy = "customer")
-    private List<Visit> visits = new LinkedList<>();
+    private Set<Visit> visits = new HashSet<>();
 
     @OneToMany(mappedBy = "owner")
-    private List<Review> reviews = new LinkedList<>();
+    private Set<Review> reviews = new HashSet<>();
 
     private AuthProvider authProvider;
 
@@ -82,19 +84,19 @@ public class OAuthUser {
         this.authProvider = authProvider;
     }
 
-    public List<Visit> getVisits() {
+    public Set<Visit> getVisits() {
         return visits;
     }
 
-    public void setVisits(List<Visit> visits) {
+    public void setVisits(Set<Visit> visits) {
         this.visits = visits;
     }
 
-    public List<Review> getReviews() {
+    public Set<Review> getReviews() {
         return reviews;
     }
 
-    public void setReviews(List<Review> reviews) {
+    public void setReviews(Set<Review> reviews) {
         this.reviews = reviews;
     }
 }
