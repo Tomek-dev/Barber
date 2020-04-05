@@ -16,6 +16,7 @@ import org.springframework.security.config.BeanIds;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -26,92 +27,74 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Order(2)
-    @Configuration
-    public class JWTSecurity extends WebSecurityConfigurerAdapter{
-        private UserDetailsServiceImpl userDetailsService;
-        private JwtAuthenticationEntryPoint authenticationEntryPoint;
-        private JwtAuthenticationFilter authenticationFilter;
+    private UserDetailsServiceImpl userDetailsService;
+    private JwtAuthenticationEntryPoint authenticationEntryPoint;
+    private JwtAuthenticationFilter authenticationFilter;
+    private HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository;
+    private CustomOAuth2UserService customOAuth2UserService;
+    private OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
+    private OAuth2AuthenticationFailureHandler oAuth2AuthenticationFailureHandler;
 
-        @Autowired
-        public JWTSecurity(UserDetailsServiceImpl userDetailsService, JwtAuthenticationEntryPoint authenticationEntryPoint,
-                                 JwtAuthenticationFilter authenticationFilter) {
-            this.userDetailsService = userDetailsService;
-            this.authenticationEntryPoint = authenticationEntryPoint;
-            this.authenticationFilter = authenticationFilter;
-        }
-
-        @Override
-        protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-            auth.userDetailsService(userDetailsService);
-        }
-
-        @Override
-        protected void configure(HttpSecurity http) throws Exception {
-            http
-                    .antMatcher("/**")
-                    //.cors()
-                    //.and()
-                    .sessionManagement()
-                    .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                    .and()
-                    .exceptionHandling()
-                    .authenticationEntryPoint(authenticationEntryPoint)
-                    .and()
-                    .csrf().disable()
-                    .addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class);
-        }
-
-        @Bean
-        public PasswordEncoder passwordEncoder() {
-            return new BCryptPasswordEncoder();
-        }
-
-        @Bean(BeanIds.AUTHENTICATION_MANAGER)
-        @Override
-        public AuthenticationManager authenticationManagerBean() throws Exception {
-            return super.authenticationManagerBean();
-        }
+    @Bean
+    public HttpCookieOAuth2AuthorizationRequestRepository cookieAuthorizationRequestRepository() {
+        return new HttpCookieOAuth2AuthorizationRequestRepository();
     }
 
-    @Order(1)
-    @Configuration
-    public class OpenIdSecurity extends WebSecurityConfigurerAdapter{
+    @Autowired
+    public WebSecurityConfig(UserDetailsServiceImpl userDetailsService, JwtAuthenticationEntryPoint authenticationEntryPoint, JwtAuthenticationFilter authenticationFilter, HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository, CustomOAuth2UserService customOAuth2UserService, OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler, OAuth2AuthenticationFailureHandler oAuth2AuthenticationFailureHandler) {
+        this.userDetailsService = userDetailsService;
+        this.authenticationEntryPoint = authenticationEntryPoint;
+        this.authenticationFilter = authenticationFilter;
+        this.httpCookieOAuth2AuthorizationRequestRepository = httpCookieOAuth2AuthorizationRequestRepository;
+        this.customOAuth2UserService = customOAuth2UserService;
+        this.oAuth2AuthenticationSuccessHandler = oAuth2AuthenticationSuccessHandler;
+        this.oAuth2AuthenticationFailureHandler = oAuth2AuthenticationFailureHandler;
+    }
 
-        private HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository;
-        private CustomOAuth2UserService customOAuth2UserService;
-        private OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
-        private OAuth2AuthenticationFailureHandler oAuth2AuthenticationFailureHandler;
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(userDetailsService);
+    }
 
-        @Autowired
-        public OpenIdSecurity(HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository, CustomOAuth2UserService customOAuth2UserService, OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler, OAuth2AuthenticationFailureHandler oAuth2AuthenticationFailureHandler) {
-            this.httpCookieOAuth2AuthorizationRequestRepository = httpCookieOAuth2AuthorizationRequestRepository;
-            this.customOAuth2UserService = customOAuth2UserService;
-            this.oAuth2AuthenticationSuccessHandler = oAuth2AuthenticationSuccessHandler;
-            this.oAuth2AuthenticationFailureHandler = oAuth2AuthenticationFailureHandler;
-        }
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http
+                .antMatcher("/**")
+                .cors()
+                .and()
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .exceptionHandling()
+                .authenticationEntryPoint(authenticationEntryPoint)
+                .and()
+                .csrf().disable()
+                .oauth2Login()
+                .authorizationEndpoint()
+                .baseUri("/oauth/authorize")
+                .authorizationRequestRepository(cookieAuthorizationRequestRepository())
+                .and()
+                .redirectionEndpoint()
+                .baseUri("/oauth/callback/*")
+                .and()
+                .userInfoEndpoint()
+                .userService(customOAuth2UserService)
+                .and()
+                .successHandler(oAuth2AuthenticationSuccessHandler)
+                .failureHandler(oAuth2AuthenticationFailureHandler);
 
-        @Override
-        protected void configure(HttpSecurity http) throws Exception {
-            http.antMatcher("/api/oauth/**")
-                    .authorizeRequests()
-                    .anyRequest().authenticated()
-                    .and()
-                    .oauth2Login()
-                    .authorizationEndpoint()
-                    .baseUri("/oauth/authorize/*")
-                    .authorizationRequestRepository(httpCookieOAuth2AuthorizationRequestRepository)
-                    .and()
-                    .redirectionEndpoint()
-                    .baseUri("/oauth/callback/*")
-                    .and()
-                    .userInfoEndpoint()
-                    .userService(customOAuth2UserService)
-                    .and()
-                    .successHandler(oAuth2AuthenticationSuccessHandler)
-                    .failureHandler(oAuth2AuthenticationFailureHandler);
+        http.addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class);
+    }
 
-        }
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+    @Bean(BeanIds.AUTHENTICATION_MANAGER)
+    @Override
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
     }
 
 

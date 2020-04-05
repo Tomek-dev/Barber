@@ -1,6 +1,9 @@
 package com.app.barber.security.jwt;
 
+import com.app.barber.config.AppProperties;
+import com.app.barber.dao.OAuthUserDao;
 import com.app.barber.dao.UserDao;
+import com.app.barber.model.OAuthUser;
 import com.app.barber.model.User;
 import com.app.barber.other.enums.Role;
 import com.auth0.jwt.JWT;
@@ -31,14 +34,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private static final String TOKEN_HEADER = "Authorization";
     private static final String TOKEN_PREFIX = "Bearer ";
 
-    @Value("${jwt.secret.key}")
-    private String secret;
-
+    private AppProperties appProperties;
     private UserDao userDao;
+    private OAuthUserDao oAuthUserDao;
 
     @Autowired
-    public JwtAuthenticationFilter(UserDao userDao) {
+    public JwtAuthenticationFilter(AppProperties appProperties, UserDao userDao, OAuthUserDao oAuthUserDao) {
+        this.appProperties = appProperties;
         this.userDao = userDao;
+        this.oAuthUserDao = oAuthUserDao;
     }
 
     @Override
@@ -55,17 +59,20 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private UsernamePasswordAuthenticationToken getAuthentication(String header) {
         DecodedJWT verified = JWT
-                .require(Algorithm.HMAC512(secret.getBytes()))
+                .require(Algorithm.HMAC512(appProperties.getAuth().getTokenSecret().getBytes()))
                 .build()
                 .verify(header.replace(TOKEN_PREFIX, ""));
-        String username = verified.getSubject();
+        String email = verified.getSubject();
         List<String> roles = verified.getClaim("roles").asList(String.class);
         Set<SimpleGrantedAuthority> authorities = roles.stream()
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toSet());
-        Optional<User> userOptional = userDao.findByUsername(username);
-        User user = userOptional.orElseThrow(() -> new UsernameNotFoundException("User not found"));
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(user, null, authorities);
-        return authenticationToken;
+        Optional<OAuthUser> oAuthOptional = oAuthUserDao.findByEmail(email);
+        if(!oAuthOptional.isPresent()){
+            Optional<User> userOptional = userDao.findByEmail(email);
+            User user = userOptional.orElseThrow(() -> new UsernameNotFoundException("User not found"));
+            return new UsernamePasswordAuthenticationToken(user, null, authorities);
+        }
+        return new UsernamePasswordAuthenticationToken(oAuthOptional.get(), null, authorities);
     }
 }

@@ -1,0 +1,49 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/barber
+    username: postgres
+    password: password
+    hikari:
+      maximumPoolSize: 2
+      connectionTimeout: 20000
+  jpa:
+    hibernate:
+      ddl-auto: create
+  security:
+    oauth2:
+      client:
+        registration:
+        #At the moment only support github provider
+        #google:
+        #  clientId: #Secret
+        #  clientSecret: #Secret
+        #  redirectUri: "{baseUrl}/oauth/callback/{registrationId}"
+        #  scope:
+        #    - email
+        #    - profile
+        #facebook:
+        #  clientId: #Secret
+        #  clientSecret: #Secret
+        #  redirectUri: "{baseUrl}/oauth/callback/{registrationId}"
+        #  scope:
+        #    - email
+        #    - public_profile
+          github:
+            clientId: #Secret
+            clientSecret: #Secret
+            redirectUri: "{baseUrl}/oauth/callback/{registrationId}"
+            scope:
+              - user:email
+              - read:user
+      #provider:
+        #facebook:
+        #  authorizationUri: https://www.facebook.com/v3.0/dialog/oauth
+        # tokenUri: https://graph.facebook.com/v3.0/oauth/access_token
+        #  userInfoUri: https://graph.facebook.com/v3.0/me?fields=id,first_name,middle_name,last_name,name,email,verified,is_verified,picture.width(250).height(250)
+app:
+  auth:
+    tokenSecret: key
+    tokenExpirationMsec: 28800000
+  oauth2:
+    authorizedRedirectUris:
+      - http://localhost:3000/oauth/redirect

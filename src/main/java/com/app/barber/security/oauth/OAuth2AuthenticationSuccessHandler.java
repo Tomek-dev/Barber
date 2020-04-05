@@ -1,10 +1,13 @@
 package com.app.barber.security.oauth;
 
+import com.app.barber.config.AppProperties;
+import com.app.barber.other.exception.BadRequestException;
 import com.app.barber.security.CookieUtils;
 import com.app.barber.security.jwt.JwtTokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
+import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.servlet.ServletException;
@@ -12,19 +15,22 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.net.URI;
 import java.util.Optional;
 
 import static com.app.barber.security.oauth.HttpCookieOAuth2AuthorizationRequestRepository.REDIRECT_URI_PARAM_COOKIE_NAME;
 
+@Component
 public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
     private JwtTokenProvider provider;
-
+    private AppProperties appProperties;
     private HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository;
 
     @Autowired
-    public OAuth2AuthenticationSuccessHandler(JwtTokenProvider provider, HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository) {
+    public OAuth2AuthenticationSuccessHandler(JwtTokenProvider provider, AppProperties appProperties, HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository) {
         this.provider = provider;
+        this.appProperties = appProperties;
         this.httpCookieOAuth2AuthorizationRequestRepository = httpCookieOAuth2AuthorizationRequestRepository;
     }
 
@@ -44,6 +50,10 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         Optional<String> redirectUri = CookieUtils.getCookie(request, REDIRECT_URI_PARAM_COOKIE_NAME)
                 .map(Cookie::getValue);
 
+        if(redirectUri.isPresent() && !isAuthorizedRedirectUri(redirectUri.get())){
+            throw new BadRequestException("Sorry! We've got an Unauthorized Redirect URI and can't proceed with the authentication");
+        }
+
         String targetUrl = redirectUri.orElse(getDefaultTargetUrl());
 
         String token = provider.generateToken(authentication);
@@ -57,5 +67,16 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     protected void clearAuthenticationAttributes(HttpServletRequest request, HttpServletResponse response){
         super.clearAuthenticationAttributes(request);
         httpCookieOAuth2AuthorizationRequestRepository.removeAuthorizationRequestCookie(request, response);
+    }
+
+    private boolean isAuthorizedRedirectUri(String uri){
+        URI clientRedirectUri = URI.create(uri);
+
+        return appProperties.getOAuth2().getAuthorizedRedirectUris().stream()
+                .anyMatch(authorizedUri -> {
+                   URI authorizedURI = URI.create(authorizedUri);
+                    return authorizedURI.getHost().equalsIgnoreCase(clientRedirectUri.getHost())
+                            && authorizedURI.getPort() == clientRedirectUri.getPort();
+                });
     }
 }

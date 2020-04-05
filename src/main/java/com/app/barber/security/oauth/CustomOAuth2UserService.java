@@ -1,7 +1,9 @@
 package com.app.barber.security.oauth;
 
-import com.app.barber.dao.OAuthUserRepository;
+import com.app.barber.dao.OAuthUserDao;
+import com.app.barber.dao.UserDao;
 import com.app.barber.model.OAuthUser;
+import com.app.barber.model.User;
 import com.app.barber.other.builder.OAuthUserBuilder;
 import com.app.barber.other.enums.AuthProvider;
 import com.app.barber.other.exception.OAuth2AuthenticationProcessingException;
@@ -20,11 +22,13 @@ import java.util.Optional;
 @Service
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
-    private OAuthUserRepository repository;
+    private OAuthUserDao repository;
+    private UserDao userDao;
 
     @Autowired
-    public CustomOAuth2UserService(OAuthUserRepository repository) {
+    public CustomOAuth2UserService(OAuthUserDao repository, UserDao userDao) {
         this.repository = repository;
+        this.userDao = userDao;
     }
 
     @Override
@@ -56,6 +60,10 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             }
             oAuthUser = update(oAuthUser, oAuth2UserInfo);
         }else{
+            Optional<User> userOptional = userDao.findByEmail(oAuth2UserInfo.getEmail());
+            if(userOptional.isPresent()){
+                throw new OAuth2AuthenticationProcessingException("Looks like you're already signed with email based authentication");
+            }
             oAuthUser = register(oAuth2UserRequest, oAuth2UserInfo);
         }
         return OAuthPrincipal.create(oAuthUser, oAuth2User.getAttributes());
