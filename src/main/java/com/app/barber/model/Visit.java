@@ -17,6 +17,9 @@ public class Visit {
     private LocalDateTime finish;
 
     @ManyToOne
+    private OAuthUser customer;
+
+    @ManyToOne
     private Service service;
 
     @ManyToOne
@@ -82,5 +85,13 @@ public class Visit {
 
     public void setBarber(Barber barber) {
         this.barber = barber;
+    }
+
+    public OAuthUser getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(OAuthUser customer) {
+        this.customer = customer;
     }
 }

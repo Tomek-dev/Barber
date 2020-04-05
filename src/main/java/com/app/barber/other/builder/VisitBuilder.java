@@ -1,9 +1,6 @@
 package com.app.barber.other.builder;
 
-import com.app.barber.model.Barber;
-import com.app.barber.model.Service;
-import com.app.barber.model.Visit;
-import com.app.barber.model.Worker;
+import com.app.barber.model.*;
 
 import java.time.LocalDateTime;
 
@@ -42,6 +39,11 @@ public class VisitBuilder {
 
     public VisitBuilder barber(Barber barber){
         visit.setBarber(barber);
+        return this;
+    }
+
+    public VisitBuilder customer(OAuthUser customer){
+        visit.setCustomer(customer);
         return this;
     }
 

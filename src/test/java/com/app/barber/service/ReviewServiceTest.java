@@ -2,14 +2,19 @@ package com.app.barber.service;
 
 import com.app.barber.dao.BarberDao;
 import com.app.barber.dao.ReviewDao;
-import com.app.barber.model.Barber;
-import com.app.barber.model.Review;
+import com.app.barber.dao.VisitDao;
+import com.app.barber.model.*;
 import com.app.barber.other.builder.ReviewBuilder;
+import com.app.barber.other.builder.ServiceBuilder;
+import com.app.barber.other.builder.VisitBuilder;
+import com.app.barber.other.builder.WorkerBuilder;
 import com.app.barber.other.dto.ReviewInputDto;
 import com.app.barber.other.dto.ReviewOutputDto;
 import com.app.barber.other.enums.Star;
 import com.app.barber.other.exception.BarberNotFoundException;
 import com.app.barber.other.exception.StarNotFoundException;
+import com.app.barber.other.exception.VisitNotFoundException;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -36,31 +41,55 @@ public class ReviewServiceTest {
     private ReviewDao reviewDao;
 
     @Mock
+    private VisitDao visitDao;
+
+    @Mock
     private BarberDao barberDao;
 
     @InjectMocks
     private ReviewService reviewService;
 
+    private Visit visit;
+    private Service service;
+    private Worker worker;
+    private OAuthUser user;
+
+    @Before
+    public void init(){
+        service = ServiceBuilder.builder()
+                .name("name")
+                .build();
+        worker = WorkerBuilder.builder()
+                .name("name")
+                .build();
+        visit = VisitBuilder.builder()
+                .service(service)
+                .worker(worker)
+                .barber(new Barber())
+                .customer(new OAuthUser())
+                .build();
+        user = new OAuthUser();
+    }
+
     @Test
-    public void shouldThrowBarberNotFoundException(){
+    public void shouldThrowVisitNotFoundException(){
         //given
-        given(barberDao.findById(Mockito.any())).willReturn(Optional.empty());
+        given(visitDao.findById(Mockito.any())).willReturn(Optional.empty());
 
         //then
-        assertThrows(BarberNotFoundException.class, () -> reviewService.add(new ReviewInputDto(), 4L));
+        assertThrows(VisitNotFoundException.class, () -> reviewService.add(new ReviewInputDto(), 4L, user));
     }
 
     @Test
     public void shouldAdd(){
         //given
-        Barber barber = new Barber();
         ReviewInputDto review = new ReviewInputDto();
         review.setStar(5);
         review.setReview("review");
-        given(barberDao.findById(Mockito.any())).willReturn(Optional.of(barber));
+        given(visitDao.findById(Mockito.any())).willReturn(Optional.of(visit));
 
         //when
-        reviewService.add(review, 4L);
+        reviewService.add(review, 4L, user);
 
         //then
         verify(reviewDao).save(any());
@@ -69,14 +98,13 @@ public class ReviewServiceTest {
     @Test
     public void shouldThrowStarNotFoundException(){
         //given
-        Barber barber = new Barber();
         ReviewInputDto review = new ReviewInputDto();
         review.setStar(10);
         review.setReview("review");
-        given(barberDao.findById(Mockito.any())).willReturn(Optional.of(barber));
+        given(visitDao.findById(Mockito.any())).willReturn(Optional.of(visit));
 
         //then
-        assertThrows(StarNotFoundException.class, () -> reviewService.add(review, 4L));
+        assertThrows(StarNotFoundException.class, () -> reviewService.add(review, 4L, user));
     }
 
     @Test
@@ -87,6 +115,8 @@ public class ReviewServiceTest {
                 .date(date)
                 .star(Star.FOUR)
                 .review("review")
+                .worker(worker)
+                .service(service)
                 .build();
         given(reviewDao.findByBarberId(Mockito.any())).willReturn(Collections.singletonList(review));
 
@@ -95,6 +125,8 @@ public class ReviewServiceTest {
 
         //then
         assertEquals("review", reviews.get(0).getReview());
+        assertEquals("name", reviews.get(0).getWorkerName());
+        assertEquals("name", reviews.get(0).getServiceName());
         assertEquals(date, reviews.get(0).getDate());
         assertEquals(Star.FOUR, reviews.get(0).getStar());
     }

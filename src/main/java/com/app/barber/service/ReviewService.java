@@ -2,14 +2,19 @@ package com.app.barber.service;
 
 import com.app.barber.dao.BarberDao;
 import com.app.barber.dao.ReviewDao;
+import com.app.barber.dao.VisitDao;
 import com.app.barber.model.Barber;
+import com.app.barber.model.OAuthUser;
 import com.app.barber.model.Review;
+import com.app.barber.model.Visit;
 import com.app.barber.other.builder.ReviewBuilder;
 import com.app.barber.other.dto.ReviewInputDto;
 import com.app.barber.other.dto.ReviewOutputDto;
 import com.app.barber.other.enums.Star;
 import com.app.barber.other.exception.BarberNotFoundException;
+import com.app.barber.other.exception.BelongException;
 import com.app.barber.other.exception.StarNotFoundException;
+import com.app.barber.other.exception.VisitNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,22 +30,27 @@ public class ReviewService {
 
     private ReviewDao reviewDao;
     private BarberDao barberDao;
+    private VisitDao visitDao;
 
     @Autowired
-    public ReviewService(ReviewDao reviewDao, BarberDao barberDao) {
+    public ReviewService(ReviewDao reviewDao, BarberDao barberDao, VisitDao visitDao) {
         this.reviewDao = reviewDao;
         this.barberDao = barberDao;
+        this.visitDao = visitDao;
     }
 
-    public void add(ReviewInputDto review, long id){
-        Optional<Barber> barberOptional = barberDao.findById(id);
-        Barber foundBarber = barberOptional.orElseThrow(BarberNotFoundException::new);
+    public void add(ReviewInputDto review, long id, OAuthUser owner){
+        Optional<Visit> visitOptional = visitDao.findById(id);
+        Visit visit = visitOptional.orElseThrow(VisitNotFoundException::new);
         Optional<Star> starOptional = Star.fromNumber(review.getStar());
         Star foundStar = starOptional.orElseThrow(StarNotFoundException::new);
         Review newReview = ReviewBuilder.builder()
                 .review(review.getReview())
                 .star(foundStar)
-                .barber(foundBarber)
+                .barber(visit.getBarber())
+                .service(visit.getService())
+                .worker(visit.getWorker())
+                .owner(owner)
                 .build();
         reviewDao.save(newReview);
     }

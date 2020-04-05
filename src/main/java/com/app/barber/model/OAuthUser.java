@@ -3,10 +3,9 @@ package com.app.barber.model;
 import com.app.barber.other.enums.AuthProvider;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.LinkedList;
+import java.util.List;
 
 
 @Entity
@@ -23,6 +22,12 @@ public class OAuthUser {
     private String name;
 
     private String providerId;
+
+    @OneToMany(mappedBy = "customer")
+    private List<Visit> visits = new LinkedList<>();
+
+    @OneToMany(mappedBy = "owner")
+    private List<Review> reviews = new LinkedList<>();
 
     private AuthProvider authProvider;
 
@@ -77,4 +82,19 @@ public class OAuthUser {
         this.authProvider = authProvider;
     }
 
+    public List<Visit> getVisits() {
+        return visits;
+    }
+
+    public void setVisits(List<Visit> visits) {
+        this.visits = visits;
+    }
+
+    public List<Review> getReviews() {
+        return reviews;
+    }
+
+    public void setReviews(List<Review> reviews) {
+        this.reviews = reviews;
+    }
 }

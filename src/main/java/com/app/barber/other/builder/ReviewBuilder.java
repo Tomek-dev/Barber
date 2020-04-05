@@ -1,7 +1,6 @@
 package com.app.barber.other.builder;
 
-import com.app.barber.model.Barber;
-import com.app.barber.model.Review;
+import com.app.barber.model.*;
 import com.app.barber.other.enums.Star;
 
 import java.time.LocalDateTime;
@@ -31,6 +30,21 @@ public class ReviewBuilder {
 
     public ReviewBuilder star(Star star){
         review.setStar(star);
+        return this;
+    }
+
+    public ReviewBuilder worker(Worker worker){
+        review.setWorker(worker);
+        return this;
+    }
+
+    public ReviewBuilder service(Service service){
+        review.setService(service);
+        return this;
+    }
+
+    public ReviewBuilder owner(OAuthUser owner){
+        review.setOwner(owner);
         return this;
     }
 

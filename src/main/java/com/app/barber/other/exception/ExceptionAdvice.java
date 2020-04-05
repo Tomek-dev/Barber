@@ -91,5 +91,11 @@ public class ExceptionAdvice {
         return new ResponseEntity<>(response, HttpStatus.UNPROCESSABLE_ENTITY);
     }
 
-
+    @ExceptionHandler(VisitNotFoundException.class)
+    public ResponseEntity<ApiResponse> handleVisitNotFoundException(BelongException e){
+        ApiResponse response = new ApiResponse(false, e.getMessage());
+        response.setStatus(HttpStatus.NOT_FOUND.value());
+        response.setDate(LocalDateTime.now());
+        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+    }
 }

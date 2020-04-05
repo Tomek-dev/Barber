@@ -17,6 +17,15 @@ public class Review {
     private LocalDateTime date;
 
     @ManyToOne
+    private OAuthUser owner;
+
+    @ManyToOne
+    private Worker worker;
+
+    @ManyToOne
+    private Service service;
+
+    @ManyToOne
     private Barber barber;
 
     private Star star;
@@ -63,5 +72,29 @@ public class Review {
 
     public void setStar(Star star) {
         this.star = star;
+    }
+
+    public OAuthUser getOwner() {
+        return owner;
+    }
+
+    public void setOwner(OAuthUser owner) {
+        this.owner = owner;
+    }
+
+    public Worker getWorker() {
+        return worker;
+    }
+
+    public void setWorker(Worker worker) {
+        this.worker = worker;
+    }
+
+    public Service getService() {
+        return service;
+    }
+
+    public void setService(Service service) {
+        this.service = service;
     }
 }

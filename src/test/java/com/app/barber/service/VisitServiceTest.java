@@ -106,7 +106,7 @@ public class VisitServiceTest {
         given(serviceDao.findById(Mockito.any())).willReturn(Optional.empty());
 
         //then
-        assertThrows(ServiceNotFoundException.class, () -> visitService.add(new VisitInputDto()));
+        assertThrows(ServiceNotFoundException.class, () -> visitService.add(new VisitInputDto(), new OAuthUser()));
         assertThrows(ServiceNotFoundException.class, () -> visitService.findAllAvailable(4L, "2020-03-29"));
     }
 
@@ -117,7 +117,7 @@ public class VisitServiceTest {
         given(workerDao.findById(Mockito.any())).willReturn(Optional.empty());
 
         //then
-        assertThrows(WorkerNotFoundException.class, () -> visitService.add(new VisitInputDto()));
+        assertThrows(WorkerNotFoundException.class, () -> visitService.add(new VisitInputDto(), new OAuthUser()));
     }
 
     @Test
@@ -132,7 +132,7 @@ public class VisitServiceTest {
         given(openDao.findByBarberAndDay(Mockito.any(), Mockito.any())).willReturn(Optional.of(open));
 
         //then
-        assertThrows(VisitDateNotAvailableException.class, () -> visitService.add(visit));
+        assertThrows(VisitDateNotAvailableException.class, () -> visitService.add(visit, new OAuthUser()));
     }
 
     @Test
@@ -147,9 +147,9 @@ public class VisitServiceTest {
         given(openDao.findByBarberAndDay(Mockito.any(), Mockito.any())).willReturn(Optional.of(open));
 
         //then
-        assertThrows(VisitDateNotAvailableException.class, () -> visitService.add(visit));
+        assertThrows(VisitDateNotAvailableException.class, () -> visitService.add(visit, new OAuthUser()));
         visit.setDate("2020-03-29T11:45:00.0");
-        assertThrows(VisitDateNotAvailableException.class, () -> visitService.add(visit));
+        assertThrows(VisitDateNotAvailableException.class, () -> visitService.add(visit, new OAuthUser()));
     }
 
     @Test
@@ -169,9 +169,9 @@ public class VisitServiceTest {
         given(openDao.findByBarberAndDay(Mockito.any(), Mockito.any())).willReturn(Optional.of(open));
 
         //then
-        assertThrows(VisitDateNotAvailableException.class, () -> visitService.add(visit));
+        assertThrows(VisitDateNotAvailableException.class, () -> visitService.add(visit, new OAuthUser()));
         visit.setDate("2020-03-29T11:45:00.0");
-        assertThrows(VisitDateNotAvailableException.class, () -> visitService.add(visit));
+        assertThrows(VisitDateNotAvailableException.class, () -> visitService.add(visit, new OAuthUser()));
     }
 
     @Test

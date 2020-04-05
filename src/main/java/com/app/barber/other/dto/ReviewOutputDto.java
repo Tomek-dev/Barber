@@ -9,6 +9,8 @@ public class ReviewOutputDto {
     private String review;
     private LocalDateTime date;
     private Star star;
+    private String workerName;
+    private String serviceName;
 
     public ReviewOutputDto() {
     }
@@ -35,5 +37,21 @@ public class ReviewOutputDto {
 
     public void setStar(Star star) {
         this.star = star;
+    }
+
+    public String getWorkerName() {
+        return workerName;
+    }
+
+    public void setWorkerName(String workerName) {
+        this.workerName = workerName;
+    }
+
+    public String getServiceName() {
+        return serviceName;
+    }
+
+    public void setServiceName(String serviceName) {
+        this.serviceName = serviceName;
     }
 }

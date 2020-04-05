@@ -1,10 +1,7 @@
 package com.app.barber.service;
 
 import com.app.barber.dao.*;
-import com.app.barber.model.Barber;
-import com.app.barber.model.Open;
-import com.app.barber.model.Visit;
-import com.app.barber.model.Worker;
+import com.app.barber.model.*;
 import com.app.barber.other.builder.VisitBuilder;
 import com.app.barber.other.dto.AvailableVisitOutputDto;
 import com.app.barber.other.dto.VisitInputDto;
@@ -76,7 +73,7 @@ public class VisitService {
         return times;
     }
 
-    public void add(VisitInputDto visitDto){
+    public void add(VisitInputDto visitDto, OAuthUser customer){
         Optional<com.app.barber.model.Service> serviceOptional = serviceDao.findById(visitDto.getService());
         com.app.barber.model.Service service = serviceOptional.orElseThrow(ServiceNotFoundException::new);
         Optional<Worker> workerOptional = workerDao.findById(visitDto.getWorker());
@@ -99,6 +96,7 @@ public class VisitService {
                 .worker(worker)
                 .service(service)
                 .barber(barber)
+                .customer(customer)
                 .beginning(beginning)
                 .finish(finish)
                 .build();

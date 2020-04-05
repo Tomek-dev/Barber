@@ -1,6 +1,7 @@
 package com.app.barber.other;
 
 import com.app.barber.dao.*;
+import com.app.barber.model.OAuthUser;
 import com.app.barber.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -13,13 +14,15 @@ public class WebSecurity {
     private ServiceDao serviceDao;
     private WorkerDao workerDao;
     private OpenDao openDao;
+    private ReviewDao reviewDao;
 
     @Autowired
-    public WebSecurity(VisitDao visitDao, ServiceDao serviceDao, WorkerDao workerDao, OpenDao openDao) {
+    public WebSecurity(VisitDao visitDao, ServiceDao serviceDao, WorkerDao workerDao, OpenDao openDao, ReviewDao reviewDao) {
         this.visitDao = visitDao;
         this.serviceDao = serviceDao;
         this.workerDao = workerDao;
         this.openDao = openDao;
+        this.reviewDao = reviewDao;
     }
 
     public Boolean barberOwner(Long id, Authentication authentication){
@@ -48,5 +51,15 @@ public class WebSecurity {
     public Boolean visitOwner(Long id, Authentication authentication){
         User user = (User) authentication.getPrincipal();
         return visitDao.existsByIdAndBarber(id, user.getBarber());
+    }
+
+    public Boolean visitCustomer(Long id, Authentication authentication){
+        OAuthUser user = (OAuthUser) authentication.getPrincipal();
+        return visitDao.existsByIdAndCustomer(id, user);
+    }
+
+    public Boolean reviewOwner(Long id, Authentication authentication){
+        OAuthUser user = (OAuthUser) authentication.getPrincipal();
+        return reviewDao.existsByIdAndOwner(id, user);
     }
 }
