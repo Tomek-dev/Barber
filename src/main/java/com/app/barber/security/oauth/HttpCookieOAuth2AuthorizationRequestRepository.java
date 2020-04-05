@@ -21,7 +21,6 @@ public class HttpCookieOAuth2AuthorizationRequestRepository implements Authoriza
         return CookieUtils.getCookie(httpServletRequest, OAUTH_AUTHORIZATION_REQUEST_COOKIE_NAME)
                 .map(cookie -> CookieUtils.deserialize(cookie, OAuth2AuthorizationRequest.class))
                 .orElse(null);
-
     }
 
     @Override

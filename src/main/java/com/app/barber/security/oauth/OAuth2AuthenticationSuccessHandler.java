@@ -44,10 +44,6 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         Optional<String> redirectUri = CookieUtils.getCookie(request, REDIRECT_URI_PARAM_COOKIE_NAME)
                 .map(Cookie::getValue);
 
-        if(redirectUri.isPresent() /* ?? */){
-            //throw new BadRequestException();
-        }
-
         String targetUrl = redirectUri.orElse(getDefaultTargetUrl());
 
         String token = provider.generateToken(authentication);
@@ -62,6 +58,4 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         super.clearAuthenticationAttributes(request);
         httpCookieOAuth2AuthorizationRequestRepository.removeAuthorizationRequestCookie(request, response);
     }
-
-    //TODO
 }

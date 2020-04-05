@@ -2,6 +2,10 @@ package com.app.barber.config;
 
 import com.app.barber.security.jwt.JwtAuthenticationEntryPoint;
 import com.app.barber.security.jwt.JwtAuthenticationFilter;
+import com.app.barber.security.oauth.CustomOAuth2UserService;
+import com.app.barber.security.oauth.HttpCookieOAuth2AuthorizationRequestRepository;
+import com.app.barber.security.oauth.OAuth2AuthenticationFailureHandler;
+import com.app.barber.security.oauth.OAuth2AuthenticationSuccessHandler;
 import com.app.barber.service.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -73,6 +77,20 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Order(1)
     @Configuration
     public class OpenIdSecurity extends WebSecurityConfigurerAdapter{
+
+        private HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository;
+        private CustomOAuth2UserService customOAuth2UserService;
+        private OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
+        private OAuth2AuthenticationFailureHandler oAuth2AuthenticationFailureHandler;
+
+        @Autowired
+        public OpenIdSecurity(HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository, CustomOAuth2UserService customOAuth2UserService, OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler, OAuth2AuthenticationFailureHandler oAuth2AuthenticationFailureHandler) {
+            this.httpCookieOAuth2AuthorizationRequestRepository = httpCookieOAuth2AuthorizationRequestRepository;
+            this.customOAuth2UserService = customOAuth2UserService;
+            this.oAuth2AuthenticationSuccessHandler = oAuth2AuthenticationSuccessHandler;
+            this.oAuth2AuthenticationFailureHandler = oAuth2AuthenticationFailureHandler;
+        }
+
         @Override
         protected void configure(HttpSecurity http) throws Exception {
             http.antMatcher("/api/oauth/**")
@@ -80,8 +98,19 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     .anyRequest().authenticated()
                     .and()
                     .oauth2Login()
-                    .authorizationEndpoint();
-                     //TODO
+                    .authorizationEndpoint()
+                    .baseUri("/oauth/authorize/*")
+                    .authorizationRequestRepository(httpCookieOAuth2AuthorizationRequestRepository)
+                    .and()
+                    .redirectionEndpoint()
+                    .baseUri("/oauth/callback/*")
+                    .and()
+                    .userInfoEndpoint()
+                    .userService(customOAuth2UserService)
+                    .and()
+                    .successHandler(oAuth2AuthenticationSuccessHandler)
+                    .failureHandler(oAuth2AuthenticationFailureHandler);
+
         }
     }
 

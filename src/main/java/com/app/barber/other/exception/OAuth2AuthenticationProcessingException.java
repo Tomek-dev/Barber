@@ -1,4 +1,4 @@
-package com.app.barber.other.validation;
+package com.app.barber.other.exception;
 
 public class OAuth2AuthenticationProcessingException extends RuntimeException {
 
