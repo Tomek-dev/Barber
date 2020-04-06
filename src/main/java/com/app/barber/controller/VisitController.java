@@ -46,4 +46,10 @@ public class VisitController {
     public void delete(@PathVariable Long id){
         visitService.delete(id);
     }
+
+    @PreAuthorize("hasRole('ROLE_OAUTH')")
+    @GetMapping("/oauth/visit/{id}")
+    public List<VisitOutputDto> findAllByCustomer(@PathVariable Long id, @AuthenticationPrincipal OAuthUser user){
+        return visitService.findAllByOAuthUser(id, user);
+    }
 }

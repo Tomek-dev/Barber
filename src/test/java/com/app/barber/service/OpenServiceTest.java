@@ -2,6 +2,7 @@ package com.app.barber.service;
 
 import com.app.barber.dao.BarberDao;
 import com.app.barber.dao.OpenDao;
+import com.app.barber.model.Open;
 import com.app.barber.other.dto.OpenDto;
 import com.app.barber.other.exception.BarberNotFoundException;
 import com.app.barber.other.exception.OpenNotFoundException;
@@ -12,8 +13,8 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import java.util.Collections;
-import java.util.Optional;
+import java.time.DayOfWeek;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
@@ -43,7 +44,6 @@ public class OpenServiceTest {
     public void shouldThrowOpenNotFoundException2(){
         //given
         OpenDto open = new OpenDto();
-        open.setDay("monday");
         given(openDao.findByBarberIdAndDay(Mockito.any(), Mockito.any())).willReturn(Optional.empty());
 
         //then
@@ -57,5 +57,46 @@ public class OpenServiceTest {
 
         //then
         assertThrows(BarberNotFoundException.class, () -> openService.setWeek(4L, Collections.singletonList(new OpenDto())));
+    }
+
+    @Test
+    public void shouldReturnListOfOpeningHours(){
+        //given
+        List<Open> opens = new LinkedList<>();
+        Open friday = new Open();
+        friday.setDay(DayOfWeek.FRIDAY);
+        opens.add(friday);
+        Open monday = new Open();
+        monday.setDay(DayOfWeek.MONDAY);
+        opens.add(monday);
+        Open thursday = new Open();
+        thursday.setDay(DayOfWeek.THURSDAY);
+        opens.add(thursday);
+        Open wednesday = new Open();
+        wednesday.setDay(DayOfWeek.WEDNESDAY);
+        opens.add(wednesday);
+        Open saturday = new Open();
+        saturday.setDay(DayOfWeek.SATURDAY);
+        opens.add(saturday);
+        Open sunday = new Open();
+        sunday.setDay(DayOfWeek.SUNDAY);
+        opens.add(sunday);
+        Open tuesday = new Open();
+        tuesday.setDay(DayOfWeek.TUESDAY);
+        opens.add(tuesday);
+        given(openDao.findByBarberId(Mockito.any())).willReturn(opens);
+
+        //when
+        List<OpenDto> dto = openService.getWeek(4L);
+
+        //then
+        assertEquals(7, dto.size());
+        assertEquals("Monday", dto.get(0).getDay());
+        assertEquals("Tuesday", dto.get(1).getDay());
+        assertEquals("Wednesday", dto.get(2).getDay());
+        assertEquals("Thursday", dto.get(3).getDay());
+        assertEquals("Friday", dto.get(4).getDay());
+        assertEquals("Saturday", dto.get(5).getDay());
+        assertEquals("Sunday", dto.get(6).getDay());
     }
 }

@@ -2,6 +2,7 @@ package com.app.barber.controller;
 
 import com.app.barber.model.OAuthUser;
 import com.app.barber.model.Review;
+import com.app.barber.other.dto.ReviewInfoDto;
 import com.app.barber.other.dto.ReviewInputDto;
 import com.app.barber.other.dto.ReviewOutputDto;
 import com.app.barber.service.ReviewService;
@@ -35,9 +36,9 @@ public class ReviewController {
         return reviewService.findById(id);
     }
 
-    @GetMapping("/review/average/{id}")
-    public Double getAverage(@PathVariable Long id){
-        return reviewService.averageByBarber(id);
+    @GetMapping("/review/info/{id}")
+    public ReviewInfoDto getInfo(@PathVariable Long id){
+        return reviewService.reviewInfo(id);
     }
 
     @PreAuthorize("hasRole('ROLE_OAUTH') && @webSecurity.reviewOwner(id, authentication)")

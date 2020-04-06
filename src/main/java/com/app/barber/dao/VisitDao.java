@@ -1,6 +1,7 @@
 package com.app.barber.dao;
 
 import com.app.barber.model.*;
+import com.app.barber.other.dto.VisitOutputDto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,4 +19,6 @@ public interface VisitDao extends JpaRepository<Visit, Long> {
     Boolean existsByIdAndBarber(Long id, Barber barber);
 
     Boolean existsByIdAndCustomer(Long id, OAuthUser user);
+
+    List<Visit> findByCustomerAndBarberId(OAuthUser user, Long id);
 }

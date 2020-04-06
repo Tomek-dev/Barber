@@ -6,6 +6,8 @@ import java.time.LocalDateTime;
 
 public class VisitOutputDto {
 
+    private Long id;
+
     private String name;
 
     private String workerName;
@@ -58,5 +60,13 @@ public class VisitOutputDto {
 
     public void setBeginning(LocalDateTime beginning) {
         this.beginning = beginning;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }

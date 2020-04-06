@@ -31,7 +31,7 @@ public class ServiceController {
     }
 
     @GetMapping("/service/value")
-    public List<ServiceOutputDto> findAllByWorker(@RequestParam(required = false) Long barber,
+    public List<ServiceOutputDto> findAllByParam(@RequestParam(required = false) Long barber,
                                                   @RequestParam(required = false) Long worker){
         if((barber == null && worker == null)
         || (barber != null && worker != null)) {

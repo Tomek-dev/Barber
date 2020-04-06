@@ -8,6 +8,7 @@ import com.app.barber.model.OAuthUser;
 import com.app.barber.model.Review;
 import com.app.barber.model.Visit;
 import com.app.barber.other.builder.ReviewBuilder;
+import com.app.barber.other.dto.ReviewInfoDto;
 import com.app.barber.other.dto.ReviewInputDto;
 import com.app.barber.other.dto.ReviewOutputDto;
 import com.app.barber.other.enums.Star;
@@ -66,12 +67,12 @@ public class ReviewService {
                 .collect(Collectors.toList());
     }
 
-    public Double averageByBarber(Long id){
+    public ReviewInfoDto reviewInfo(Long id){
         List<Review> reviews = reviewDao.findByBarberId(id);
         long sum = 0L;
         for (Review review : reviews) {
             sum += review.getStar().getNumber();
         }
-        return  (double) sum / reviews.size();
+        return  new ReviewInfoDto((double) sum / reviews.size(), reviews.size());
     }
 }

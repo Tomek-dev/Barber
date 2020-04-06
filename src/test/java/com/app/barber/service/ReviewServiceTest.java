@@ -8,6 +8,8 @@ import com.app.barber.other.builder.ReviewBuilder;
 import com.app.barber.other.builder.ServiceBuilder;
 import com.app.barber.other.builder.VisitBuilder;
 import com.app.barber.other.builder.WorkerBuilder;
+import com.app.barber.other.dto.ResetInputDto;
+import com.app.barber.other.dto.ReviewInfoDto;
 import com.app.barber.other.dto.ReviewInputDto;
 import com.app.barber.other.dto.ReviewOutputDto;
 import com.app.barber.other.enums.Star;
@@ -154,7 +156,11 @@ public class ReviewServiceTest {
         reviews.add(review2);
         given(reviewDao.findByBarberId(Mockito.any())).willReturn(reviews);
 
+        ///when
+        ReviewInfoDto dto = reviewService.reviewInfo(4L);
+
         //then
-        assertEquals(4.5, reviewService.averageByBarber(4L));
+        assertEquals(4.5, dto.getAverage());
+        assertEquals(2, dto.getCount());
     }
 }

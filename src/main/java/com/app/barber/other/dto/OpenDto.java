@@ -3,6 +3,9 @@ package com.app.barber.other.dto;
 import com.app.barber.other.validation.Time;
 
 import javax.validation.constraints.NotEmpty;
+import java.time.DayOfWeek;
+import java.time.format.TextStyle;
+import java.util.Locale;
 
 public class OpenDto {
 
@@ -40,7 +43,7 @@ public class OpenDto {
         return day;
     }
 
-    public void setDay(String day) {
-        this.day = day;
+    public void setDay(DayOfWeek day) {
+        this.day = day.getDisplayName(TextStyle.FULL, Locale.ENGLISH);
     }
 }
