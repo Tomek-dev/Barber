@@ -4,6 +4,8 @@ import com.app.barber.other.enums.Star;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 public class Review {
@@ -29,6 +31,9 @@ public class Review {
     private Barber barber;
 
     private Star star;
+
+    @OneToMany(mappedBy = "review")
+    private Set<Report> reports = new HashSet<>();
 
     public Review() {
         date = LocalDateTime.now();
@@ -96,5 +101,13 @@ public class Review {
 
     public void setService(Service service) {
         this.service = service;
+    }
+
+    public Set<Report> getReports() {
+        return reports;
+    }
+
+    public void setReports(Set<Report> reports) {
+        this.reports = reports;
     }
 }

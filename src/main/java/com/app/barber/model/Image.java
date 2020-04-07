@@ -14,30 +14,40 @@ public class Image {
     @ManyToOne
     private Barber barber;
 
-    public Image() {
+    private Image() {
+    }
+
+    public static class Builder{
+        private String url;
+        private Barber barber;
+
+        public Builder url(String url){
+            this.url = url;
+            return this;
+        }
+
+        public Builder barber(Barber barber){
+            this.barber = barber;
+            return this;
+        }
+
+        public Image build(){
+            Image image = new Image();
+            image.barber = this.barber;
+            image.url = this.url;
+            return image;
+        }
     }
 
     public Long getId() {
         return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     public String getUrl() {
         return url;
     }
 
-    public void setUrl(String url) {
-        this.url = url;
-    }
-
     public Barber getBarber() {
         return barber;
-    }
-
-    public void setBarber(Barber barber) {
-        this.barber = barber;
     }
 }
