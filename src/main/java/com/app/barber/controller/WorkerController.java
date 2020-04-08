@@ -3,6 +3,7 @@ package com.app.barber.controller;
 import com.app.barber.model.User;
 import com.app.barber.other.dto.WorkerInputDto;
 import com.app.barber.other.dto.WorkerOutputDto;
+import com.app.barber.other.validation.ValidList;
 import com.app.barber.service.WorkerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -30,6 +31,12 @@ public class WorkerController {
         workerService.add(workerDto, user.getBarber().getId());
     }
 
+    @PreAuthorize("hasRole('ROLE_USER')")
+    @PostMapping("/workers/add")
+    public void addAll(@Valid @RequestBody ValidList<WorkerInputDto> dto, @AuthenticationPrincipal User user){
+        workerService.addAll(dto, user.getBarber());
+    }
+
     @PreAuthorize("hasRole('ROLE_USER') && @webSecurity.workerOwner(#workerId, authentication)")
     @PostMapping("/worker/{workerId}/add/{serviceId}")
     public void addTo(@PathVariable Long serviceId, @PathVariable Long workerId){
@@ -41,6 +48,7 @@ public class WorkerController {
     public void removeFrom(@PathVariable Long serviceId, @PathVariable Long workerId){
         workerService.removeFrom(serviceId, workerId);
     }
+
     @PreAuthorize("hasRole('ROLE_USER') && @webSecurity.workerOwner(#id, authentication)")
     @DeleteMapping("/worker/{id}")
     public void delete(@PathVariable Long id){

@@ -4,6 +4,7 @@ import com.app.barber.model.User;
 import com.app.barber.other.dto.ServiceInputDto;
 import com.app.barber.other.dto.ServiceOutputDto;
 import com.app.barber.other.exception.IncorrectParamException;
+import com.app.barber.other.validation.ValidList;
 import com.app.barber.service.ServiceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -27,7 +28,13 @@ public class ServiceController {
     @PreAuthorize("hasRole('ROLE_USER')")
     @PostMapping("/service/add")
     public void add(@Valid @RequestBody ServiceInputDto serviceDto, @AuthenticationPrincipal User user){
-        serviceService.add(serviceDto, user.getId());
+        serviceService.add(serviceDto, user.getBarber().getId());
+    }
+
+    @PreAuthorize(("hasRole('ROLE_USER')"))
+    @PostMapping("/services/add")
+    public void add(@Valid @RequestBody ValidList<ServiceInputDto> service, @AuthenticationPrincipal User user){
+        serviceService.addAll(service, user.getBarber());
     }
 
     @GetMapping("/service/value")

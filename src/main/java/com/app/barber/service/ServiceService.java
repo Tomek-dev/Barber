@@ -4,6 +4,7 @@ import com.app.barber.dao.BarberDao;
 import com.app.barber.dao.ServiceDao;
 import com.app.barber.dao.WorkerDao;
 import com.app.barber.model.Barber;
+import com.app.barber.model.User;
 import com.app.barber.model.Worker;
 import com.app.barber.other.builder.ServiceBuilder;
 import com.app.barber.other.dto.ServiceInputDto;
@@ -16,6 +17,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -48,6 +50,21 @@ public class ServiceService {
                 .barber(barber)
                 .build();
         serviceDao.save(service);
+    }
+
+    public void addAll(List<ServiceInputDto> dto, Barber barber){
+        List<com.app.barber.model.Service> services = new LinkedList<>();
+        dto.forEach(service -> {
+            com.app.barber.model.Service object = ServiceBuilder.builder()
+                    .name(service.getName())
+                    .price(service.getPrice())
+                    .description(service.getDescription())
+                    .time(service.getTime())
+                    .barber(barber)
+                    .build();
+            services.add(object);
+        });
+        serviceDao.saveAll(services);
     }
 
     public List<ServiceOutputDto> getAllByWorkerId(Long id){
