@@ -114,4 +114,12 @@ public class ExceptionAdvice {
         response.setDate(LocalDateTime.now());
         return new ResponseEntity<>(response, HttpStatus.UNPROCESSABLE_ENTITY);
     }
+
+    @ExceptionHandler(SocialNotFoundException.class)
+    public ResponseEntity<ApiResponse> handleSocialNotFoundException(SocialNotFoundException e){
+        ApiResponse response = new ApiResponse(false, e.getMessage());
+        response.setStatus(HttpStatus.NOT_FOUND.value());
+        response.setDate(LocalDateTime.now());
+        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+    }
 }

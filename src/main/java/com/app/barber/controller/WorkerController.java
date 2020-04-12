@@ -1,6 +1,7 @@
 package com.app.barber.controller;
 
 import com.app.barber.model.User;
+import com.app.barber.other.dto.AvailabilityDto;
 import com.app.barber.other.dto.WorkerInputDto;
 import com.app.barber.other.dto.WorkerOutputDto;
 import com.app.barber.other.validation.ValidList;
@@ -58,6 +59,11 @@ public class WorkerController {
     @GetMapping("/worker/{id}")
     public WorkerOutputDto get(@PathVariable Long id){
         return workerService.getById(id);
+    }
+
+    @GetMapping("/worker/available/{name}")
+    public AvailabilityDto availableName(@PathVariable String name, @AuthenticationPrincipal User user){
+        return new AvailabilityDto(workerService.availableName(name, user.getBarber()));
     }
 
     @GetMapping("/workers/{id}")

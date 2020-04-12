@@ -15,14 +15,18 @@ public class WebSecurity {
     private WorkerDao workerDao;
     private OpenDao openDao;
     private ReviewDao reviewDao;
+    private SocialDao socialDao;
 
     @Autowired
-    public WebSecurity(VisitDao visitDao, ServiceDao serviceDao, WorkerDao workerDao, OpenDao openDao, ReviewDao reviewDao) {
+    public WebSecurity(VisitDao visitDao, ServiceDao serviceDao,
+                       WorkerDao workerDao, OpenDao openDao,
+                       ReviewDao reviewDao, SocialDao socialDao) {
         this.visitDao = visitDao;
         this.serviceDao = serviceDao;
         this.workerDao = workerDao;
         this.openDao = openDao;
         this.reviewDao = reviewDao;
+        this.socialDao = socialDao;
     }
 
     public Boolean barberOwner(Long id, Authentication authentication){
@@ -61,5 +65,10 @@ public class WebSecurity {
     public Boolean reviewOwner(Long id, Authentication authentication){
         OAuthUser user = (OAuthUser) authentication.getPrincipal();
         return reviewDao.existsByIdAndOwner(id, user);
+    }
+
+    public Boolean socialOwner(Long id, Authentication authentication){
+        User user = (User) authentication.getPrincipal();
+        return socialDao.existsByIdAndBarber(id, user.getBarber());
     }
 }

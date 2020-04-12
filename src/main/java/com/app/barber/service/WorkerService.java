@@ -40,10 +40,10 @@ public class WorkerService {
 
     public void add(WorkerInputDto workerDto, Long id){
         Optional<Barber> barberOptional = barberDao.findById(id);
-        Barber foundBarber = barberOptional.orElseThrow(BarberNotFoundException::new);
+        Barber barber = barberOptional.orElseThrow(BarberNotFoundException::new);
         Worker worker = WorkerBuilder.builder()
                 .name(workerDto.getName())
-                .barber(foundBarber)
+                .barber(barber)
                 .build();
         workerDao.save(worker);
     }
@@ -85,6 +85,10 @@ public class WorkerService {
         Optional<Worker> workerOptional = workerDao.findById(id);
         Worker worker = workerOptional.orElseThrow(WorkerNotFoundException::new);
         return mapper.map(worker, WorkerOutputDto.class);
+    }
+
+    public Boolean availableName(String name, Barber barber){
+        return !workerDao.existsByBarberAndName(barber, name);
     }
 
     public void delete(Long id){

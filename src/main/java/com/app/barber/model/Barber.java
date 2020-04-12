@@ -45,6 +45,9 @@ public class Barber {
     @OneToMany(mappedBy = "barber", orphanRemoval = true)
     private Set<Visit> visits = new HashSet<>();
 
+    @OneToMany(mappedBy = "barber", orphanRemoval = true)
+    private Set<Social> socials = new HashSet<>();
+
     public Barber() {
     }
 
@@ -150,5 +153,21 @@ public class Barber {
 
     public void setServices(Set<Service> services) {
         this.services = services;
+    }
+
+    public Set<Image> getImages() {
+        return images;
+    }
+
+    public void setImages(Set<Image> images) {
+        this.images = images;
+    }
+
+    public Set<Social> getSocials() {
+        return socials;
+    }
+
+    public void setSocials(Set<Social> socials) {
+        this.socials = socials;
     }
 }
