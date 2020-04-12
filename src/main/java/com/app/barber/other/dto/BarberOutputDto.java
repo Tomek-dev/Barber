@@ -2,6 +2,8 @@ package com.app.barber.other.dto;
 
 public class BarberOutputDto {
 
+    private Long id;
+
     private String name;
 
     private String city;
@@ -44,5 +46,13 @@ public class BarberOutputDto {
 
     public void setLocal(String local) {
         this.local = local;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }

@@ -1,5 +1,6 @@
 package com.app.barber.controller;
 
+import com.app.barber.model.Barber;
 import com.app.barber.model.User;
 import com.app.barber.other.dto.BarberInputDto;
 import com.app.barber.other.dto.BarberOutputDto;
@@ -31,6 +32,12 @@ public class BarberController {
     @GetMapping("/barber/{id}")
     public BarberOutputDto get(@PathVariable Long id){
         return barberService.getById(id);
+    }
+
+    @PreAuthorize("isAuthenticated() && hasRole('ROLE_USER')")
+    @GetMapping("/barber")
+    public BarberOutputDto getByUser(@AuthenticationPrincipal User user){
+        return barberService.getByUser(user);
     }
 
     @PreAuthorize("hasRole('ROLE_USER') && @webSecurity.barberOwner(#id, authentication)")

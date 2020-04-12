@@ -53,6 +53,12 @@ public class BarberService {
         return mapper.map(foundBarber, BarberOutputDto.class);
     }
 
+    public BarberOutputDto getByUser(User user){
+        Optional<Barber> barberOptional = barberDao.findByUser(user);
+        Barber foundBarber = barberOptional.orElseThrow(BarberNotFoundException::new);
+        return mapper.map(foundBarber, BarberOutputDto.class);
+    }
+
     public void delete(Long id){
         barberDao.deleteById(id);
     }

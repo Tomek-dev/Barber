@@ -31,10 +31,10 @@ public class WorkerController {
         workerService.add(workerDto, user.getBarber().getId());
     }
 
-    @PreAuthorize("hasRole('ROLE_USER')")
-    @PostMapping("/workers/add")
-    public void addAll(@Valid @RequestBody ValidList<WorkerInputDto> dto, @AuthenticationPrincipal User user){
-        workerService.addAll(dto, user.getBarber());
+    @PreAuthorize("hasRole('ROLE_USER') && @webSecurity.workerOwner(#id, authentication)")
+    @PutMapping("/worker/{id}")
+    public void edit(@Valid @RequestBody WorkerInputDto workerDto, @PathVariable Long id){
+        workerService.edit(workerDto, id);
     }
 
     @PreAuthorize("hasRole('ROLE_USER') && @webSecurity.workerOwner(#workerId, authentication)")

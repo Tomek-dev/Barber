@@ -3,6 +3,7 @@ package com.app.barber.service;
 import com.app.barber.dao.UserDao;
 import com.app.barber.model.User;
 import com.app.barber.other.builder.UserBuilder;
+import com.app.barber.other.dto.AuthenticatedDto;
 import com.app.barber.other.dto.AvailabilityDto;
 import com.app.barber.other.payload.SignUpRequest;
 import com.app.barber.other.enums.Role;
@@ -54,5 +55,15 @@ public class UserService {
     public AvailabilityDto emailAvailability(String email){
         Boolean available = userDao.existsByEmailIgnoreCase(email);
         return new AvailabilityDto(!available);
+    }
+
+
+    public AuthenticatedDto authenticated(User user) {
+        AuthenticatedDto authenticatedDto = new AuthenticatedDto();
+        authenticatedDto.setEmail(user.getEmail());
+        authenticatedDto.setName(user.getUsername());
+        authenticatedDto.setType("basic");
+        authenticatedDto.setId(user.getId());
+        return authenticatedDto;
     }
 }

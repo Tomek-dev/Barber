@@ -51,6 +51,7 @@ public class ServiceServiceTest {
                 .name("name")
                 .price(1.0)
                 .description("description")
+                .time(4L)
                 .build();
         worker = WorkerBuilder.builder()
                 .name("name")
@@ -82,6 +83,7 @@ public class ServiceServiceTest {
         assertTrue(services.get(0).getWorkers().contains("name"));
         assertEquals(1.0, services.get(0).getPrice());
         assertEquals("description", services.get(0).getDescription());
+        assertEquals(4, services.get(0).getTime());
     }
 
     @Test

@@ -2,10 +2,13 @@ package com.app.barber.other.dto;
 
 import com.app.barber.model.Worker;
 
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 public class ServiceOutputDto {
+
+    private Long id;
 
     private Set<String> workers;
 
@@ -14,6 +17,8 @@ public class ServiceOutputDto {
     private String description;
 
     private Double price;
+
+    private Integer time;
 
 
     public ServiceOutputDto() {
@@ -51,5 +56,21 @@ public class ServiceOutputDto {
         this.workers = workers.stream()
                 .map(Worker::getName)
                 .collect(Collectors.toSet());
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Integer getTime() {
+        return time;
+    }
+
+    public void setTime(Integer time) {
+        this.time = time;
     }
 }

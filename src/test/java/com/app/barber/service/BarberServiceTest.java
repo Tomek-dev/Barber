@@ -73,6 +73,7 @@ public class BarberServiceTest {
                 .city("city")
                 .local("1")
                 .build();
+        barber.setId(4L);
         given(barberDao.findById(Mockito.any(Long.class))).willReturn(Optional.ofNullable(barber));
 
         //when
@@ -83,5 +84,6 @@ public class BarberServiceTest {
         assertEquals("address", output.getAddress());
         assertEquals("city", output.getCity());
         assertEquals("1", output.getLocal());
+        assertEquals(4, output.getId());
     }
 }

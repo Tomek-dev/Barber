@@ -52,21 +52,6 @@ public class ServiceService {
         serviceDao.save(service);
     }
 
-    public void addAll(List<ServiceInputDto> dto, Barber barber){
-        List<com.app.barber.model.Service> services = new LinkedList<>();
-        dto.forEach(service -> {
-            com.app.barber.model.Service object = ServiceBuilder.builder()
-                    .name(service.getName())
-                    .price(service.getPrice())
-                    .description(service.getDescription())
-                    .time(service.getTime())
-                    .barber(barber)
-                    .build();
-            services.add(object);
-        });
-        serviceDao.saveAll(services);
-    }
-
     public List<ServiceOutputDto> getAllByWorkerId(Long id){
         Optional<Worker> workerOptional = workerDao.findById(id);
         Worker worker = workerOptional.orElseThrow(WorkerNotFoundException::new);
@@ -83,6 +68,16 @@ public class ServiceService {
         return services.stream()
                 .map(service -> mapper.map(service, ServiceOutputDto.class))
                 .collect(Collectors.toList());
+    }
+
+    public void edit(Long id, ServiceInputDto dto){
+        Optional<com.app.barber.model.Service> serviceOptional = serviceDao.findById(id);
+        com.app.barber.model.Service service = serviceOptional.orElseThrow(ServiceNotFoundException::new);
+        service.setName(dto.getName());
+        service.setTime(dto.getTime());
+        service.setPrice(dto.getPrice());
+        service.setDescription(dto.getDescription());
+        serviceDao.save(service);
     }
 
     public void delete(Long id){

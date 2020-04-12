@@ -6,11 +6,9 @@ import javax.validation.constraints.Size;
 public class LoginRequest {
 
     @NotBlank
-    @Size(min = 4, max = 24)
     private String username;
 
     @NotBlank
-    @Size(min = 8, max = 36)
     private String password;
 
     public LoginRequest() {

@@ -31,10 +31,10 @@ public class ServiceController {
         serviceService.add(serviceDto, user.getBarber().getId());
     }
 
-    @PreAuthorize(("hasRole('ROLE_USER')"))
-    @PostMapping("/services/add")
-    public void add(@Valid @RequestBody ValidList<ServiceInputDto> service, @AuthenticationPrincipal User user){
-        serviceService.addAll(service, user.getBarber());
+    @PreAuthorize("hasRole('ROLE_USER') && @webSecurity.serviceOwner(#id, authentication)")
+    @PutMapping("/service/{id}")
+    public void edit(@Valid ServiceInputDto dto, @PathVariable Long id){
+        serviceService.edit(id, dto);
     }
 
     @GetMapping("/service/value")

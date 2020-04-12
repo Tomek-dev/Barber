@@ -48,18 +48,6 @@ public class WorkerService {
         workerDao.save(worker);
     }
 
-    public void addAll(List<WorkerInputDto> dto, Barber barber){
-        List<Worker> workers = new LinkedList<>();
-        dto.forEach(object -> {
-            Worker worker = WorkerBuilder.builder()
-                    .name(object.getName())
-                    .barber(barber)
-                    .build();
-            workers.add(worker);
-        });
-        workerDao.saveAll(workers);
-    }
-
     public void addTo(Long serviceId, Long workerId){
         Optional<Worker> workerOptional = workerDao.findById(workerId);
         Worker worker = workerOptional.orElseThrow(WorkerNotFoundException::new);
@@ -104,5 +92,12 @@ public class WorkerService {
         Worker worker = workerOptional.orElseThrow(WorkerNotFoundException::new);
         worker.getServices().removeIf(service -> service.getWorkers().contains(worker));
         workerDao.delete(worker);
+    }
+
+    public void edit(WorkerInputDto workerDto, Long id) {
+        Optional<Worker> workerOptional = workerDao.findById(id);
+        Worker worker = workerOptional.orElseThrow(WorkerNotFoundException::new);
+        worker.setName(workerDto.getName());
+        workerDao.save(worker);
     }
 }
