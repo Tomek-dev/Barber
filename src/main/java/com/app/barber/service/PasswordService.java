@@ -7,9 +7,9 @@ import com.app.barber.model.User;
 import com.app.barber.other.dto.ForgotInputDto;
 import com.app.barber.other.dto.PasswordDto;
 import com.app.barber.other.dto.ResetInputDto;
+import com.app.barber.other.exception.InvalidPasswordException;
 import com.app.barber.other.exception.TokenNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -31,10 +31,11 @@ public class PasswordService {
         this.tokenDao = tokenDao;
     }
 
-    public void change(PasswordDto password, String username){
-        Optional<User> userOptional = userDao.findByUsername(username);
-        User user = userOptional.orElseThrow(() -> new UsernameNotFoundException("User not found"));
-        user.setPassword(passwordEncoder.encode(password.getPassword()));
+    public void change(PasswordDto password, User user){
+        if(!passwordEncoder.matches(password.getOldPass(), user.getPassword())){
+            throw new InvalidPasswordException();
+        }
+        user.setPassword(passwordEncoder.encode(password.getNewPass()));
         userDao.save(user);
     }
 

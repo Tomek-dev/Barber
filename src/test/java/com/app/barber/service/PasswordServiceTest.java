@@ -8,6 +8,7 @@ import com.app.barber.other.builder.UserBuilder;
 import com.app.barber.other.dto.ForgotInputDto;
 import com.app.barber.other.dto.PasswordDto;
 import com.app.barber.other.dto.ResetInputDto;
+import com.app.barber.other.exception.InvalidPasswordException;
 import com.app.barber.other.exception.TokenNotFoundException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,8 +16,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -46,12 +45,22 @@ public class PasswordServiceTest {
     @Test
     public void shouldThrowUsernameNotFoundException(){
         //given
-        Authentication authentication = new UsernamePasswordAuthenticationToken("user", null, null);
-        given(userDao.findByUsername(Mockito.any(String.class))).willReturn(Optional.empty());
+        given(userDao.findByUsername(Mockito.any())).willReturn(Optional.empty());
 
         //then
-        assertThrows(UsernameNotFoundException.class, () -> passwordService.change(new PasswordDto(), ""));
         assertThrows(UsernameNotFoundException.class, () -> passwordService.createReset(new ForgotInputDto()));
+    }
+
+    @Test
+    public void shouldInvalidPasswordException(){
+        //given
+        User user = new User();
+        user.setPassword("password");
+        PasswordDto passwordDto = new PasswordDto();
+        passwordDto.setOldPass("invalid");
+
+        //then
+        assertThrows(InvalidPasswordException.class, () -> passwordService.change(new PasswordDto(), user));
     }
 
     @Test
@@ -83,14 +92,17 @@ public class PasswordServiceTest {
                 .password(passwordEncoder.encode("password"))
                 .build();
         PasswordDto password = new PasswordDto();
-        password.setPassword("change");
-        given(userDao.findByUsername(Mockito.any())).willReturn(Optional.of(user));
+        password.setOldPass("password");
+        password.setNewPass("change");
+        given(passwordEncoder.matches(Mockito.any(), Mockito.any())).willReturn(true);
+        given(passwordEncoder.encode(Mockito.anyString())).willAnswer(invocationOnMock -> invocationOnMock.getArguments()[0]);
 
         //when
-        passwordService.change(password, "");
+        passwordService.change(password, user);
 
         //then
         verify(userDao).save(user);
+        assertEquals("change", user.getPassword());
     }
 
     @Test

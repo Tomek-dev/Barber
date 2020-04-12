@@ -33,7 +33,7 @@ public class ServiceController {
 
     @PreAuthorize("hasRole('ROLE_USER') && @webSecurity.serviceOwner(#id, authentication)")
     @PutMapping("/service/{id}")
-    public void edit(@Valid ServiceInputDto dto, @PathVariable Long id){
+    public void edit(@RequestBody @Valid ServiceInputDto dto, @PathVariable Long id){
         serviceService.edit(id, dto);
     }
 

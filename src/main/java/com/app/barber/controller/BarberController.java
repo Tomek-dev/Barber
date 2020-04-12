@@ -34,6 +34,12 @@ public class BarberController {
         return barberService.getById(id);
     }
 
+    @PreAuthorize("hasRole('ROLE_USER')")
+    @PutMapping("/barber")
+    public void edit(@RequestBody @Valid BarberInputDto barberDto, @AuthenticationPrincipal User user){
+        barberService.edit(barberDto, user.getBarber());
+    }
+
     @PreAuthorize("isAuthenticated() && hasRole('ROLE_USER')")
     @GetMapping("/barber")
     public BarberOutputDto getByUser(@AuthenticationPrincipal User user){

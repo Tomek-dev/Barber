@@ -10,25 +10,43 @@ import javax.validation.constraints.Size;
 public class PasswordDto implements PasswordDetails {
 
     @NotBlank
+    private String oldPass;
+    @NotBlank
     @Size(min = 8, max = 36)
-    private String password;
-    private String confirmPassword;
+    private String newPass;
+    private String conNewPass;
 
     @Override
     public String getPassword() {
-        return password;
+        return newPass;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setNewPass(String newPass) {
+        this.newPass = newPass;
     }
 
     @Override
     public String getConfirmPassword() {
-        return confirmPassword;
+        return conNewPass;
     }
 
-    public void setConfirmPassword(String confirmPassword) {
-        this.confirmPassword = confirmPassword;
+    public void setConNewPass(String conNewPass) {
+        this.conNewPass = conNewPass;
+    }
+
+    public String getOldPass() {
+        return oldPass;
+    }
+
+    public void setOldPass(String oldPass) {
+        this.oldPass = oldPass;
+    }
+
+    public String getNewPass() {
+        return newPass;
+    }
+
+    public String getConNewPass() {
+        return conNewPass;
     }
 }

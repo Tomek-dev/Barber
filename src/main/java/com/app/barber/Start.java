@@ -50,7 +50,7 @@ public class Start {
                 .build();
         User user = UserBuilder.builder()
                 .username("user")
-                .email("email@email.email")
+                .email("user@email.email")
                 .password(passwordEncoder.encode("password"))
                 .roles(Collections.singleton(Role.USER))
                 .build();
@@ -80,5 +80,12 @@ public class Start {
         workerDao.save(worker);
         serviceDao.save(service);
         openDao.save(open);
+        User newUser = UserBuilder.builder()
+                .roles(Collections.singleton(Role.USER))
+                .username("new")
+                .password(passwordEncoder.encode("password"))
+                .email("new@email.email")
+                .build();
+        userDao.save(newUser);
     }
 }

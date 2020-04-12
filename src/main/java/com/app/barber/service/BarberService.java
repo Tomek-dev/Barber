@@ -59,6 +59,21 @@ public class BarberService {
         return mapper.map(foundBarber, BarberOutputDto.class);
     }
 
+    public void edit(BarberInputDto barberDto, Barber barber){
+        if(!barberDto.getAddress().equals(barber.getAddress())
+        || !barberDto.getCity().equals(barber.getCity())
+        || !barberDto.getLocal().equals(barber.getLocal())) {
+            //Double[] coordinates = geocodeService.geocoder(barberDto.getAddress(), barberDto.getCity(), barberDto.getLocal());
+            //barber.setLongitude(coordinates[1]);
+            //barber.setLatitude(coordinates[0]);
+            barber.setLocal(barberDto.getLocal());
+            barber.setCity(barberDto.getCity());
+            barber.setAddress(barberDto.getAddress());
+        }
+        barber.setName(barberDto.getName());
+        barberDao.save(barber);
+    }
+
     public void delete(Long id){
         barberDao.deleteById(id);
     }

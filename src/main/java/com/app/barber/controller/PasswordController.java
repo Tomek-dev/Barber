@@ -30,7 +30,7 @@ public class PasswordController {
     @PreAuthorize("hasRole('ROLE_USER')")
     @PostMapping("/change")
     public ResponseEntity<?> change(@Valid @RequestBody PasswordDto password, @AuthenticationPrincipal User user){
-        passwordService.change(password, user.getUsername());
+        passwordService.change(password, user);
         return ResponseEntity.ok("Password change successfully");
     }
 
