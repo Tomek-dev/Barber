@@ -4,7 +4,7 @@ import com.app.barber.other.enums.SocialType;
 
 import javax.validation.constraints.NotBlank;
 
-public class SocialDto {
+public class SocialInputDto {
 
     @NotBlank
     private String url;
@@ -22,10 +22,6 @@ public class SocialDto {
 
     public String getSocialType() {
         return socialType;
-    }
-
-    public void setSocialType(SocialType socialType) {
-        this.socialType = socialType.getValue();
     }
 
     public void setSocialType(String socialType) {

@@ -43,6 +43,10 @@ public class OpenDto {
         return day;
     }
 
+    public void setDay(String day) {
+        this.day = day;
+    }
+
     public void setDay(DayOfWeek day) {
         this.day = day.getDisplayName(TextStyle.FULL, Locale.ENGLISH);
     }

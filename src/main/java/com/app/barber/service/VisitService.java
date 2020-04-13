@@ -78,7 +78,6 @@ public class VisitService {
         com.app.barber.model.Service service = serviceOptional.orElseThrow(ServiceNotFoundException::new);
         Optional<Worker> workerOptional = workerDao.findById(visitDto.getWorker());
         Worker worker = workerOptional.orElseThrow(WorkerNotFoundException::new);
-        //TODO check if worker has this service
         Barber barber = service.getBarber();
         Optional<Open> openOptional = openDao.findByBarberAndDay(barber, DayOfWeek.from(LocalDateTime.parse(visitDto.getDate())));
         Open open = openOptional.orElseThrow(OpenNotFoundException::new);

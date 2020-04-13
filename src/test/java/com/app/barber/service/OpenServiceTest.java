@@ -44,6 +44,7 @@ public class OpenServiceTest {
     public void shouldThrowOpenNotFoundException2(){
         //given
         OpenDto open = new OpenDto();
+        open.setDay("friday");
         given(openDao.findByBarberIdAndDay(Mockito.any(), Mockito.any())).willReturn(Optional.empty());
 
         //then

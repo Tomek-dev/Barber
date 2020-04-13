@@ -1,7 +1,9 @@
 package com.app.barber.controller;
 
 import com.app.barber.model.User;
-import com.app.barber.other.dto.SocialDto;
+import com.app.barber.other.dto.SocialEditDto;
+import com.app.barber.other.dto.SocialInputDto;
+import com.app.barber.other.dto.SocialOutputDto;
 import com.app.barber.service.SocialService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -24,18 +26,18 @@ public class SocialController {
 
     @PreAuthorize("hasRole('ROLE_USER')")
     @PostMapping("/social/add")
-    public void add(@Valid @RequestBody SocialDto socialDto, @AuthenticationPrincipal User user){
+    public void add(@Valid @RequestBody SocialInputDto socialDto, @AuthenticationPrincipal User user){
         socialService.add(socialDto, user.getBarber());
     }
 
     @GetMapping("/social/{id}")
-    public List<SocialDto> getAll(@PathVariable Long id){
+    public List<SocialOutputDto> getAll(@PathVariable Long id){
         return socialService.getAll(id);
     }
 
     @PreAuthorize("hasRole('ROLE_USER') && @webSecurity.socialOwner(#id, authentication)")
     @PutMapping("/social/{id}")
-    public void edit(@RequestBody @Valid SocialDto socialDto, @PathVariable Long id){
+    public void edit(@RequestBody @Valid SocialEditDto socialDto, @PathVariable Long id){
         socialService.edit(socialDto, id);
     }
 

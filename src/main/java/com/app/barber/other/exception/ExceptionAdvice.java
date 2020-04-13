@@ -122,4 +122,13 @@ public class ExceptionAdvice {
         response.setDate(LocalDateTime.now());
         return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<ApiResponse> handleUserNotFoundException(UserNotFoundException e){
+        ApiResponse response = new ApiResponse(false, e.getMessage());
+        response.setStatus(HttpStatus.NOT_FOUND.value());
+        response.setDate(LocalDateTime.now());
+        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+    }
+
 }

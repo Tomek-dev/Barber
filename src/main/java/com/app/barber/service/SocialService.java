@@ -5,7 +5,9 @@ import com.app.barber.dao.SocialDao;
 import com.app.barber.model.Barber;
 import com.app.barber.model.Social;
 import com.app.barber.other.builder.SocialBuilder;
-import com.app.barber.other.dto.SocialDto;
+import com.app.barber.other.dto.SocialEditDto;
+import com.app.barber.other.dto.SocialInputDto;
+import com.app.barber.other.dto.SocialOutputDto;
 import com.app.barber.other.enums.SocialType;
 import com.app.barber.other.exception.BarberNotFoundException;
 import com.app.barber.other.exception.SocialNotFoundException;
@@ -31,7 +33,7 @@ public class SocialService {
         this.barberDao = barberDao;
     }
 
-    public void add(SocialDto socialDto, Barber barber){
+    public void add(SocialInputDto socialDto, Barber barber){
         Social social = SocialBuilder.builder()
                 .barber(barber)
                 .type(SocialType.valueOf(socialDto.getSocialType().toUpperCase()))
@@ -40,15 +42,15 @@ public class SocialService {
         socialDao.save(social);
     }
 
-    public List<SocialDto> getAll(Long id){
+    public List<SocialOutputDto> getAll(Long id){
         Optional<Barber> barberOptional = barberDao.findById(id);
         Barber barber = barberOptional.orElseThrow(BarberNotFoundException::new);
         return barber.getSocials().stream()
-                .map(social -> mapper.map(social, SocialDto.class))
+                .map(social -> mapper.map(social, SocialOutputDto.class))
                 .collect(Collectors.toList());
     }
 
-    public void edit(SocialDto socialDto, Long id){
+    public void edit(SocialEditDto socialDto, Long id){
         Optional<Social> socialOptional = socialDao.findById(id);
         Social social = socialOptional.orElseThrow(SocialNotFoundException::new);
         social.setUrl(socialDto.getUrl());

@@ -10,6 +10,7 @@ import com.app.barber.other.dto.PasswordDto;
 import com.app.barber.other.dto.ResetInputDto;
 import com.app.barber.other.exception.InvalidPasswordException;
 import com.app.barber.other.exception.TokenNotFoundException;
+import com.app.barber.other.exception.UserNotFoundException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -48,7 +49,7 @@ public class PasswordServiceTest {
         given(userDao.findByUsername(Mockito.any())).willReturn(Optional.empty());
 
         //then
-        assertThrows(UsernameNotFoundException.class, () -> passwordService.createReset(new ForgotInputDto()));
+        assertThrows(UserNotFoundException.class, () -> passwordService.createReset(new ForgotInputDto()));
     }
 
     @Test

@@ -5,7 +5,9 @@ import com.app.barber.dao.SocialDao;
 import com.app.barber.model.Barber;
 import com.app.barber.model.Social;
 import com.app.barber.other.builder.SocialBuilder;
-import com.app.barber.other.dto.SocialDto;
+import com.app.barber.other.dto.SocialEditDto;
+import com.app.barber.other.dto.SocialInputDto;
+import com.app.barber.other.dto.SocialOutputDto;
 import com.app.barber.other.enums.SocialType;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -48,7 +50,7 @@ public class SocialServiceTest {
         given(barberDao.findById(Mockito.any())).willReturn(Optional.of(barber));
 
         //when
-        List<SocialDto> list = socialService.getAll(4L);
+        List<SocialOutputDto> list = socialService.getAll(4L);
 
         //then
         assertEquals("url", list.get(0).getUrl());
@@ -58,12 +60,12 @@ public class SocialServiceTest {
     @Test
     public void shouldAdd(){
         //given
-        SocialDto socialDto = new SocialDto();
-        socialDto.setSocialType("facebook");
-        socialDto.setUrl("url");
+        SocialInputDto socialInputDto = new SocialInputDto();
+        socialInputDto.setSocialType("facebook");
+        socialInputDto.setUrl("url");
 
         //when
-        socialService.add(socialDto, new Barber());
+        socialService.add(socialInputDto, new Barber());
 
         //then
         verify(socialDao).save(any());
@@ -73,12 +75,12 @@ public class SocialServiceTest {
     public void shouldEdit(){
         //given
         Social social = new Social();
-        SocialDto socialDto = new SocialDto();
-        socialDto.setUrl("url");
+        SocialEditDto socialEditDto = new SocialEditDto();
+        socialEditDto.setUrl("url");
         given(socialDao.findById(Mockito.any())).willReturn(Optional.of(social));
 
         //when
-        socialService.edit(socialDto,4L);
+        socialService.edit(socialEditDto,4L);
 
         //then
         verify(socialDao).save(social);

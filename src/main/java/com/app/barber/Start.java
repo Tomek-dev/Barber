@@ -4,6 +4,7 @@ import com.app.barber.dao.*;
 import com.app.barber.model.*;
 import com.app.barber.other.builder.*;
 import com.app.barber.other.enums.Role;
+import com.app.barber.other.enums.SocialType;
 import com.app.barber.other.enums.Star;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -23,9 +24,13 @@ public class Start {
     private WorkerDao workerDao;
     private ServiceDao serviceDao;
     private OpenDao openDao;
+    private SocialDao socialDao;
 
     @Autowired
-    public Start(ReviewDao reviewDao, BarberDao barberDao, UserDao userDao, PasswordEncoder passwordEncoder, WorkerDao workerDao, ServiceDao serviceDao, OpenDao openDao) {
+    public Start(ReviewDao reviewDao, BarberDao barberDao,
+                 UserDao userDao, PasswordEncoder passwordEncoder,
+                 WorkerDao workerDao, ServiceDao serviceDao,
+                 OpenDao openDao, SocialDao socialDao) {
         this.reviewDao = reviewDao;
         this.barberDao = barberDao;
         this.userDao = userDao;
@@ -33,6 +38,7 @@ public class Start {
         this.workerDao = workerDao;
         this.serviceDao = serviceDao;
         this.openDao = openDao;
+        this.socialDao = socialDao;
         init();
     }
 
@@ -74,12 +80,18 @@ public class Start {
                 .day(DayOfWeek.FRIDAY)
                 .barber(barber)
                 .build();
+        Social social = SocialBuilder.builder()
+                .type(SocialType.FACEBOOK)
+                .url("url")
+                .barber(barber)
+                .build();
         userDao.save(user);
         barberDao.save(barber);
         reviewDao.save(review);
         workerDao.save(worker);
         serviceDao.save(service);
         openDao.save(open);
+        socialDao.save(social);
         User newUser = UserBuilder.builder()
                 .roles(Collections.singleton(Role.USER))
                 .username("new")

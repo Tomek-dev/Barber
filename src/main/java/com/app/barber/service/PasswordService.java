@@ -9,6 +9,7 @@ import com.app.barber.other.dto.PasswordDto;
 import com.app.barber.other.dto.ResetInputDto;
 import com.app.barber.other.exception.InvalidPasswordException;
 import com.app.barber.other.exception.TokenNotFoundException;
+import com.app.barber.other.exception.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -51,7 +52,7 @@ public class PasswordService {
     public void createReset(ForgotInputDto forgot){
         if (!tokenDao.existsByUserUsername(forgot.getUsername())) {
             Optional<User> userOptional = userDao.findByUsername(forgot.getUsername());
-            User user = userOptional.orElseThrow(() -> new UsernameNotFoundException("User not found"));
+            User user = userOptional.orElseThrow(UserNotFoundException::new);
             Token token = new Token.Builder()
                     .user(user)
                     .token(UUID.randomUUID())
