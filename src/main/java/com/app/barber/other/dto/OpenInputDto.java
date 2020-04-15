@@ -7,7 +7,7 @@ import java.time.DayOfWeek;
 import java.time.format.TextStyle;
 import java.util.Locale;
 
-public class OpenDto {
+public class OpenInputDto {
 
     @NotEmpty
     private String day;
@@ -20,7 +20,7 @@ public class OpenDto {
     @NotEmpty
     private String close;
 
-    public OpenDto() {
+    public OpenInputDto() {
     }
 
     public String getOpen() {
@@ -45,9 +45,5 @@ public class OpenDto {
 
     public void setDay(String day) {
         this.day = day;
-    }
-
-    public void setDay(DayOfWeek day) {
-        this.day = day.getDisplayName(TextStyle.FULL, Locale.ENGLISH);
     }
 }

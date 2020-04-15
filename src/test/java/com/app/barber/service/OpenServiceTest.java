@@ -3,7 +3,8 @@ package com.app.barber.service;
 import com.app.barber.dao.BarberDao;
 import com.app.barber.dao.OpenDao;
 import com.app.barber.model.Open;
-import com.app.barber.other.dto.OpenDto;
+import com.app.barber.other.dto.OpenInputDto;
+import com.app.barber.other.dto.OpenOutputDto;
 import com.app.barber.other.exception.BarberNotFoundException;
 import com.app.barber.other.exception.OpenNotFoundException;
 import org.junit.Test;
@@ -43,7 +44,7 @@ public class OpenServiceTest {
     @Test
     public void shouldThrowOpenNotFoundException2(){
         //given
-        OpenDto open = new OpenDto();
+        OpenInputDto open = new OpenInputDto();
         open.setDay("friday");
         given(openDao.findByBarberIdAndDay(Mockito.any(), Mockito.any())).willReturn(Optional.empty());
 
@@ -57,7 +58,7 @@ public class OpenServiceTest {
         given(barberDao.findById(Mockito.any())).willReturn(Optional.empty());
 
         //then
-        assertThrows(BarberNotFoundException.class, () -> openService.setWeek(4L, Collections.singletonList(new OpenDto())));
+        assertThrows(BarberNotFoundException.class, () -> openService.setWeek(4L, Collections.singletonList(new OpenInputDto())));
     }
 
     @Test
@@ -88,7 +89,7 @@ public class OpenServiceTest {
         given(openDao.findByBarberId(Mockito.any())).willReturn(opens);
 
         //when
-        List<OpenDto> dto = openService.getWeek(4L);
+        List<OpenOutputDto> dto = openService.getWeek(4L);
 
         //then
         assertEquals(7, dto.size());
