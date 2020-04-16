@@ -18,6 +18,8 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -153,5 +155,20 @@ public class WorkerServiceTest {
 
         assertFalse(worker.getServices().contains(service));
         assertFalse(service.getWorkers().contains(worker));
+    }
+
+    @Test
+    public void shouldListReturnWorkerOutputDto(){
+        //given
+        worker.addService(service);
+        given(serviceDao.findById(Mockito.any())).willReturn(Optional.of(service));
+
+        //when
+        List<WorkerOutputDto> workers = workerService.getAllByServiceId(4L);
+
+        //then
+        assertEquals("name", workers.get(0).getName());
+        assertEquals(4, workers.get(0).getId());
+        assertEquals("url", workers.get(0).getImageUrl());
     }
 }

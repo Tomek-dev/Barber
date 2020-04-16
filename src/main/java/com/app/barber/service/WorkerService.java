@@ -104,4 +104,12 @@ public class WorkerService {
         worker.setName(workerDto.getName());
         workerDao.save(worker);
     }
+
+    public List<WorkerOutputDto> getAllByServiceId(Long id) {
+        Optional<com.app.barber.model.Service> serviceOptional = serviceDao.findById(id);
+        com.app.barber.model.Service service = serviceOptional.orElseThrow(ServiceNotFoundException::new);
+        return service.getWorkers().stream()
+                .map(worker -> mapper.map(worker, WorkerOutputDto.class))
+                .collect(Collectors.toList());
+    }
 }

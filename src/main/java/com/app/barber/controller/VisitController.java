@@ -36,7 +36,7 @@ public class VisitController {
         visitService.add(visit, user);
     }
 
-    @GetMapping("/visit/")
+    @GetMapping("/visit")
     public List<AvailableVisitOutputDto> findAllAvailable(@RequestParam Long id, @RequestParam String date){
         return visitService.findAllAvailable(id, date);
     }

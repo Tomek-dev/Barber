@@ -4,6 +4,7 @@ import com.app.barber.model.User;
 import com.app.barber.other.dto.AvailabilityDto;
 import com.app.barber.other.dto.WorkerInputDto;
 import com.app.barber.other.dto.WorkerOutputDto;
+import com.app.barber.other.exception.IncorrectParamException;
 import com.app.barber.other.validation.ValidList;
 import com.app.barber.service.WorkerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,8 +67,12 @@ public class WorkerController {
         return new AvailabilityDto(workerService.availableName(name, user.getBarber()));
     }
 
-    @GetMapping("/workers/{id}")
-    public List<WorkerOutputDto> getAll(@PathVariable Long id){
-        return workerService.getByBarberId(id);
+    @GetMapping("/worker/value")
+    public List<WorkerOutputDto> getAll(@RequestParam(required = false) Long barber, @RequestParam(required = false) Long service){
+        if((barber == null && service == null)
+                || (barber != null && service != null)) {
+            throw new IncorrectParamException();
+        }
+        return (barber == null ? workerService.getAllByServiceId(service): workerService.getByBarberId(barber));
     }
 }
