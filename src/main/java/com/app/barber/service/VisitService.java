@@ -102,8 +102,8 @@ public class VisitService {
         visitDao.save(visit);
     }
 
-    public List<VisitOutputDto> findAllByOAuthUser(Long id, OAuthUser user){
-        return visitDao.findByCustomerAndBarberId(user, id).stream()
+    public List<VisitOutputDto> findAllByOAuthUser(OAuthUser user){
+        return user.getVisits().stream()
                 .map(visit -> mapper.map(visit, VisitOutputDto.class))
                 .collect(Collectors.toList());
     }

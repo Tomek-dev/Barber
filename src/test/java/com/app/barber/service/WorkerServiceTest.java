@@ -46,8 +46,10 @@ public class WorkerServiceTest {
         barber.setId(4L);
         worker = WorkerBuilder.builder()
                 .name("name")
+                .url("url")
                 .barber(barber)
                 .build();
+        worker.setId(4L);
         service = ServiceBuilder.builder()
                 .barber(barber)
                 .build();
@@ -63,6 +65,8 @@ public class WorkerServiceTest {
 
         //then
         assertEquals("name", output.getName());
+        assertEquals(4, output.getId());
+        assertEquals("url", output.getImageUrl());
     }
 
     @Test

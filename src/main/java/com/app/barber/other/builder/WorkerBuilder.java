@@ -35,6 +35,11 @@ public class WorkerBuilder {
         return this;
     }
 
+    public WorkerBuilder url(String url) {
+        worker.setImageUrl(url);
+        return this;
+    }
+
     public Worker build(){
         return worker;
     }

@@ -4,16 +4,11 @@ import com.app.barber.dao.BarberDao;
 import com.app.barber.dao.ReviewDao;
 import com.app.barber.dao.VisitDao;
 import com.app.barber.model.*;
-import com.app.barber.other.builder.ReviewBuilder;
-import com.app.barber.other.builder.ServiceBuilder;
-import com.app.barber.other.builder.VisitBuilder;
-import com.app.barber.other.builder.WorkerBuilder;
-import com.app.barber.other.dto.ResetInputDto;
+import com.app.barber.other.builder.*;
 import com.app.barber.other.dto.ReviewInfoDto;
 import com.app.barber.other.dto.ReviewInputDto;
 import com.app.barber.other.dto.ReviewOutputDto;
 import com.app.barber.other.enums.Star;
-import com.app.barber.other.exception.BarberNotFoundException;
 import com.app.barber.other.exception.StarNotFoundException;
 import com.app.barber.other.exception.VisitNotFoundException;
 import org.junit.Before;
@@ -23,8 +18,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
-import java.awt.*;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -113,24 +111,31 @@ public class ReviewServiceTest {
     public void shouldReturnListOfReviewOutputDto(){
         //given
         LocalDateTime date = LocalDateTime.now();
+        OAuthUser owner = OAuthUserBuilder.builder()
+                .imageUrl("url")
+                .name("name")
+                .build();
         Review review = ReviewBuilder.builder()
                 .date(date)
                 .star(Star.FOUR)
                 .review("review")
                 .worker(worker)
                 .service(service)
+                .owner(owner)
                 .build();
-        given(reviewDao.findByBarberId(Mockito.any())).willReturn(Collections.singletonList(review));
+        given(reviewDao.findByBarberId(Mockito.any(), Mockito.any())).willReturn(new PageImpl<>(Collections.singletonList(review)));
 
         //when
-        List<ReviewOutputDto> reviews = reviewService.findById(4L);
+        List<ReviewOutputDto> reviews = reviewService.findById(4L, PageRequest.of(0, 10));
 
         //then
         assertEquals("review", reviews.get(0).getReview());
         assertEquals("name", reviews.get(0).getWorkerName());
         assertEquals("name", reviews.get(0).getServiceName());
+        assertEquals("name", reviews.get(0).getOwnerName());
+        assertEquals("url", reviews.get(0).getOwnerImageUrl());
         assertEquals(date, reviews.get(0).getDate());
-        assertEquals(Star.FOUR, reviews.get(0).getStar());
+        assertEquals(4, reviews.get(0).getStar());
     }
 
     @Test

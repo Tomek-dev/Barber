@@ -6,6 +6,8 @@ public class WorkerOutputDto {
 
     private String name;
 
+    private String imageUrl;
+
     public WorkerOutputDto() {
     }
 
@@ -23,5 +25,13 @@ public class WorkerOutputDto {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }

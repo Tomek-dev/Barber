@@ -3,7 +3,6 @@ package com.app.barber.service;
 import com.app.barber.dao.BarberDao;
 import com.app.barber.dao.ReviewDao;
 import com.app.barber.dao.VisitDao;
-import com.app.barber.model.Barber;
 import com.app.barber.model.OAuthUser;
 import com.app.barber.model.Review;
 import com.app.barber.model.Visit;
@@ -12,12 +11,12 @@ import com.app.barber.other.dto.ReviewInfoDto;
 import com.app.barber.other.dto.ReviewInputDto;
 import com.app.barber.other.dto.ReviewOutputDto;
 import com.app.barber.other.enums.Star;
-import com.app.barber.other.exception.BarberNotFoundException;
-import com.app.barber.other.exception.BelongException;
 import com.app.barber.other.exception.StarNotFoundException;
 import com.app.barber.other.exception.VisitNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -40,7 +39,7 @@ public class ReviewService {
         this.visitDao = visitDao;
     }
 
-    public void add(ReviewInputDto review, long id, OAuthUser owner){
+    public void add(ReviewInputDto review, Long id, OAuthUser owner){
         Optional<Visit> visitOptional = visitDao.findById(id);
         Visit visit = visitOptional.orElseThrow(VisitNotFoundException::new);
         Optional<Star> starOptional = Star.fromNumber(review.getStar());
@@ -60,8 +59,8 @@ public class ReviewService {
         reviewDao.deleteById(id);
     }
 
-    public List<ReviewOutputDto> findById(long id){
-        List<Review> reviews = reviewDao.findByBarberId(id);
+    public List<ReviewOutputDto> findById(Long id, Pageable pageable){
+        Page<Review> reviews = reviewDao.findByBarberId(id, pageable);
         return reviews.stream()
                 .map(review -> mapper.map(review, ReviewOutputDto.class))
                 .collect(Collectors.toList());

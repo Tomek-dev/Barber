@@ -13,6 +13,8 @@ public class Worker {
 
     private String name;
 
+    private String imageUrl;
+
     @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinTable(name = "worker_services",
         joinColumns = @JoinColumn(name = "worker_id"),
@@ -66,6 +68,14 @@ public class Worker {
 
     public void setVisits(Set<Visit> visits) {
         this.visits = visits;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     public void addService(Service service){

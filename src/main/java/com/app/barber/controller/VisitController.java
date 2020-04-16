@@ -48,8 +48,8 @@ public class VisitController {
     }
 
     @PreAuthorize("hasRole('ROLE_OAUTH')")
-    @GetMapping("/oauth/visit/{id}")
-    public List<VisitOutputDto> findAllByCustomer(@PathVariable Long id, @AuthenticationPrincipal OAuthUser user){
-        return visitService.findAllByOAuthUser(id, user);
+    @GetMapping("/oauth/visit")
+    public List<VisitOutputDto> findAllByCustomer(@AuthenticationPrincipal OAuthUser user){
+        return visitService.findAllByOAuthUser(user);
     }
 }

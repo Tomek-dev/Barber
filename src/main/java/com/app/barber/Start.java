@@ -3,6 +3,7 @@ package com.app.barber;
 import com.app.barber.dao.*;
 import com.app.barber.model.*;
 import com.app.barber.other.builder.*;
+import com.app.barber.other.enums.AuthProvider;
 import com.app.barber.other.enums.Role;
 import com.app.barber.other.enums.SocialType;
 import com.app.barber.other.enums.Star;
@@ -13,6 +14,8 @@ import org.springframework.stereotype.Component;
 import java.time.DayOfWeek;
 import java.time.LocalTime;
 import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 
 @Component
 public class Start {
@@ -25,12 +28,13 @@ public class Start {
     private ServiceDao serviceDao;
     private OpenDao openDao;
     private SocialDao socialDao;
+    private OAuthUserDao oAuthUserDao;
 
     @Autowired
     public Start(ReviewDao reviewDao, BarberDao barberDao,
                  UserDao userDao, PasswordEncoder passwordEncoder,
                  WorkerDao workerDao, ServiceDao serviceDao,
-                 OpenDao openDao, SocialDao socialDao) {
+                 OpenDao openDao, SocialDao socialDao, OAuthUserDao oAuthUserDao) {
         this.reviewDao = reviewDao;
         this.barberDao = barberDao;
         this.userDao = userDao;
@@ -39,6 +43,7 @@ public class Start {
         this.serviceDao = serviceDao;
         this.openDao = openDao;
         this.socialDao = socialDao;
+        this.oAuthUserDao = oAuthUserDao;
         init();
     }
 
@@ -48,11 +53,12 @@ public class Start {
                 .local("1")
                 .city("city")
                 .address("address")
+                .latitude(52.237049)
+                .longitude(21.017532)
                 .build();
-        Review review = ReviewBuilder.builder()
-                .review("review")
-                .star(Star.FOUR)
-                .barber(barber)
+        OAuthUser oAuthUser = OAuthUserBuilder.builder()
+                .provider(AuthProvider.FACEBOOK)
+                .name("name")
                 .build();
         User user = UserBuilder.builder()
                 .username("user")
@@ -61,25 +67,41 @@ public class Start {
                 .roles(Collections.singleton(Role.USER))
                 .build();
         barber.setUser(user);
-        Worker worker = WorkerBuilder.builder()
-                .name("name")
-                .barber(barber)
-                .build();
+        List<Worker> workers = new LinkedList<>();
+        for(int i = 0; i < 4; i++){
+            Worker worker = WorkerBuilder.builder()
+                    .name("name")
+                    .barber(barber)
+                    .build();
+            workers.add(worker);
+        }
         Service service = ServiceBuilder.builder()
                 .name("name")
                 .price(1.0)
                 .description("description")
-                .workers(Collections.singleton(worker))
+                .workers(Collections.singleton(workers.get(0)))
                 .time(30L)
                 .barber(barber)
                 .build();
-        worker.setServices(Collections.singleton(service));
-        Open open = OpenBuilder.builder()
-                .open(LocalTime.of(8, 0))
-                .close(LocalTime.of(18, 0))
-                .day(DayOfWeek.FRIDAY)
+        workers.get(0).setServices(Collections.singleton(service));
+        Review review = ReviewBuilder.builder()
+                .review("review")
+                .star(Star.FOUR)
+                .worker(workers.get(0))
+                .service(service)
+                .owner(oAuthUser)
                 .barber(barber)
                 .build();
+        List<Open> opens = new LinkedList<>();
+        for (DayOfWeek value : DayOfWeek.values()) {
+            Open open = OpenBuilder.builder()
+                    .open(LocalTime.of(8, 0))
+                    .close(LocalTime.of(18, 0))
+                    .day(value)
+                    .barber(barber)
+                    .build();
+            opens.add(open);
+        }
         Social social = SocialBuilder.builder()
                 .type(SocialType.FACEBOOK)
                 .url("url")
@@ -87,11 +109,12 @@ public class Start {
                 .build();
         userDao.save(user);
         barberDao.save(barber);
-        reviewDao.save(review);
-        workerDao.save(worker);
+        workerDao.saveAll(workers);
         serviceDao.save(service);
-        openDao.save(open);
+        openDao.saveAll(opens);
         socialDao.save(social);
+        oAuthUserDao.save(oAuthUser);
+        reviewDao.save(review);
         User newUser = UserBuilder.builder()
                 .roles(Collections.singleton(Role.USER))
                 .username("new")
