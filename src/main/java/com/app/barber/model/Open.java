@@ -1,10 +1,17 @@
 package com.app.barber.model;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import javax.persistence.*;
 import java.time.DayOfWeek;
 import java.time.LocalTime;
 
 @Entity
+@NoArgsConstructor
+@Getter
+@Setter
 public class Open {
 
     @Id
@@ -18,46 +25,4 @@ public class Open {
     @ManyToOne
     private Barber barber;
 
-    public Open() {
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public LocalTime getOpen() {
-        return open;
-    }
-
-    public void setOpen(LocalTime open) {
-        this.open = open;
-    }
-
-    public LocalTime getClose() {
-        return close;
-    }
-
-    public void setClose(LocalTime close) {
-        this.close = close;
-    }
-
-    public Barber getBarber() {
-        return barber;
-    }
-
-    public void setBarber(Barber barber) {
-        this.barber = barber;
-    }
-
-    public DayOfWeek getDay() {
-        return day;
-    }
-
-    public void setDay(DayOfWeek day) {
-        this.day = day;
-    }
 }

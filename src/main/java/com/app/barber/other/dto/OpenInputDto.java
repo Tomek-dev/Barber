@@ -1,12 +1,16 @@
 package com.app.barber.other.dto;
 
 import com.app.barber.other.validation.Time;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.validation.constraints.NotEmpty;
 import java.time.DayOfWeek;
 import java.time.format.TextStyle;
 import java.util.Locale;
 
+@Getter
+@Setter
 public class OpenInputDto {
 
     @NotEmpty
@@ -19,31 +23,4 @@ public class OpenInputDto {
     @Time
     @NotEmpty
     private String close;
-
-    public OpenInputDto() {
-    }
-
-    public String getOpen() {
-        return open;
-    }
-
-    public void setOpen(String open) {
-        this.open = open;
-    }
-
-    public String getClose() {
-        return close;
-    }
-
-    public void setClose(String close) {
-        this.close = close;
-    }
-
-    public String getDay() {
-        return day;
-    }
-
-    public void setDay(String day) {
-        this.day = day;
-    }
 }

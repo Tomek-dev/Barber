@@ -2,11 +2,15 @@ package com.app.barber.other.dto;
 
 import com.app.barber.other.validation.Password;
 import com.app.barber.other.validation.PasswordDetails;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 @Password
+@Getter
+@Setter
 public class PasswordDto implements PasswordDetails {
 
     @NotBlank
@@ -21,32 +25,9 @@ public class PasswordDto implements PasswordDetails {
         return newPass;
     }
 
-    public void setNewPass(String newPass) {
-        this.newPass = newPass;
-    }
-
     @Override
     public String getConfirmPassword() {
         return conNewPass;
     }
 
-    public void setConNewPass(String conNewPass) {
-        this.conNewPass = conNewPass;
-    }
-
-    public String getOldPass() {
-        return oldPass;
-    }
-
-    public void setOldPass(String oldPass) {
-        this.oldPass = oldPass;
-    }
-
-    public String getNewPass() {
-        return newPass;
-    }
-
-    public String getConNewPass() {
-        return conNewPass;
-    }
 }

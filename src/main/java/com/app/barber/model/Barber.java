@@ -1,11 +1,18 @@
 package com.app.barber.model;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 @Entity
+@NoArgsConstructor
+@Getter
+@Setter
 public class Barber {
 
     @Id
@@ -48,126 +55,4 @@ public class Barber {
     @OneToMany(mappedBy = "barber", orphanRemoval = true)
     private Set<Social> socials = new HashSet<>();
 
-    public Barber() {
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Set<Review> getReviews() {
-        return reviews;
-    }
-
-    public void setReviews(Set<Review> reviews) {
-        this.reviews = reviews;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public String getLocal() {
-        return local;
-    }
-
-    public void setLocal(String local) {
-        this.local = local;
-    }
-
-    public Double getLongitude() {
-        return longitude;
-    }
-
-    public void setLongitude(Double longitude) {
-        this.longitude = longitude;
-    }
-
-    public Double getLatitude() {
-        return latitude;
-    }
-
-    public void setLatitude(Double latitude) {
-        this.latitude = latitude;
-    }
-
-    public Set<Worker> getWorkers() {
-        return workers;
-    }
-
-    public void setWorkers(Set<Worker> workers) {
-        this.workers = workers;
-    }
-
-    public Set<Open> getOpen() {
-        return open;
-    }
-
-    public void setOpen(Set<Open> open) {
-        this.open = open;
-    }
-
-    public Set<Service> getServices() {
-        return services;
-    }
-
-    public Set<Visit> getVisits() {
-        return visits;
-    }
-
-    public void setVisits(Set<Visit> visits) {
-        this.visits = visits;
-    }
-
-    public void setServices(Set<Service> services) {
-        this.services = services;
-    }
-
-    public Set<Image> getImages() {
-        return images;
-    }
-
-    public void setImages(Set<Image> images) {
-        this.images = images;
-    }
-
-    public Set<Social> getSocials() {
-        return socials;
-    }
-
-    public void setSocials(Set<Social> socials) {
-        this.socials = socials;
-    }
 }
