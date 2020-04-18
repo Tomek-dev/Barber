@@ -4,23 +4,23 @@ import java.util.Arrays;
 import java.util.Optional;
 
 public enum Reason {
-    VULGAR_NAME("vulgar name"),
-    VULGAR_REVIEW("vulgar review"),
-    OTHER("name");
+    VULGAR_NAME(1),
+    VULGAR_REVIEW(2),
+    OTHER(3);
 
-    private final String value;
+    private final Integer value;
 
-    Reason(String value) {
+    Reason(Integer value) {
         this.value = value;
     }
 
-    public String getValue() {
+    public Integer getValue() {
         return value;
     }
 
-    public static Optional<Reason> fromValue(String value){
-        return Arrays.stream(Reason.values()).
-                filter(type -> type.getValue().equalsIgnoreCase(value))
+    public static Optional<Reason> fromValue(Integer value){
+        return Arrays.stream(Reason.values())
+                .filter(type -> type.getValue().equals(value))
                 .findFirst();
     }
 }

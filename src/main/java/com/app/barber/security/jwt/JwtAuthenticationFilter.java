@@ -6,11 +6,11 @@ import com.app.barber.dao.UserDao;
 import com.app.barber.model.OAuthUser;
 import com.app.barber.model.User;
 import com.app.barber.other.enums.Role;
+import com.app.barber.other.exception.OAuthUserNotFoundException;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -62,17 +62,18 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 .require(Algorithm.HMAC512(appProperties.getAuth().getTokenSecret().getBytes()))
                 .build()
                 .verify(header.replace(TOKEN_PREFIX, ""));
-        String email = verified.getSubject();
+        String subject = verified.getSubject();
         List<String> roles = verified.getClaim("roles").asList(String.class);
         Set<SimpleGrantedAuthority> authorities = roles.stream()
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toSet());
-        Optional<OAuthUser> oAuthOptional = oAuthUserDao.findByEmail(email);
-        if(!oAuthOptional.isPresent()){
-            Optional<User> userOptional = userDao.findByEmail(email);
-            User user = userOptional.orElseThrow(() -> new UsernameNotFoundException("User not found"));
-            return new UsernamePasswordAuthenticationToken(user, null, authorities);
+        if(roles.contains(Role.OAUTH.getAuthority())){
+            Optional<OAuthUser> oAuthOptional = oAuthUserDao.findByEmail(subject);
+            OAuthUser oAuthUser = oAuthOptional.orElseThrow(OAuthUserNotFoundException::new);
+            return new UsernamePasswordAuthenticationToken(oAuthUser, null, authorities);
         }
-        return new UsernamePasswordAuthenticationToken(oAuthOptional.get(), null, authorities);
+        Optional<User> userOptional = userDao.findByUsername(subject);
+        User user = userOptional.orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        return new UsernamePasswordAuthenticationToken(user, null, authorities);
     }
 }

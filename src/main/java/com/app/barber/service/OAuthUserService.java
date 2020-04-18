@@ -21,6 +21,7 @@ public class OAuthUserService {
         authenticatedDto.setName(oAuthUser.getName());
         authenticatedDto.setEmail(oAuthUser.getEmail());
         authenticatedDto.setType("oauth");
+        authenticatedDto.setImageUrl(oAuthUser.getImageUrl());
         authenticatedDto.setId(oAuthUser.getId());
         return authenticatedDto;
     }

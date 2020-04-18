@@ -131,4 +131,12 @@ public class ExceptionAdvice {
         return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(OAuthUserNotFoundException.class)
+    public ResponseEntity<ApiResponse> handleOAuthUserNotFoundException(OAuthUserNotFoundException e){
+        ApiResponse response = new ApiResponse(false, e.getMessage());
+        response.setStatus(HttpStatus.NOT_FOUND.value());
+        response.setDate(LocalDateTime.now());
+        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+    }
+
 }

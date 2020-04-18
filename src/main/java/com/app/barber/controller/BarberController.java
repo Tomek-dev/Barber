@@ -11,6 +11,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api")
@@ -38,6 +39,11 @@ public class BarberController {
     @PutMapping("/barber")
     public void edit(@RequestBody @Valid BarberInputDto barberDto, @AuthenticationPrincipal User user){
         barberService.edit(barberDto, user.getBarber());
+    }
+
+    @GetMapping("/barbers")
+    public List<BarberOutputDto> findTop(){
+        return barberService.getTop10();
     }
 
     @PreAuthorize("isAuthenticated() && hasRole('ROLE_USER')")

@@ -17,7 +17,7 @@ public class ReportController {
     }
 
     @PostMapping("/report/{id}")
-    public void report(@PathVariable Long id, ReportDto dto){
+    public void report(@PathVariable Long id, @RequestBody ReportDto dto){
         reportService.add(id, dto);
     }
 }

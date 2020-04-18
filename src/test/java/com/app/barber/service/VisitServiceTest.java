@@ -80,6 +80,7 @@ public class VisitServiceTest {
                 .service(service)
                 .name("name")
                 .build();
+        barber.setVisits(Collections.singleton(visit));
         worker.addService(service);
     }
 
@@ -87,11 +88,9 @@ public class VisitServiceTest {
     public void shouldReturnListOfVisitOutputDto(){
         //given
         visit.setWorker(worker);
-        given(barberDao.findById(Mockito.any())).willReturn(java.util.Optional.ofNullable(barber));
-        given(visitDao.findByBarber(Mockito.any())).willReturn(Collections.singletonList(visit));
 
         //when
-        List<VisitOutputDto> visits = visitService.findAllByBarber(4L);
+        List<VisitOutputDto> visits = visitService.findAllByBarber(barber);
 
         //then
         assertEquals("name", visits.get(0).getServiceName());

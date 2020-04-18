@@ -64,6 +64,7 @@ public class UserService {
         authenticatedDto.setName(user.getUsername());
         authenticatedDto.setType("basic");
         authenticatedDto.setId(user.getId());
+        authenticatedDto.setBarberId(user.getBarber().getId());
         return authenticatedDto;
     }
 }

@@ -8,6 +8,8 @@ import com.auth0.jwt.algorithms.Algorithm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.util.Collections;
@@ -28,12 +30,12 @@ public class JwtTokenProvider {
     }
 
     public String generateToken(Authentication authentication){
-        User user = (User) authentication.getPrincipal();
-        String[] roles = user.getRoles().stream()
-                .map(Role::getAuthority)
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        String[] roles = userDetails.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
                 .toArray(String[]::new);
         String token = JWT.create()
-                .withSubject(user.getEmail())
+                .withSubject(userDetails.getUsername())
                 .withExpiresAt(new Date(System.currentTimeMillis() + appProperties.getAuth().getTokenExpirationMsec()))
                 .withArrayClaim("roles", roles)
                 .sign(Algorithm.HMAC512(appProperties.getAuth().getTokenSecret().getBytes()));

@@ -25,10 +25,10 @@ public class ReportService {
         this.reviewDao = reviewDao;
     }
 
-    public void add(Long id, ReportDto dto){
+    public void add(Long id, ReportDto reportDto){
         Optional<Review> reviewOptional = reviewDao.findById(id);
         Review review = reviewOptional.orElseThrow(ReviewNotFoundException::new);
-        Optional<Reason> reasonOptional = Reason.fromValue(dto.getReason());
+        Optional<Reason> reasonOptional = Reason.fromValue(reportDto.getReason());
         Reason reason = reasonOptional.orElseThrow(EnumNotExistException::new);
         Report report = new Report.Builder()
                 .reason(reason)

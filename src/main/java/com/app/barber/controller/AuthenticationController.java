@@ -17,7 +17,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
@@ -62,7 +61,7 @@ public class AuthenticationController {
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/authenticated")
-    public AuthenticatedDto authenticated(Authentication authentication, Principal principal){
+    public AuthenticatedDto authenticated(Authentication authentication){
         if(authentication.getPrincipal() instanceof User){
             return userService.authenticated((User) authentication.getPrincipal());
         }

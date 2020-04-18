@@ -17,21 +17,21 @@ spring:
         #google:
         #  clientId: #Secret
         #  clientSecret: #Secret
-        #  redirectUri: "{baseUrl}/oauth/callback/{registrationId}"
+        #  redirectUri: "{baseUrl}/api/oauth/callback/{registrationId}"
         #  scope:
         #    - email
         #    - profile
         #facebook:
         #  clientId: #Secret
         #  clientSecret: #Secret
-        #  redirectUri: "{baseUrl}/oauth/callback/{registrationId}"
+        #  redirectUri: "{baseUrl}/api/oauth/callback/{registrationId}"
         #  scope:
         #    - email
         #    - public_profile
           github:
             clientId: #Secret
             clientSecret: #Secret
-            redirectUri: "{baseUrl}/oauth/callback/{registrationId}"
+            redirectUri: "{baseUrl}/api/oauth/callback/{registrationId}"
             scope:
               - user:email
               - read:user

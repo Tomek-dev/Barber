@@ -12,6 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.time.DayOfWeek;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -29,12 +30,14 @@ public class Start {
     private OpenDao openDao;
     private SocialDao socialDao;
     private OAuthUserDao oAuthUserDao;
+    private VisitDao visitDao;
 
     @Autowired
     public Start(ReviewDao reviewDao, BarberDao barberDao,
                  UserDao userDao, PasswordEncoder passwordEncoder,
                  WorkerDao workerDao, ServiceDao serviceDao,
-                 OpenDao openDao, SocialDao socialDao, OAuthUserDao oAuthUserDao) {
+                 OpenDao openDao, SocialDao socialDao, OAuthUserDao oAuthUserDao,
+                 VisitDao visitDao) {
         this.reviewDao = reviewDao;
         this.barberDao = barberDao;
         this.userDao = userDao;
@@ -44,6 +47,7 @@ public class Start {
         this.openDao = openDao;
         this.socialDao = socialDao;
         this.oAuthUserDao = oAuthUserDao;
+        this.visitDao = visitDao;
         init();
     }
 
@@ -92,6 +96,14 @@ public class Start {
                 .owner(oAuthUser)
                 .barber(barber)
                 .build();
+        Visit visit = VisitBuilder.builder()
+                .beginning(LocalDateTime.parse("2020-03-29T10:30:01.0"))
+                .finish(LocalDateTime.parse("2020-03-29T11:00:00.0"))
+                .service(service)
+                .worker(workers.get(0))
+                .barber(barber)
+                .name("name")
+                .build();
         List<Open> opens = new LinkedList<>();
         for (DayOfWeek value : DayOfWeek.values()) {
             Open open = OpenBuilder.builder()
@@ -115,6 +127,7 @@ public class Start {
         socialDao.save(social);
         oAuthUserDao.save(oAuthUser);
         reviewDao.save(review);
+        visitDao.save(visit);
         User newUser = UserBuilder.builder()
                 .roles(Collections.singleton(Role.USER))
                 .username("new")

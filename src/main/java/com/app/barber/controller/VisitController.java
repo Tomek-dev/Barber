@@ -1,6 +1,7 @@
 package com.app.barber.controller;
 
 import com.app.barber.model.OAuthUser;
+import com.app.barber.model.User;
 import com.app.barber.other.dto.AvailableVisitOutputDto;
 import com.app.barber.other.dto.VisitInputDto;
 import com.app.barber.other.dto.VisitOutputDto;
@@ -24,10 +25,10 @@ public class VisitController {
         this.visitService = visitService;
     }
 
-    @PreAuthorize("hasRole('ROLE_USER') && @webSecurity.visitOwner(#id, authentication)")
-    @GetMapping("/visit/{id}")
-    public List<VisitOutputDto> findAllByBarber(@PathVariable Long id){
-        return visitService.findAllByBarber(id);
+    @PreAuthorize("hasRole('ROLE_USER')")
+    @GetMapping("/visits")
+    public List<VisitOutputDto> findAllByBarber(@AuthenticationPrincipal User user){
+        return visitService.findAllByBarber(user.getBarber());
     }
 
     @PreAuthorize("isAuthenticated() && hasRole('ROLE_OAUTH')")

@@ -40,9 +40,7 @@ public class VisitService {
         this.openDao = openDao;
     }
 
-    public List<VisitOutputDto> findAllByBarber(Long id){
-        Optional<Barber> barberOptional = barberDao.findById(id);
-        Barber barber = barberOptional.orElseThrow(BarberNotFoundException::new);
+    public List<VisitOutputDto> findAllByBarber(Barber barber){
         List<Visit> visits = visitDao.findByBarber(barber);
         return visits.stream()
                 .map(visit -> mapper.map(visit, VisitOutputDto.class))

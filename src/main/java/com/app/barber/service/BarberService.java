@@ -13,7 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class BarberService {
@@ -72,6 +74,12 @@ public class BarberService {
         }
         barber.setName(barberDto.getName());
         barberDao.save(barber);
+    }
+
+    public List<BarberOutputDto> getTop10(){
+        return barberDao.findTop10ByOrderByReviewsDesc().stream()
+                .map(barber -> mapper.map(barber, BarberOutputDto.class))
+                .collect(Collectors.toList());
     }
 
     public void delete(Long id){

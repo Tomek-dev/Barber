@@ -12,4 +12,6 @@ public class AuthenticatedDto {
     private String name;
     private String email;
     private String type;
+    private Long barberId;
+    private String imageUrl;
 }
