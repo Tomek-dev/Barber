@@ -100,8 +100,16 @@ public class VisitService {
         visitDao.save(visit);
     }
 
-    public List<VisitOutputDto> findAllByOAuthUser(OAuthUser user){
-        return user.getVisits().stream()
+    public List<VisitOutputDto> findAllByCustomerAndDateGreatherThan(OAuthUser user, String date){
+        List<Visit> visits = visitDao.findByCustomerAndBeginningGreaterThan(user, LocalDateTime.parse(date));
+        return visits.stream()
+                .map(visit -> mapper.map(visit, VisitOutputDto.class))
+                .collect(Collectors.toList());
+    }
+
+    public List<VisitOutputDto> findAllByCustomerAndDateLessThan(OAuthUser user, String date){
+        List<Visit> visits = visitDao.findByCustomerAndBeginningLessThan(user, LocalDateTime.parse(date));
+        return visits.stream()
                 .map(visit -> mapper.map(visit, VisitOutputDto.class))
                 .collect(Collectors.toList());
     }

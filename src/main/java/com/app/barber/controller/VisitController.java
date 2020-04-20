@@ -5,6 +5,7 @@ import com.app.barber.model.User;
 import com.app.barber.other.dto.AvailableVisitOutputDto;
 import com.app.barber.other.dto.VisitInputDto;
 import com.app.barber.other.dto.VisitOutputDto;
+import com.app.barber.other.exception.IncorrectParamException;
 import com.app.barber.service.VisitService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -49,8 +50,14 @@ public class VisitController {
     }
 
     @PreAuthorize("hasRole('ROLE_OAUTH')")
-    @GetMapping("/oauth/visit")
-    public List<VisitOutputDto> findAllByCustomer(@AuthenticationPrincipal OAuthUser user){
-        return visitService.findAllByOAuthUser(user);
+    @GetMapping("/oauth/visit/value")
+    public List<VisitOutputDto> findAllByCustomerAndDate(@RequestParam String date, @RequestParam String method,@AuthenticationPrincipal OAuthUser user){
+        if(method.equals("greater")){
+            return visitService.findAllByCustomerAndDateGreatherThan(user, date);
+        }
+        if(method.equals("less")){
+            return visitService.findAllByCustomerAndDateLessThan(user, date);
+        }
+        throw new IncorrectParamException();
     }
 }

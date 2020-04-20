@@ -20,5 +20,8 @@ public interface VisitDao extends JpaRepository<Visit, Long> {
 
     Boolean existsByIdAndCustomer(Long id, OAuthUser user);
 
+    List<Visit> findByCustomerAndBeginningLessThan(OAuthUser user, LocalDateTime date);
+    List<Visit> findByCustomerAndBeginningGreaterThan(OAuthUser user, LocalDateTime date);
+
     List<Visit> findByCustomerAndBarberId(OAuthUser user, Long id);
 }

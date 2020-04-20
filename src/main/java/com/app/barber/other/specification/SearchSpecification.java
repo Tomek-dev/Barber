@@ -33,11 +33,9 @@ public class SearchSpecification implements Specification<Barber> {
         List<Predicate> predicates = new LinkedList<>();
         if(query != null){
             predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("name")), "%" + query.toLowerCase() + "%"));
-            predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("about")), "%" + query.toLowerCase() + "%"));
         }
         if(city != null){
-            Predicate predicate = criteriaBuilder.like(criteriaBuilder.lower(root.get("city")), "%" + city.toLowerCase() + "%");
-            return criteriaBuilder.and(predicate, criteriaBuilder.or(predicates.toArray(new Predicate[0])));
+            predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("city")), "%" + city.toLowerCase() + "%"));
         }
         return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
     }
