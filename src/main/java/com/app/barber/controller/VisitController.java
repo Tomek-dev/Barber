@@ -32,7 +32,7 @@ public class VisitController {
         return visitService.findAllByBarber(user.getBarber());
     }
 
-    @PreAuthorize("isAuthenticated() && hasRole('ROLE_OAUTH')")
+    @PreAuthorize("hasRole('ROLE_OAUTH')")
     @PostMapping("/oauth/visit/add")
     public void add(@Valid @RequestBody VisitInputDto visit, @AuthenticationPrincipal OAuthUser user){
         visitService.add(visit, user);
@@ -43,7 +43,7 @@ public class VisitController {
         return visitService.findAllAvailable(id, date);
     }
 
-    @PreAuthorize("hasRole('ROLE_OAUTH') && @webSecurity.visitCustomer(id, authentication)")
+    @PreAuthorize("hasRole('ROLE_OAUTH') && @webSecurity.visitOwner(id, authentication)")
     @DeleteMapping("/oauth/visit/{id}")
     public void delete(@PathVariable Long id){
         visitService.delete(id);

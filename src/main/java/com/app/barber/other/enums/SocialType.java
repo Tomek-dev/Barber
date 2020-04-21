@@ -1,5 +1,10 @@
 package com.app.barber.other.enums;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
+@AllArgsConstructor
+@Getter
 public enum SocialType {
     FACEBOOK("Facebook"),
     TWITTER("Twitter"),
@@ -7,12 +12,4 @@ public enum SocialType {
     INSTAGRAM("Instagram");
 
     private final String value;
-
-    SocialType(String value) {
-        this.value = value;
-    }
-
-    public String getValue() {
-        return value;
-    }
 }

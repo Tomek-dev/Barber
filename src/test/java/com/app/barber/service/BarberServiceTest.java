@@ -8,6 +8,7 @@ import com.app.barber.other.builder.BarberBuidler;
 import com.app.barber.other.dto.BarberInputDto;
 import com.app.barber.other.dto.BarberOutputDto;
 import com.app.barber.other.exception.BarberNotFoundException;
+import com.app.barber.other.exception.UserNotFoundException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -47,12 +48,12 @@ public class BarberServiceTest {
     }
 
     @Test
-    public void  shouldThrowUsernameNotFoundException(){
+    public void  shouldThrowUserNotFoundException(){
         //given
         given(userDao.findById(Mockito.any(Long.class))).willReturn(Optional.empty());
 
         //then
-        assertThrows(UsernameNotFoundException.class ,() -> barberService.add(new BarberInputDto(), 4L));
+        assertThrows(UserNotFoundException.class ,() -> barberService.add(new BarberInputDto(), 4L));
     }
 
     @Test

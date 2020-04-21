@@ -9,7 +9,7 @@ import com.app.barber.other.dto.ReviewInfoDto;
 import com.app.barber.other.dto.ReviewInputDto;
 import com.app.barber.other.dto.ReviewOutputDto;
 import com.app.barber.other.enums.Star;
-import com.app.barber.other.exception.StarNotFoundException;
+import com.app.barber.other.exception.EnumNotExistException;
 import com.app.barber.other.exception.VisitNotFoundException;
 import org.junit.Before;
 import org.junit.Test;
@@ -18,10 +18,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
@@ -104,7 +102,7 @@ public class ReviewServiceTest {
         given(visitDao.findById(Mockito.any())).willReturn(Optional.of(visit));
 
         //then
-        assertThrows(StarNotFoundException.class, () -> reviewService.add(review, 4L, user));
+        assertThrows(EnumNotExistException.class, () -> reviewService.add(review, 4L, user));
     }
 
     @Test

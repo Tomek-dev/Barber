@@ -4,6 +4,9 @@ import com.app.barber.security.oauth.OAuth2UserInfo;
 
 import java.util.Map;
 
+/**
+ * Not tested.
+ */
 public class FaceBookOAuth2UserInfo extends OAuth2UserInfo {
 
 

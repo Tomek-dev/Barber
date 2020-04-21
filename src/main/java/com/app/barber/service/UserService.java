@@ -39,14 +39,6 @@ public class UserService {
         userDao.deleteById(id);
     }
 
-    public boolean existsByEmailIgnoreCase(String email){
-        return userDao.existsByEmailIgnoreCase(email);
-    }
-
-    public boolean existsByUsernameIgnoreCase(String username){
-        return userDao.existsByUsernameIgnoreCase(username);
-    }
-
     public AvailabilityDto usernameAvailability(String username){
         Boolean available = userDao.existsByUsernameIgnoreCase(username);
         return new AvailabilityDto(!available);

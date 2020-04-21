@@ -4,6 +4,9 @@ import com.app.barber.other.DataParser;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+/**
+ *  Gets data from api and return information about longitude and latitude
+ */
 
 @Service
 public class GeocodeService {

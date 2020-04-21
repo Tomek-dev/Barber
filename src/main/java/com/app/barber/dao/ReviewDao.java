@@ -13,6 +13,5 @@ import java.util.List;
 public interface ReviewDao extends JpaRepository<Review, Long> {
     List<Review> findByBarberId(Long id);
     Page<Review> findByBarberId(Long id, Pageable pageable);
-
     Boolean existsByIdAndOwner(Long id, OAuthUser user);
 }

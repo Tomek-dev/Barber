@@ -12,12 +12,10 @@ import java.util.Locale;
 @Getter
 @Setter
 public class OpenOutputDto {
+
     private Long id;
-
     private String day;
-
     private String open;
-
     private String close;
 
     public void setDay(DayOfWeek day) {

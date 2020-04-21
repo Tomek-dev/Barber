@@ -46,7 +46,7 @@ public class BarberController {
         return barberService.getTop10();
     }
 
-    @PreAuthorize("isAuthenticated() && hasRole('ROLE_USER')")
+    @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping("/barber")
     public BarberOutputDto getByUser(@AuthenticationPrincipal User user){
         return barberService.getByUser(user);

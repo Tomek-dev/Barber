@@ -9,5 +9,6 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class AvailabilityDto {
+
     private Boolean available;
 }

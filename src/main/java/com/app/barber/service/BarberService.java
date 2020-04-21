@@ -8,6 +8,7 @@ import com.app.barber.other.builder.BarberBuidler;
 import com.app.barber.other.dto.BarberInputDto;
 import com.app.barber.other.dto.BarberOutputDto;
 import com.app.barber.other.exception.BarberNotFoundException;
+import com.app.barber.other.exception.UserNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -35,7 +36,7 @@ public class BarberService {
 
     public void add(BarberInputDto barberDto, Long id){
         Optional<User> userOptional =  userDao.findById(id);
-        User foundUser = userOptional.orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        User foundUser = userOptional.orElseThrow(UserNotFoundException::new);
         //Double[] coordinates = geocodeService.geocoder(barberDto.getAddress(), barberDto.getCity(), barberDto.getLocal());
         Barber barber = BarberBuidler.buidler()
                 .name(barberDto.getName())

@@ -8,17 +8,11 @@ import lombok.Setter;
 public class BarberOutputDto {
 
     private Long id;
-
     private String name;
-
     private String city;
-
     private String address;
-
     private String local;
-
     private Double latitude;
-
     private Double longitude;
 
 }

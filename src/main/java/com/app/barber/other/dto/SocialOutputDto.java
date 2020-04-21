@@ -11,8 +11,10 @@ import javax.validation.constraints.NotBlank;
 public class SocialOutputDto {
 
     private Long id;
-
     private String url;
-
     private String socialType;
+
+    public void setSocialType(SocialType socialType) {
+        this.socialType = socialType.getValue();
+    }
 }

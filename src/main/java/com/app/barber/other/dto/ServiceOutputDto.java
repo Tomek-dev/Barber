@@ -13,15 +13,10 @@ import java.util.stream.Collectors;
 public class ServiceOutputDto {
 
     private Long id;
-
     private Set<String> workers;
-
     private String name;
-
     private String description;
-
     private Double price;
-
     private Integer time;
 
     public void setWorkers(Set<Worker> workers) {

@@ -11,7 +11,7 @@ import com.app.barber.other.dto.ReviewInfoDto;
 import com.app.barber.other.dto.ReviewInputDto;
 import com.app.barber.other.dto.ReviewOutputDto;
 import com.app.barber.other.enums.Star;
-import com.app.barber.other.exception.StarNotFoundException;
+import com.app.barber.other.exception.EnumNotExistException;
 import com.app.barber.other.exception.VisitNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,7 +43,7 @@ public class ReviewService {
         Optional<Visit> visitOptional = visitDao.findById(id);
         Visit visit = visitOptional.orElseThrow(VisitNotFoundException::new);
         Optional<Star> starOptional = Star.fromNumber(review.getStar());
-        Star foundStar = starOptional.orElseThrow(StarNotFoundException::new);
+        Star foundStar = starOptional.orElseThrow(EnumNotExistException::new);
         Review newReview = ReviewBuilder.builder()
                 .review(review.getReview())
                 .star(foundStar)

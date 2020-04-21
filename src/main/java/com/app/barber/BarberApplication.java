@@ -26,12 +26,9 @@ public class BarberApplication {
 		configuration.setAllowedOrigins(Collections.singletonList("http://localhost:3000"));
 		configuration.setAllowCredentials(true);
 		configuration.setAllowedHeaders(Arrays.asList("Access-Control-Allow-Headers","Access-Control-Allow-Origin","Access-Control-Request-Method", "Access-Control-Request-Headers","Origin","Cache-Control", "Content-Type", "Authorization"));
-		configuration.setAllowedMethods(Arrays.asList("DELETE", "GET", "POST", "PATCH", "PUT"));
+		configuration.setAllowedMethods(Arrays.asList("DELETE", "GET", "POST", "PUT"));
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 		source.registerCorsConfiguration("/**", configuration);
 		return source;
 	}
-
-	//TODO logout and ResponseEntity, images, admin
-	//TODO acl, regexp, servicedto, integration tests
 }

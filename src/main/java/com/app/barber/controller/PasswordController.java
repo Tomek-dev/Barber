@@ -28,16 +28,14 @@ public class PasswordController {
     }
 
     @PreAuthorize("hasRole('ROLE_USER')")
-    @PostMapping("/change")
-    public ResponseEntity<?> change(@Valid @RequestBody PasswordDto password, @AuthenticationPrincipal User user){
+    @PutMapping("/change")
+    public void change(@Valid @RequestBody PasswordDto password, @AuthenticationPrincipal User user){
         passwordService.change(password, user);
-        return ResponseEntity.ok("Password change successfully");
     }
 
-    @PostMapping("/reset/value")
-    public ResponseEntity<?> reset(@Valid @RequestBody ResetInputDto reset, @RequestParam String token){
+    @PutMapping("/reset/value")
+    public void reset(@Valid @RequestBody ResetInputDto reset, @RequestParam String token){
         passwordService.reset(reset, token);
-        return ResponseEntity.ok("Reset password successfully");
     }
 
     @PostMapping("/forgot")

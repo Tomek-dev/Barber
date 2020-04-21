@@ -53,11 +53,6 @@ public class WebSecurity {
     }
 
     public Boolean visitOwner(Long id, Authentication authentication){
-        User user = (User) authentication.getPrincipal();
-        return visitDao.existsByIdAndBarber(id, user.getBarber());
-    }
-
-    public Boolean visitCustomer(Long id, Authentication authentication){
         OAuthUser user = (OAuthUser) authentication.getPrincipal();
         return visitDao.existsByIdAndCustomer(id, user);
     }

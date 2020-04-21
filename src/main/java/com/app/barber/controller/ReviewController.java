@@ -28,7 +28,7 @@ public class ReviewController {
         this.reviewService = reviewService;
     }
 
-    @PreAuthorize("isAuthenticated && hasRole('ROLE_OAUTH')")
+    @PreAuthorize("hasRole('ROLE_OAUTH')")
     @PostMapping("/oauth/reviews/add/{id}")
     public void add(@Valid @RequestBody ReviewInputDto review, @PathVariable  long id, @AuthenticationPrincipal OAuthUser user){
         reviewService.add(review, id, user);

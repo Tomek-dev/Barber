@@ -47,6 +47,11 @@ public class VisitService {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Return list of the available visit date.
+     * An available visit can't beginning and finish between the existing visit date
+     * and have to be between opening hours of barber
+     */
     public List<AvailableVisitOutputDto> findAllAvailable(Long id, String date){
         Optional<com.app.barber.model.Service> serviceOptional = serviceDao.findById(id);
         com.app.barber.model.Service service = serviceOptional.orElseThrow(ServiceNotFoundException::new);
@@ -71,6 +76,11 @@ public class VisitService {
         return times;
     }
 
+    /**
+     * Add visit which can't beginning
+     * and finish between existing visit date
+     * and have to be between opening hours of a barber.
+     */
     public void add(VisitInputDto visitDto, OAuthUser customer){
         Optional<com.app.barber.model.Service> serviceOptional = serviceDao.findById(visitDto.getService());
         com.app.barber.model.Service service = serviceOptional.orElseThrow(ServiceNotFoundException::new);

@@ -4,6 +4,9 @@ import com.app.barber.security.oauth.OAuth2UserInfo;
 
 import java.util.Map;
 
+/**
+ * User has to enable public email.
+ */
 public class GithubOAuth2UserInfo extends OAuth2UserInfo {
 
     public GithubOAuth2UserInfo(Map<String, Object> attributes) {
