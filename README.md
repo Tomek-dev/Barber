@@ -12,4 +12,4 @@ Project is created with:
 * JUnit/Mockito
 
 ## Setup
-At this moment OAuth supports only GitHub provided and also you have to enable public email in profile settings
+At this moment OAuth supports only GitHub provider and also you have to enable public email in profile settings
