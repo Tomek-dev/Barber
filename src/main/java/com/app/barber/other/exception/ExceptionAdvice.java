@@ -131,4 +131,12 @@ public class ExceptionAdvice {
         return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(UploadException.class)
+    public ResponseEntity<ApiResponse> handleUploadException(UploadException e){
+        ApiResponse response = new ApiResponse(false, e.getMessage());
+        response.setStatus(HttpStatus.BAD_REQUEST.value());
+        response.setDate(LocalDateTime.now());
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
 }

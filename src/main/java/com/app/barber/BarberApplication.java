@@ -1,6 +1,8 @@
 package com.app.barber;
 
 import com.app.barber.config.AppProperties;
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -30,5 +32,13 @@ public class BarberApplication {
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 		source.registerCorsConfiguration("/**", configuration);
 		return source;
+	}
+
+	@Bean
+	public Cloudinary cloudinary(){
+		return new Cloudinary(ObjectUtils.asMap(
+				"cloud_name", "name",
+				"api_key", "key",
+				"api_secret", "secret"));
 	}
 }
